@@ -1,8 +1,54 @@
-import React from 'react';
-import '../styles/Summary.css';
-import PieChart from './PieChart';
+import React from "react";
+import "../styles/Summary.css";
+import PieChart from "./PieChart";
 
-const Summary = ({ month, total, pending, ongoing, completed }) => {
+const Summary = ({ enquiries }) => {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const d = new Date();
+  let month = months[d.getMonth()];
+
+  const total = enquiries?.reduce((acc, enquiry) => {
+    if (enquiry.status !== "Archived") {
+      acc += 1;
+    }
+    return acc;
+  }, 0);
+
+  const ongoing = enquiries?.reduce((acc, enquiry) => {
+    if (enquiry.status === "Ongoing") {
+      acc += 1;
+    }
+    return acc;
+  }, 0);
+
+  const pending = enquiries?.reduce((acc, enquiry) => {
+    if (enquiry.status === "Pending" || enquiry.status === "Reopened") {
+      acc += 1;
+    }
+    return acc;
+  }, 0);
+
+  const completed = enquiries?.reduce((acc, enquiry) => {
+    if (enquiry.status === "Completed") {
+      acc += 1;
+    }
+    return acc;
+  }, 0);
+
   return (
     <div className="centre-section1">
       <div className="section1">
@@ -14,19 +60,19 @@ const Summary = ({ month, total, pending, ongoing, completed }) => {
           <div className="infodiv">
             <div className="info-div-flex">
               <h4>Pending</h4>
-              <h5 style={{ color: '#652361' }}>{pending}</h5>
+              <h5 style={{ color: "#652361" }}>{pending}</h5>
             </div>
           </div>
           <div className="infodiv">
             <div className="info-div-flex">
               <h4>Ongoing</h4>
-              <h5 style={{ color: '#F3BF39' }}>{ongoing}</h5>
+              <h5 style={{ color: "#F3BF39" }}>{ongoing}</h5>
             </div>
           </div>
           <div className="infodiv">
             <div className="info-div-flex">
               <h4>Completed</h4>
-              <h5 style={{ color: '#9E7C9C' }}>{completed}</h5>
+              <h5 style={{ color: "#9E7C9C" }}>{completed}</h5>
             </div>
           </div>
         </div>

@@ -4,7 +4,9 @@ import { useEnquiryContext } from "../../hooks/useEnquiryContext";
 
 // components
 import EnquiryCard from "../../components/EnquiryCard";
-import CreateEnquiryForm from "../../components/CreateEnquiryForm";
+import Summary from "../../components/Summary";
+import Sort from "../../components/Sort";
+import DayEnquiry from "../../components/DayEnquiry";
 
 const DashboardView = () => {
   const { enquiries, dispatch } = useEnquiryContext();
@@ -34,14 +36,16 @@ const DashboardView = () => {
 
   useEffect(() => {
     setFilteredEnquiries(
-      enquiries.filter((enquiry) => {
+      enquiries?.filter((enquiry) => {
         const filterLower = filter.toLowerCase();
         return (
           enquiry.firstName.toLowerCase().includes(filterLower) ||
           enquiry.lastName.toLowerCase().includes(filterLower) ||
           enquiry.fromDate.toLowerCase().includes(filterLower) ||
           enquiry.toDate.toLowerCase().includes(filterLower) ||
-          enquiry.destinations.some((destination) => destination.toLowerCase().includes(filterLower)) ||
+          enquiry.destinations.some((destination) =>
+            destination.toLowerCase().includes(filterLower)
+          ) ||
           enquiry.fromLocation.toLowerCase().includes(filterLower) ||
           enquiry.toLocation.toLowerCase().includes(filterLower) ||
           enquiry.budget.toString().includes(filterLower) ||
@@ -57,31 +61,23 @@ const DashboardView = () => {
       })
     );
   }, [filter, enquiries]);
-  
 
   return (
     <div className="home">
       <div className="enquiries">
+        <Summary enquiries={enquiries} />
         <input
+          id="search"
           type="text"
           placeholder="Search"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          style={{
-            marginBottom: 20,
-            borderRadius: 30,
-            width: "70%",
-            border: "none",
-            paddingBlock: 10,
-            paddingInline: 20,
-            fontFamily: "Poppins",
-          }}
         />
-        {filteredEnquiries.map((enquiry) => (
+        <Sort />
+        {filteredEnquiries?.map((enquiry) => (
           <EnquiryCard key={enquiry._id} enquiry={enquiry} />
         ))}
       </div>
-      <CreateEnquiryForm />
     </div>
   );
 };
