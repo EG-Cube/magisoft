@@ -6,7 +6,6 @@ import "./index.css"
 import TopNavbar from "./components/TopNavbar";
 import TopNav from "./components/TopNav";
 import SideNavbar from "./components/SideNavbar";
-import Sidebar from "./components/Sidebar";
 import CentreSection from "./components/CentreSection";
 import RightSide from "./components/RightSide";
 
