@@ -15,7 +15,7 @@ const TopNavbar = () => {
     <header className="top-nav">
       <div className="container">
         <Link to="/">
-          <h1>Magi Holidays</h1>
+            <h1>Magi Holidays</h1>
         </Link>
         <nav>
           {user ? (

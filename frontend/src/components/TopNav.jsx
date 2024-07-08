@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles//TopNav.css";
+import "../styles/TopNav.css";
 
 import leftImage from "../assets/magilogo.png";
 import rightImage from "../assets/england.png";

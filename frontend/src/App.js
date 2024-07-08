@@ -4,6 +4,7 @@ import "./index.css"
 
 // pages & components
 import TopNavbar from "./components/TopNavbar";
+import TopNav from "./components/TopNav";
 import SideNavbar from "./components/SideNavbar";
 import Sidebar from "./components/Sidebar";
 import CentreSection from "./components/CentreSection";
@@ -22,7 +23,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <TopNavbar />
+        <TopNav />
         <div className="main-content">
           <SideNavbar />
           <CentreSection>
