@@ -36,18 +36,11 @@ const ListView = ({ type }) => {
 
   useEffect(() => {
     setFilteredEnquiries(
-      enquiries
-        ?.filter(
-          (e) =>
-            (type === "ongoing" && e.status === "Ongoing") ||
-            (type === "pending" && e.status === "Pending") ||
-            (type === "pending" && e.status === "Reopened") ||
-            (type === "completed" && e.status === "Completed")
-        )
-        .filter((enquiry) => {
-          const filterLower = filter.toLowerCase();
-          return (
-            enquiry.firstName.toLowerCase().includes(filterLower) ||
+      enquiries?.filter((enquiry) => {
+        const filterLower = filter.toLowerCase();
+        return (
+          enquiry.status === type &&
+          (enquiry.firstName.toLowerCase().includes(filterLower) ||
             enquiry.lastName.toLowerCase().includes(filterLower) ||
             enquiry.fromDate.toLowerCase().includes(filterLower) ||
             enquiry.toDate.toLowerCase().includes(filterLower) ||
@@ -63,14 +56,15 @@ const ListView = ({ type }) => {
             enquiry.mealPlan.toLowerCase().includes(filterLower) ||
             enquiry.purpose.toLowerCase().includes(filterLower) ||
             enquiry.remarks.toLowerCase().includes(filterLower) ||
-            enquiry.enteredBy.toLowerCase().includes(filterLower)
-          );
-        })
+            enquiry.enteredBy.toLowerCase().includes(filterLower))
+        );
+      })
     );
-  }, [filter, enquiries]);
+  }, [filter, enquiries, type]);
 
   return (
     <div className="home">
+      <h1>{type} Enquiries</h1>
       <div className="enquiries">
         <input
           id="search"

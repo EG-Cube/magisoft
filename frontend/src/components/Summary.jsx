@@ -36,7 +36,7 @@ const Summary = ({ enquiries }) => {
   }, 0);
 
   const pending = enquiries?.reduce((acc, enquiry) => {
-    if (enquiry.status === "Pending" || enquiry.status === "Reopened") {
+    if (enquiry.status === "Pending") {
       acc += 1;
     }
     return acc;

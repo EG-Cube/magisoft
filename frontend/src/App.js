@@ -44,19 +44,19 @@ function App() {
                   />
                   <Route
                     path="ongoing"
-                    element={user ? <ListView type={"ongoing"} /> : <Navigate to="/" />}
+                    element={user ? <ListView type={"Ongoing"} /> : <Navigate to="/" />}
                   />
                   <Route
                     path="pending"
-                    element={user ? <ListView type={"pending"} /> : <Navigate to="/" />}
+                    element={user ? <ListView type={"Pending"} /> : <Navigate to="/" />}
                   />
                   <Route
                     path="completed"
-                    element={user ? <ListView type={"completed"} /> : <Navigate to="/" />}
+                    element={user ? <ListView type={"Completed"} /> : <Navigate to="/" />}
                   />
                   <Route
                     path="archive"
-                    element={user ? <ListView type={"archive"} /> : <Navigate to="/" />}
+                    element={user ? <ListView type={"Archived"} /> : <Navigate to="/" />}
                   />
                   <Route
                     path="packages"

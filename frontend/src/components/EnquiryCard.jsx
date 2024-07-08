@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "../styles/Enquiry.css";
+import { Link } from "react-router-dom";
 
 const EnquiryCard = ({ enquiry }) => {
   useEffect(() => {
@@ -7,7 +8,7 @@ const EnquiryCard = ({ enquiry }) => {
   }, []);
 
   return (
-    <div className="enq">
+    <Link to={`/enquiry/view/${enquiry._id}`} className="enq">
       {/* {enquiry} */}
       <div className="left">
         <div className="title" style={{ marginLeft: "10px" }}>
@@ -29,7 +30,7 @@ const EnquiryCard = ({ enquiry }) => {
         </div>
         <div className="status">{enquiry?.status}</div>
       </div>
-    </div>
+    </Link>
   );
 };
 

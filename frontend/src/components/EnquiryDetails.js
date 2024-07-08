@@ -11,7 +11,7 @@ import { useState } from "react";
 const EnquiryDetails = ({ enquiry }) => {
   const { dispatch } = useEnquiryContext();
   const { user } = useAuthContext();
-  const [isUpdated, setIsUpdated] = useState(false)
+  const [isUpdated, setIsUpdated] = useState(false);
   const navigate = useNavigate();
 
   const handleEdit = async () => {
@@ -24,12 +24,12 @@ const EnquiryDetails = ({ enquiry }) => {
     }
 
     let newStatus = "";
-    if(enquiry.status == "Pending") {
-      newStatus = "Ongoing"
-    } else if (enquiry.status == "Ongoing" || enquiry.status == "Reopened"){
-      newStatus = "Completed"
+    if (enquiry.status == "Pending") {
+      newStatus = "Ongoing";
+    } else if (enquiry.status == "Ongoing") {
+      newStatus = "Completed";
     } else if (enquiry.status == "Completed") {
-      newStatus = "Reopened"
+      newStatus = "Pending";
     }
 
     try {
@@ -157,10 +157,9 @@ const EnquiryDetails = ({ enquiry }) => {
       {!isUpdated && enquiry.status != "Archived" && (
         <button onClick={handleUpdateStatus}>
           <span>
-            Update Status to{" "}
-            {enquiry.status == "Pending" ? "Ongoing" : ""}
-            {enquiry.status == "Ongoing" || enquiry.status == "Reopened" ? "Completed" : ""}  
-            {enquiry.status == "Completed" ? "Reopened" : ""}               
+            Update Status to {enquiry.status == "Pending" ? "Ongoing" : ""}
+            {enquiry.status == "Ongoing" ? "Completed" : ""}
+            {enquiry.status == "Completed" ? "Reopened" : ""}
           </span>
         </button>
       )}
