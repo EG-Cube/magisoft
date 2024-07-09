@@ -3,10 +3,9 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { useEnquiryContext } from "../hooks/useEnquiryContext";
 import { format } from "date-fns";
 import axios from "axios";
-
-// date fns
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { useState } from "react";
+import "../styles/EnquiryDetails.css";
 
 const EnquiryDetails = ({ enquiry }) => {
   const { dispatch } = useEnquiryContext();
@@ -57,11 +56,11 @@ const EnquiryDetails = ({ enquiry }) => {
     }
 
     let newStatus = "";
-    if (enquiry.status == "Pending") {
+    if (enquiry.status === "Pending") {
       newStatus = "Ongoing";
-    } else if (enquiry.status == "Ongoing") {
+    } else if (enquiry.status === "Ongoing") {
       newStatus = "Completed";
-    } else if (enquiry.status == "Completed") {
+    } else if (enquiry.status === "Completed") {
       newStatus = "Pending";
     }
 

@@ -13,43 +13,41 @@
     border-radius: 10px;
     background-color: #fff;
     color: black;
+    margin-bottom: 1rem;
+    transition: scale 0.3s ease;
 }
 
-.enq .left {
-    display: flex;
-    align-items: center;
-    gap: 50px;
-  }
-  .enq .left div {
+.enq:hover {
+  scale: 1.01;
+}
+
+  .enq div {
     margin-right: 20px;
   }
-  .enq .left div:last-child {
+  .enq div:last-child {
     margin-right: 0;
   }
-  .enq .right {
-    display: flex;
-    align-items: center;
-    gap: 100px;
-  }
-  .enq .right .status {
+
+  .enq .status {
     background-color: #fcd980;
+    color: black;
     border-radius: 20px;
     padding: 5px 15px;
     font-weight: bold;
   }
+
   .enq .title {
     font-size: 18px;
   }
+
   .enq .budget, .enq .details {
     font-size: 18px;
   }
+
   .enq .details span {
     margin: 0 10px;
     font-weight: bold;
   }
-  .enq-flex{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+
+  
   

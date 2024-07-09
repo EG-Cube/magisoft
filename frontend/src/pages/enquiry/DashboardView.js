@@ -6,7 +6,7 @@ import { useEnquiryContext } from "../../hooks/useEnquiryContext";
 import EnquiryCard from "../../components/EnquiryCard";
 import Summary from "../../components/Summary";
 import Sort from "../../components/Sort";
-import DayEnquiry from "../../components/DayEnquiry";
+import "../../styles/DashboardView.css";
 
 const DashboardView = () => {
   const { enquiries, dispatch } = useEnquiryContext();
