@@ -74,7 +74,7 @@ const ListView = ({ type }) => {
           onChange={(e) => setFilter(e.target.value)}
         />
         <Sort />
-        {filteredEnquiries?.map((enquiry) => (
+        {filteredEnquiries?.sort((a, b) => a.createdAt < b.createdAt).map((enquiry) => (
           <EnquiryCard key={enquiry._id} enquiry={enquiry} />
         ))}
       </div>

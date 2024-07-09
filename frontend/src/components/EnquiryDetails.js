@@ -18,6 +18,39 @@ const EnquiryDetails = ({ enquiry }) => {
     navigate(`/enquiry/edit/${enquiry._id}`);
   };
 
+  const handleArchive = async () => {
+    if (!user) {
+      return;
+    }
+
+    let newStatus = "Archived";
+
+    try {
+      const response = await axios.patch(
+        `/api/enquiry/${enquiry._id}`,
+        {
+          ...enquiry,
+          status: newStatus,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      const updatedEnquiry = response.data;
+      setIsUpdated(true);
+
+      dispatch({ type: "UPDATE_ENQUIRY", payload: updatedEnquiry });
+
+      navigate(`/enquiry/dashboard`);
+    } catch (error) {
+      console.error("Failed to update status of enquiry", error);
+    }
+  };
+
   const handleUpdateStatus = async () => {
     if (!user) {
       return;
@@ -166,6 +199,9 @@ const EnquiryDetails = ({ enquiry }) => {
 
       <button onClick={handleEdit}>
         <span className="material-symbols-outlined">edit</span>
+      </button>
+      <button onClick={handleArchive}>
+        <span className="material-symbols-outlined">archive</span>
       </button>
       <button onClick={handleDelete}>
         <span className="material-symbols-outlined">delete</span>

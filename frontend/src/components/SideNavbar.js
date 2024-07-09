@@ -17,34 +17,22 @@ const SideNavbar = () => {
       <nav className="nav">
         <ul>
           <li>
-            <Link to={"/enquiry/dashboard"}>
-              <a href="#">Dashboard</a>
-            </Link>
+            <Link to={"/enquiry/dashboard"}>Dashboard</Link>
           </li>
           <li>
-            <Link to={"/enquiry/pending"}>
-              <a href="#">Pending</a>
-            </Link>
+            <Link to={"/enquiry/pending"}>Pending</Link>
           </li>
           <li>
-            <Link to={"/enquiry/ongoing"}>
-              <a href="#">Ongoing</a>
-            </Link>
+            <Link to={"/enquiry/ongoing"}>Ongoing</Link>
           </li>
           <li>
-            <Link to={"/enquiry/completed"}>
-              <a href="#">Completed</a>
-            </Link>
+            <Link to={"/enquiry/completed"}>Completed</Link>
           </li>
           <li>
-            <Link to={"/enquiry/packages"}>
-              <a href="#">Packages</a>
-            </Link>
+            <Link to={"/enquiry/packages"}>Packages</Link>
           </li>
           <li>
-            <Link to={"/enquiry/archive"}>
-              <a href="#">Archive</a>
-            </Link>
+            <Link to={"/enquiry/archive"}>Archive</Link>
           </li>
         </ul>
       </nav>
