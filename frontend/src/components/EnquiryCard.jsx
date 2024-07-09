@@ -1,11 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "../styles/Enquiry.css";
 import { Link } from "react-router-dom";
 
 const EnquiryCard = ({ enquiry }) => {
-  useEffect(() => {
-    console.log(enquiry);
-  }, []);
 
   return (
     <Link to={`/enquiry/view/${enquiry._id}`} className="enq">
