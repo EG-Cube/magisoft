@@ -17,39 +17,6 @@ const EnquiryDetails = ({ enquiry }) => {
     navigate(`/enquiry/edit/${enquiry._id}`);
   };
 
-  const handleArchive = async () => {
-    if (!user) {
-      return;
-    }
-
-    let newStatus = "Archived";
-
-    try {
-      const response = await axios.patch(
-        `/api/enquiry/${enquiry._id}`,
-        {
-          ...enquiry,
-          status: newStatus,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-
-      const updatedEnquiry = response.data;
-      setIsUpdated(true);
-
-      dispatch({ type: "UPDATE_ENQUIRY", payload: updatedEnquiry });
-
-      navigate(`/enquiry/dashboard`);
-    } catch (error) {
-      console.error("Failed to update status of enquiry", error);
-    }
-  };
-
   const handleUpdateStatus = async () => {
     if (!user) {
       return;
@@ -110,101 +77,91 @@ const EnquiryDetails = ({ enquiry }) => {
 
   return (
     <div className="enquiry-details">
-      <h4>
-        {enquiry.firstName} {enquiry.lastName}
-      </h4>
-      <p>
-        <strong>Dates: </strong>
-        {format(new Date(enquiry.fromDate), "MMMM do yyyy")} -{" "}
-        {format(new Date(enquiry.toDate), "MMMM do yyyy")} (
-        {enquiry.numberOfDays} days)
-      </p>
-      <p>
-        <strong>Passengers: </strong>
-        {enquiry.passengers.adults} Adults | {enquiry.passengers.children}{" "}
-        Children | {enquiry.passengers.infants} Infants
-      </p>
-      <p>
-        <strong>Destinations: </strong>
-        {enquiry.destinations.join(", ")}
-      </p>
-      <p>
-        <strong>From: </strong>
-        {enquiry.fromLocation}
-      </p>
-      <p>
-        <strong>To: </strong>
-        {enquiry.toLocation}
-      </p>
-      <p>
-        <strong>Budget: </strong>₹{enquiry.budget}
-      </p>
-      <p>
-        <strong>Hotel Star Rating: </strong>
-        {enquiry.hotelStarRating}
-      </p>
-      <p>
-        <strong>Number of Rooms: </strong>
-        {enquiry.numberOfRooms}
-      </p>
-      <p>
-        <strong>Meal Plan: </strong>
-        {enquiry.mealPlan}
-      </p>
-      <p>
-        <strong>Room Comments: </strong>
-        {enquiry.roomComments}
-      </p>
-      <p>
-        <strong>Phone Number: </strong>
-        {enquiry.phoneNumber}
-      </p>
-      <p>
-        <strong>Email Address: </strong>
-        {enquiry.emailAddress}
-      </p>
-      <p>
-        <strong>Flight Booking Required: </strong>
-        {enquiry.flightBookingRequired ? "Yes" : "No"}
-      </p>
-      <p>
-        <strong>Purpose: </strong>
-        {enquiry.purpose}
-      </p>
-      <p>
-        <strong>Status: </strong>
-        {enquiry.status}
-      </p>
-      <p>
-        <strong>Remarks: </strong>
-        {enquiry.remarks}
-      </p>
-      <p>
-        <strong>Entered by: </strong>
-        {enquiry.enteredBy}
-      </p>
-      <p>
-        {formatDistanceToNow(new Date(enquiry.createdAt), { addSuffix: true })}
-      </p>
-      {!isUpdated && enquiry.status != "Archived" && (
-        <button onClick={handleUpdateStatus}>
-          <span>
-            Update Status to {enquiry.status == "Pending" ? "Ongoing" : ""}
-            {enquiry.status == "Ongoing" ? "Completed" : ""}
-            {enquiry.status == "Completed" ? "Reopened" : ""}
-          </span>
-        </button>
-      )}
-
-      <button onClick={handleEdit}>
-        <span className="material-symbols-outlined">edit</span>
-      </button>
-      <button onClick={handleArchive}>
-        <span className="material-symbols-outlined">archive</span>
-      </button>
-      <button onClick={handleDelete}>
-        <span className="material-symbols-outlined">delete</span>
-      </button>
+      <div className="enquiry-header">
+        <div className="created-date">
+          {formatDistanceToNow(new Date(enquiry.createdAt), { addSuffix: true })}
+        </div>
+        <div className="status">Status: <span>{enquiry.status}</span></div>
+      </div>
+      <div className="enquiry-content">
+        <div className="row">
+          <div>
+            <div>Name:</div>
+            <div>{enquiry.firstName} {enquiry.lastName}</div>
+          </div>
+          <div>
+            <div>Budget:</div>
+            <div>₹{enquiry.budget}</div>
+          </div>
+          <div>
+            <div>Destination:</div>
+            <div>{enquiry.destinations.join(", ").slice(0, -2)}</div>
+          </div>
+        </div>
+        <div className="row">
+          <div>
+            <div>Gender:</div>
+            <div>{enquiry.gender}</div>
+          </div>
+          <div>
+            <div>Email:</div>
+            <div>{enquiry.emailAddress}</div>
+          </div>
+          <div>
+            <div>Phone Number:</div>
+            <div>{enquiry.phoneNumber}</div>
+          </div>
+        </div>
+        <div className="row">
+          <div>
+            <div>From:</div>
+            <div>{enquiry.fromLocation}</div>
+          </div>
+          <div>
+            <div>To:</div>
+            <div>{enquiry.toLocation}</div>
+          </div>
+          <div className="passengers">
+            <div>
+              <div>Adults:</div>
+              <div>{enquiry.passengers.adults}</div>
+            </div>
+            <div>
+              <div>Children:</div>
+              <div>{enquiry.passengers.children}</div>
+            </div>
+            <div>
+              <div>Infants:</div>
+              <div>{enquiry.passengers.infants}</div>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div>
+            <div>From Date:</div>
+            <div>{format(new Date(enquiry.fromDate), "MMMM do yyyy")}</div>
+          </div>
+          <div>
+            <div>To Date:</div>
+            <div>{format(new Date(enquiry.toDate), "MMMM do yyyy")}</div>
+          </div>
+          <div>
+            <div>Remarks:</div>
+            <div>{enquiry.remarks}</div>
+          </div>
+        </div>
+        <div className="actions">
+          <button className="edit-btn" onClick={handleEdit}>Edit</button>
+          {!isUpdated && enquiry.status !== "Archived" && (
+            <button className="edit-status-btn" onClick={handleUpdateStatus}>
+              Update Status to {enquiry.status === "Pending" ? "Ongoing" : ""}
+              {enquiry.status === "Ongoing" ? "Completed" : ""}
+              {enquiry.status === "Completed" ? "Reopened" : ""}
+            </button>
+          )}
+          <button className="delete-btn" onClick={handleDelete}>Delete</button>
+        </div>
+      </div>
     </div>
   );
 };
