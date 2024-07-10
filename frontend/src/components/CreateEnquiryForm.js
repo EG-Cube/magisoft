@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
+import "../styles/CreateEnquityForm.css";
 
 const CreateEnquiryForm = () => {
   const { user } = useAuthContext();

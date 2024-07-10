@@ -28,9 +28,9 @@ const SideNavbar = () => {
           <li>
             <Link to={"/enquiry/completed"}>Completed</Link>
           </li>
-          <li>
+          {/* <li>
             <Link to={"/enquiry/packages"}>Packages</Link>
-          </li>
+          </li> */}
           <li>
             <Link to={"/enquiry/archive"}>Archive</Link>
           </li>
