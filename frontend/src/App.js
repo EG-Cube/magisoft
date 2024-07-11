@@ -10,6 +10,7 @@ import DetailView from "./pages/enquiry/DetailsView";
 import EditView from "./pages/enquiry/EditView";
 import ListView from "./pages/enquiry/ListView";
 import CreateView from "./pages/enquiry/CreateView";
+import DashboardLayout from "./components/DashboardLayout";
 
 function App() {
   const { user } = useAuthContext();
@@ -19,7 +20,7 @@ function App() {
       <BrowserRouter>
             <div className="pages">
               <Routes>
-                <Route path="enquiry">
+                <Route path="enquiry/" element={<DashboardLayout />}>
                   <Route
                     path="create/"
                     element={user ? <CreateView /> : <Navigate to="/" />}

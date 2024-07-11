@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useEnquiryContext } from "../../hooks/useEnquiryContext";
-import DashboardLayout from "../../components/DashboardLayout";
 
 // components
 import EnquiryCard from "../../components/EnquiryCard";
-import Summary from "../../components/Summary";
 import Sort from "../../components/Sort";
-import DayEnquiry from "../../components/DayEnquiry";
 
 const ListView = ({ type }) => {
   const { enquiries, dispatch } = useEnquiryContext();
@@ -64,26 +61,24 @@ const ListView = ({ type }) => {
   }, [filter, enquiries, type]);
 
   return (
-    <DashboardLayout>
-      <div className="home">
-        <h1>{type} Enquiries</h1>
-        <div className="enquiries">
-          <input
-            id="search"
-            type="text"
-            placeholder="Search"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          />
-          <Sort />
-          {filteredEnquiries
-            ?.sort((a, b) => a.createdAt < b.createdAt)
-            .map((enquiry) => (
-              <EnquiryCard key={enquiry._id} enquiry={enquiry} />
-            ))}
-        </div>
+    <div className="home">
+      <h1>{type} Enquiries</h1>
+      <div className="enquiries">
+        <input
+          id="search"
+          type="text"
+          placeholder="Search"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+        />
+        <Sort />
+        {filteredEnquiries
+          ?.sort((a, b) => a.createdAt < b.createdAt)
+          .map((enquiry) => (
+            <EnquiryCard key={enquiry._id} enquiry={enquiry} />
+          ))}
       </div>
-    </DashboardLayout>
+    </div>
   );
 };
 

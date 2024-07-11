@@ -5,7 +5,6 @@ import axios from "axios";
 // components
 import EnquiryDetails from "../../components/EnquiryDetails";
 import { useParams } from "react-router-dom";
-import DashboardLayout from "../../components/DashboardLayout";
 
 const DetailView = () => {
   const { user } = useAuthContext();
@@ -33,13 +32,11 @@ const DetailView = () => {
   }, [user]);
 
   return (
-    <DashboardLayout>
       <div className="home">
         <div className="enquiries">
           {enquiry && <EnquiryDetails key={id} enquiry={enquiry} />}
         </div>
       </div>
-    </DashboardLayout>
   );
 };
 
