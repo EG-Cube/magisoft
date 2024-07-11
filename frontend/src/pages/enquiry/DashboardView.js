@@ -7,6 +7,7 @@ import EnquiryCard from "../../components/EnquiryCard";
 import Summary from "../../components/Summary";
 import Sort from "../../components/Sort";
 import "../../styles/DashboardView.css";
+import DashboardLayout from "../../components/DashboardLayout";
 
 const DashboardView = () => {
   const { enquiries, dispatch } = useEnquiryContext();
@@ -63,22 +64,24 @@ const DashboardView = () => {
   }, [filter, enquiries]);
 
   return (
-    <div className="home">
-      <div className="enquiries">
-        <Summary enquiries={enquiries} />
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        <Sort />
-        {filteredEnquiries?.map((enquiry) => (
-          <EnquiryCard key={enquiry._id} enquiry={enquiry} />
-        ))}
+    <DashboardLayout>
+      <div className="home">
+        <div className="enquiries">
+          <Summary enquiries={enquiries} />
+          <input
+            id="search"
+            type="text"
+            placeholder="Search"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          <Sort />
+          {filteredEnquiries?.map((enquiry) => (
+            <EnquiryCard key={enquiry._id} enquiry={enquiry} />
+          ))}
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

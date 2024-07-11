@@ -23,10 +23,6 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <TopNav />
-        <div className="main-content">
-          <SideNavbar />
-          <CentreSection>
             <div className="pages">
               <Routes>
                 <Route path="enquiry">
@@ -82,9 +78,6 @@ function App() {
                 />
               </Routes>
             </div>
-          </CentreSection>
-          <RightSide />
-        </div>
       </BrowserRouter>
     </div>
   );

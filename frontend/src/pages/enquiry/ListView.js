@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useEnquiryContext } from "../../hooks/useEnquiryContext";
+import DashboardLayout from "../../components/DashboardLayout";
 
 // components
 import EnquiryCard from "../../components/EnquiryCard";
@@ -63,22 +64,26 @@ const ListView = ({ type }) => {
   }, [filter, enquiries, type]);
 
   return (
-    <div className="home">
-      <h1>{type} Enquiries</h1>
-      <div className="enquiries">
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        <Sort />
-        {filteredEnquiries?.sort((a, b) => a.createdAt < b.createdAt).map((enquiry) => (
-          <EnquiryCard key={enquiry._id} enquiry={enquiry} />
-        ))}
+    <DashboardLayout>
+      <div className="home">
+        <h1>{type} Enquiries</h1>
+        <div className="enquiries">
+          <input
+            id="search"
+            type="text"
+            placeholder="Search"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          <Sort />
+          {filteredEnquiries
+            ?.sort((a, b) => a.createdAt < b.createdAt)
+            .map((enquiry) => (
+              <EnquiryCard key={enquiry._id} enquiry={enquiry} />
+            ))}
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 
