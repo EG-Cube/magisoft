@@ -131,6 +131,9 @@ const EnquiryDetails = ({ enquiry }) => {
                 {enquiry.status === "Completed" ? "Reopened" : ""}
               </button>
             )}
+            <button className="edit-status-btn" onClick={handleArchive}>
+              Archive
+            </button>
             <button className="delete-btn" onClick={handleDelete}>
               Delete
             </button>
@@ -240,24 +243,6 @@ const EnquiryDetails = ({ enquiry }) => {
             <div>Entered By:</div>
             <div>{enquiry.enteredBy}</div>
           </div>
-        </div>
-        <div className="actions">
-          <button className="edit-btn" onClick={handleEdit}>
-            Edit
-          </button>
-          {!isUpdated && enquiry.status !== "Archived" && (
-            <button className="edit-status-btn" onClick={handleUpdateStatus}>
-              Update Status to {enquiry.status === "Pending" ? "Ongoing" : ""}
-              {enquiry.status === "Ongoing" ? "Completed" : ""}
-              {enquiry.status === "Completed" ? "Reopened" : ""}
-            </button>
-          )}
-          <button className="edit-status-btn" onClick={handleArchive}>
-            Archive
-          </button>
-          <button className="delete-btn" onClick={handleDelete}>
-            Delete
-          </button>
         </div>
       </div>
     </div>

@@ -4,8 +4,7 @@
     padding: 3rem;
     margin: 0;
     background-color: #EEE9E9;
-    border-top-left-radius: 2.5rem;
-    border-top-right-radius: 2.5rem;
+    border-radius: 2.5rem;
     overflow-x: hidden;
     box-sizing: border-box;
   }
