@@ -7,7 +7,7 @@
 }
 
 .nav-image {
-  height: 2.5rem;
+  height: 3.5rem;
 }
 
 .left {
@@ -24,9 +24,9 @@
 }
 
 .nav-button {
-  padding: 10px 20px;
+  padding: 0.5rem 1rem;
   margin-left: 20px;
-  background-color: #007bff;
+  background-color: rgb(128, 0, 128);
   color: white;
   border: none;
   border-radius: 5px;
@@ -37,5 +37,5 @@
 }
 
 .nav-button:hover {
-  background-color: #0056b3;
+  background-color: rgba(128, 0, 128, 0.8);
 }
