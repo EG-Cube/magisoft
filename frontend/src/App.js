@@ -2,13 +2,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuthContext } from "./hooks/useAuthContext";
 import "./index.css";
 
-// pages & components
-import TopNavbar from "./components/TopNavbar";
-import TopNav from "./components/TopNav";
-import SideNavbar from "./components/SideNavbar";
-import CentreSection from "./components/CentreSection";
-import RightSide from "./components/RightSide";
-
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import CreateEnquiryForm from "./pages/enquiry/GeneralView";
@@ -16,6 +9,7 @@ import DashboardView from "./pages/enquiry/DashboardView";
 import DetailView from "./pages/enquiry/DetailsView";
 import EditView from "./pages/enquiry/EditView";
 import ListView from "./pages/enquiry/ListView";
+import CreateView from "./pages/enquiry/CreateView";
 
 function App() {
   const { user } = useAuthContext();
@@ -26,6 +20,10 @@ function App() {
             <div className="pages">
               <Routes>
                 <Route path="enquiry">
+                  <Route
+                    path="create/"
+                    element={user ? <CreateView /> : <Navigate to="/" />}
+                  />
                   <Route
                     path="edit/:id"
                     element={user ? <EditView /> : <Navigate to="/" />}

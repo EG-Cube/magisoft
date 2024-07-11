@@ -29,7 +29,7 @@ const TopNav = () => {
     <div className="TopNav">
       <img src={leftImage} alt="Left Image" className="nav-image left" />
       <div className="right-container">
-        <Link to="/enquiry/general" className="nav-button">
+        <Link to="/enquiry/create" className="nav-button">
           New Enquiry
         </Link>
         {countryFlag && <img src={countryFlag} alt={user?.user.country} className="nav-image right" />}
