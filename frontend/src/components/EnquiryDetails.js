@@ -73,6 +73,8 @@ const EnquiryDetails = ({ enquiry }) => {
     if (response.ok) {
       dispatch({ type: "DELETE_ENQUIRY", payload: json });
     }
+    
+    navigate(`/enquiry/dashboard`);
   };
 
   return (
