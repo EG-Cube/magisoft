@@ -4,13 +4,11 @@ import { AuthContext } from "./context/AuthContext";
 
 import React from "react";
 
-const Auth = ({ allowedRoles }) => {
+const Auth = ({ allowedDepartments }) => {
   const { user } = useContext(AuthContext);
   const location = useLocation();
 
-    console.log(user.email, user.department, allowedRoles)
-
-  return allowedRoles.find((role) => user.department.includes(role)) ? (
+  return allowedDepartments.includes(user?.department) ? (
     <Outlet />
   ) : user?.name ? (
     <Navigate to="/login" state={{ from: location }} replace />

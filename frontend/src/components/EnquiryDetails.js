@@ -17,6 +17,39 @@ const EnquiryDetails = ({ enquiry }) => {
     navigate(`/enquiry/edit/${enquiry._id}`);
   };
 
+  const handleArchive = async () => {
+    if (!user) {
+      return;
+    }
+
+    let newStatus = "Archived";
+
+    try {
+      const response = await axios.patch(
+        `/api/enquiry/${enquiry._id}`,
+        {
+          ...enquiry,
+          status: newStatus,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      const updatedEnquiry = response.data;
+      setIsUpdated(true);
+
+      dispatch({ type: "UPDATE_ENQUIRY", payload: updatedEnquiry });
+
+      navigate(`/enquiry/dashboard`);
+    } catch (error) {
+      console.error("Failed to update status of enquiry", error);
+    }
+  };
+
   const handleUpdateStatus = async () => {
     if (!user) {
       return;
@@ -73,7 +106,7 @@ const EnquiryDetails = ({ enquiry }) => {
     if (response.ok) {
       dispatch({ type: "DELETE_ENQUIRY", payload: json });
     }
-    
+
     navigate(`/enquiry/dashboard`);
   };
 
@@ -81,7 +114,10 @@ const EnquiryDetails = ({ enquiry }) => {
     <div className="enquiry-details">
       <div className="enquiry-header">
         <div className="created-date">
-          {enquiry.createdAt && formatDistanceToNow(new Date(enquiry.createdAt), { addSuffix: true })}
+          {enquiry.createdAt &&
+            formatDistanceToNow(new Date(enquiry.createdAt), {
+              addSuffix: true,
+            })}
         </div>
         <div className="status">
           Status: <span>{enquiry.status}</span>
@@ -201,6 +237,9 @@ const EnquiryDetails = ({ enquiry }) => {
               {enquiry.status === "Completed" ? "Reopened" : ""}
             </button>
           )}
+          <button className="edit-status-btn" onClick={handleArchive}>
+            Archive
+          </button>
           <button className="delete-btn" onClick={handleDelete}>
             Delete
           </button>
