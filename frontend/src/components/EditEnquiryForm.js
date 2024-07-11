@@ -3,6 +3,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { EnquiryContext } from "../context/EnquiryContext";
+import "../styles/EnquiryForm.css"
 
 const EditEnquiryForm = ({ enquiryID }) => {
   const { user } = useAuthContext();
@@ -283,7 +284,7 @@ const EditEnquiryForm = ({ enquiryID }) => {
               onChange={(e) => handleDestinationChange(index, e.target.value)}
               className={emptyFields.includes("destinations") ? "error" : ""}
             />
-            <button
+            <button className="removeBtn"
               type="button"
               onClick={() => handleRemoveDestination(index)}
             >
@@ -441,7 +442,7 @@ const EditEnquiryForm = ({ enquiryID }) => {
         />
       </div>
 
-      <button type="submit">Update Enquiry</button>
+      <div className="submitBtn"><button type="submit">Update Enquiry</button></div>
       {error && <div className="error">{error}</div>}
     </form>
   );

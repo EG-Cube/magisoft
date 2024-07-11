@@ -1,0 +1,110 @@
+/* styles/EnquiryForm.css */
+
+.enquiry-form {
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .enquiry-form h3 {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .enquiry-form .row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  
+  .enquiry-form .row > div {
+    flex: 1;
+    margin-right: 1rem;
+  }
+  
+  .enquiry-form .row > div:last-child {
+    margin-right: 0;
+  }
+  
+  .enquiry-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  
+  .enquiry-form input,
+  .enquiry-form select,
+  .enquiry-form textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .enquiry-form textarea {
+    height: 100px;
+  }
+  
+  .enquiry-form button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .enquiry-form button.removeBtn {
+    background-color: #dc3545;
+    margin-left: 10px;
+  }
+  
+  .enquiry-form button.addDestinationBtn,
+  .enquiry-form button.removeBtn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .enquiry-form .destination-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .enquiry-form .error {
+    border-color: red;
+  }
+  
+  .enquiry-form .error + .error {
+    color: red;
+    font-size: 0.875rem;
+  }
+  
+  .enquiry-form .submitBtn {
+    text-align: center;
+  }
+  
+  .enquiry-form .error {
+    color: red;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .submitBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .submitBtn button {
+    background-color: rgb(100,220,100);
+  }
+
+  .submitBtn button:hover {
+    background-color: rgba(100,220,100, 0.8);
+  }

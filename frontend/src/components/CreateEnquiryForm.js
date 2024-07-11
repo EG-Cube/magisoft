@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
+import "../styles/EnquiryForm.css";
 
 const CreateEnquiryForm = () => {
   const { user } = useAuthContext();
@@ -257,7 +258,7 @@ const CreateEnquiryForm = () => {
               onChange={(e) => handleDestinationChange(index, e.target.value)}
               className={emptyFields.includes("destinations") ? "error" : ""}
             />
-            <button
+            <button className="removeBtn"
               type="button"
               onClick={() => handleRemoveDestination(index)}
             >
@@ -265,7 +266,7 @@ const CreateEnquiryForm = () => {
             </button>
           </div>
         ))}
-        <button
+        <button className="addDestinationBtn"
           type="button"
           style={{ marginBottom: "20px" }}
           onClick={handleAddDestination}
@@ -414,8 +415,9 @@ const CreateEnquiryForm = () => {
           value={formData.remarks}
         />
       </div>
+      
+      <div className="submitBtn"><button type="submit">Add Enquiry</button></div>
 
-      <button type="submit">Add Enquiry</button>
       {error && <div className="error">{error}</div>}
     </form>
   );

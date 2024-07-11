@@ -81,7 +81,6 @@ const EnquiryDetails = ({ enquiry }) => {
     <div className="enquiry-details">
       <div className="enquiry-header">
         <div className="created-date">
-          {/* {enquiry.createdAt} */}
           {enquiry.createdAt && formatDistanceToNow(new Date(enquiry.createdAt), { addSuffix: true })}
         </div>
         <div className="status">
@@ -102,13 +101,13 @@ const EnquiryDetails = ({ enquiry }) => {
           </div>
           <div>
             <div>Destination:</div>
-            <div>{enquiry.destinations.join(", ").slice(0, -2)}</div>
+            <div>{enquiry.destinations.join(", ")}</div>
           </div>
         </div>
         <div className="row">
           <div>
-            <div>Gender:</div>
-            <div>{enquiry.gender}</div>
+            <div>Purpose:</div>
+            <div>{enquiry.purpose}</div>
           </div>
           <div>
             <div>Email:</div>
@@ -153,8 +152,42 @@ const EnquiryDetails = ({ enquiry }) => {
             <div>{format(new Date(enquiry.toDate), "MMMM do yyyy")}</div>
           </div>
           <div>
+            <div>Number of Days:</div>
+            <div>{enquiry.numberOfDays}</div>
+          </div>
+        </div>
+        <div className="row">
+          <div>
+            <div>Number of Rooms:</div>
+            <div>{enquiry.numberOfRooms}</div>
+          </div>
+          <div>
+            <div>Hotel Star Rating:</div>
+            <div>{enquiry.hotelStarRating}</div>
+          </div>
+          <div>
+            <div>Meal Plan:</div>
+            <div>{enquiry.mealPlan}</div>
+          </div>
+        </div>
+        <div className="row">
+          <div>
+            <div>Room Comments:</div>
+            <div>{enquiry.roomComments}</div>
+          </div>
+          <div>
+            <div>Flight Booking Required:</div>
+            <div>{enquiry.flightBookingRequired ? "Yes" : "No"}</div>
+          </div>
+        </div>
+        <div className="row">
+          <div>
             <div>Remarks:</div>
             <div>{enquiry.remarks}</div>
+          </div>
+          <div>
+            <div>Entered By:</div>
+            <div>{enquiry.enteredBy}</div>
           </div>
         </div>
         <div className="actions">
