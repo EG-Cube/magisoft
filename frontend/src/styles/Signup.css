@@ -43,7 +43,7 @@
   
   .signup button[type="submit"]  {
     display: block;
-    max-width: 50%;
+    width: 75%;
     padding: 10px;
     border: none;
     border-radius: 5px;
@@ -51,7 +51,7 @@
     color: #fff;
     font-size: 16px;
     cursor: pointer;
-    margin: 0 auto; /* Centers the button */
+    margin: 0 auto;
   }
   
   .signup button[type="submit"]:disabled {

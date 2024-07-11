@@ -32,7 +32,7 @@
   
   .login button[type="submit"]  {
     display: block;
-    max-width: 50%;
+    width: 75%;
     padding: 10px;
     border: none;
     border-radius: 5px;
