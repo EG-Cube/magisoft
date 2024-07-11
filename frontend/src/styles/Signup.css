@@ -41,21 +41,25 @@
     flex: 1;
   }
   
-  .signup button {
+  .signup button[type="submit"]  {
     display: block;
     max-width: 50%;
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #007BFF;
+    background-color: #800080;
     color: #fff;
     font-size: 16px;
     cursor: pointer;
     margin: 0 auto; /* Centers the button */
   }
   
-  .signup button:disabled {
+  .signup button[type="submit"]:disabled {
     background-color: #aaa;
+  }
+
+  .signup button[type="submit"]:hover {
+    background-color: rgba(128,0,128, 0.8);
   }
   
   .signup .error {
