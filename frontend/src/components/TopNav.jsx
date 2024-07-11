@@ -10,19 +10,11 @@ const TopNav = () => {
   const [countryFlag, setCountryFlag] = useState(null);
 
   useEffect(() => {
-    const fetchCountryFlag = async () => {
-      if (user) {
-        try {
-          const flagModule = await import(`../assets/${user.user.country}.png`);
-          setCountryFlag(flagModule.default);
-        } catch (error) {
-          console.error(`Failed to load flag for ${user.user.country}`, error);
-          setCountryFlag(null);
-        }
-      }
-    };
-
-    fetchCountryFlag();
+    if (user) {
+      const flagUrl = `https://flagsapi.com/${user.user.country.toUpperCase()}/flat/64.png`;
+      console.log(flagUrl);
+      setCountryFlag(flagUrl);
+    }
   }, [user]);
 
   return (

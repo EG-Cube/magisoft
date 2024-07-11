@@ -84,7 +84,22 @@ const EnquiryDetails = ({ enquiry }) => {
           {enquiry.createdAt && formatDistanceToNow(new Date(enquiry.createdAt), { addSuffix: true })}
         </div>
         <div className="status">
-          Status: <span>{enquiry.status}</span>
+          <div className="actions">
+            <button className="edit-btn" onClick={handleEdit}>
+              Edit
+            </button>
+            {!isUpdated && enquiry.status !== "Archived" && (
+              <button className="edit-status-btn" onClick={handleUpdateStatus}>
+                Update Status to {enquiry.status === "Pending" ? "Ongoing" : ""}
+                {enquiry.status === "Ongoing" ? "Completed" : ""}
+                {enquiry.status === "Completed" ? "Reopened" : ""}
+              </button>
+            )}
+            <button className="delete-btn" onClick={handleDelete}>
+              Delete
+            </button>
+          </div>
+          <span>{enquiry.status}</span>
         </div>
       </div>
       <div className="enquiry-content">
@@ -190,21 +205,7 @@ const EnquiryDetails = ({ enquiry }) => {
             <div>{enquiry.enteredBy}</div>
           </div>
         </div>
-        <div className="actions">
-          <button className="edit-btn" onClick={handleEdit}>
-            Edit
-          </button>
-          {!isUpdated && enquiry.status !== "Archived" && (
-            <button className="edit-status-btn" onClick={handleUpdateStatus}>
-              Update Status to {enquiry.status === "Pending" ? "Ongoing" : ""}
-              {enquiry.status === "Ongoing" ? "Completed" : ""}
-              {enquiry.status === "Completed" ? "Reopened" : ""}
-            </button>
-          )}
-          <button className="delete-btn" onClick={handleDelete}>
-            Delete
-          </button>
-        </div>
+        
       </div>
     </div>
   );

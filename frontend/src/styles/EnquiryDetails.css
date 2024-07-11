@@ -1,9 +1,8 @@
 .enquiry-details {
-  border: 1px solid #ddd;
   border-radius: 5px;
   padding: 20px;
   margin-bottom: 20px;
-  background-color: #f9f9f9;
+  
 }
 
 .enquiry-header {
@@ -21,6 +20,9 @@
 
 .status {
   font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .status span {
@@ -37,6 +39,7 @@
   border: 1px solid #ccc;
   padding: 20px;
   border-radius: 8px;
+  background-color: #f9f9f9;
 }
 
 .row {
@@ -84,8 +87,8 @@
 
 .actions {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
+  align-items: center;
+  justify-content: center;
 }
 
 .actions button {
