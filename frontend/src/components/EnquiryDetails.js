@@ -117,15 +117,15 @@ const EnquiryDetails = ({ enquiry }) => {
   const getStatusStyle = (status) => {
     switch (status) {
       case "Pending":
-        return { backgroundColor: "yellow" };
+        return { backgroundColor: "#fcd980", color: "black" };
       case "Ongoing":
-        return { backgroundColor: "blue", color: "white" };
+        return { backgroundColor: "#87cefa", color: "black" };
       case "Completed":
-        return { backgroundColor: "green", color: "white" };
+        return { backgroundColor: "#98fb98", color: "black" };
       case "Archived":
-        return { backgroundColor: "gray", color: "white" };
+        return { backgroundColor: "#d3d3d3", color: "black" };
       default:
-        return {};
+        return { backgroundColor: "#fff", color: "black" };
     }
   };
 

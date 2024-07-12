@@ -14,6 +14,21 @@ const EnquiryCard = ({ enquiry }) => {
     return joinedDestinations;
   };
 
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case "Pending":
+        return { backgroundColor: "#fcd980", color: "black" };
+      case "Ongoing":
+        return { backgroundColor: "#87cefa", color: "black" };
+      case "Completed":
+        return { backgroundColor: "#98fb98", color: "black" };
+      case "Archived":
+        return { backgroundColor: "#d3d3d3", color: "black" };
+      default:
+        return { backgroundColor: "#fff", color: "black" };
+    }
+  };
+
   return (
     <Link to={`/enquiry/view/${enquiry._id}`} className="enq">
       <div className="title" style={{ marginLeft: "10px" }}>
@@ -31,7 +46,9 @@ const EnquiryCard = ({ enquiry }) => {
       <div className="package">
         {formatDestinations(enquiry?.destinations)} ({enquiry?.numberOfDays}D)
       </div>
-      <div className="status">{enquiry?.status}</div>
+      <div className="status" style={getStatusStyle(enquiry?.status)}>
+        {enquiry?.status}
+      </div>
     </Link>
   );
 };
