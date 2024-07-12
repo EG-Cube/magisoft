@@ -7,6 +7,10 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { useState } from "react";
 import "../styles/EnquiryDetails.css";
 
+import editBtn from "../assets/edit.png";
+import archiveBtn from "../assets/archive.png";
+import deleteBtn from "../assets/delete.png";
+
 const EnquiryDetails = ({ enquiry }) => {
   const { dispatch } = useEnquiryContext();
   const { user } = useAuthContext();
@@ -119,23 +123,24 @@ const EnquiryDetails = ({ enquiry }) => {
               addSuffix: true,
             })}
         </div>
+
         <div className="status">
+          {!isUpdated && enquiry.status !== "Archived" && (
+            <button className="edit-status-btn" onClick={handleUpdateStatus}>
+              Update to {enquiry.status === "Pending" ? "Ongoing" : ""}
+              {enquiry.status === "Ongoing" ? "Completed" : ""}
+              {enquiry.status === "Completed" ? "Reopened" : ""}
+            </button>
+          )}
           <div className="actions">
             <button className="edit-btn" onClick={handleEdit}>
-              Edit
+              <img src={editBtn} alt="Edit" />
             </button>
-            {!isUpdated && enquiry.status !== "Archived" && (
-              <button className="edit-status-btn" onClick={handleUpdateStatus}>
-                Update Status to {enquiry.status === "Pending" ? "Ongoing" : ""}
-                {enquiry.status === "Ongoing" ? "Completed" : ""}
-                {enquiry.status === "Completed" ? "Reopened" : ""}
-              </button>
-            )}
-            <button className="edit-status-btn" onClick={handleArchive}>
-              Archive
+            <button className="archive-btn" onClick={handleArchive}>
+              <img src={archiveBtn} alt="Archive" />
             </button>
             <button className="delete-btn" onClick={handleDelete}>
-              Delete
+              <img src={deleteBtn} alt="Delete" />
             </button>
           </div>
           <span>{enquiry.status}</span>

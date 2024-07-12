@@ -1,20 +1,17 @@
 .enquiry-details {
   border-radius: 5px;
-  padding: 20px;
-  margin-bottom: 20px;
-  
+  padding: 1rem;
 }
 
 .enquiry-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
-  margin-inline: 20px;
+  margin-bottom: 0.8rem;
   align-items: center;
 }
 
 .created-date {
-  font-size: 2rem;
+  font-size: 1.6rem;
   color: #555;
 }
 
@@ -85,6 +82,19 @@
   color: #000;
 }
 
+.edit-status-btn {
+  padding: 10px 20px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: rgb(100,220,100);
+}
+
+.edit-status-btn:hover {
+  background-color: rgba(100,220,100, 0.8);
+}
+
 .actions {
   display: flex;
   align-items: center;
@@ -92,34 +102,27 @@
 }
 
 .actions button {
-  margin-left: 10px;
-  padding: 10px 20px;
+  margin-left: 0.2rem;
+  padding: 0.5rem 1rem;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.actions .edit-btn {
-  background-color: rgb(0,120,255);
-}
-
 .actions .edit-btn:hover {
-  background-color: rgba(0,120,255, 0.8);
+  background-color: rgba(71, 157, 255, 0.8);
 }
 
-.actions .edit-status-btn {
-  background-color: rgb(100,220,100);
-}
-
-.actions .edit-status-btn:hover {
-  background-color: rgba(100,220,100, 0.8);
-}
-
-.actions .delete-btn {
-  background-color: rgb(255, 80, 80);
+.actions .archive-btn:hover {
+  background-color: rgba(255, 220, 70, 0.8);
 }
 
 .actions .delete-btn:hover {
   background-color: rgba(255, 80, 80, 0.8);
+}
+
+button img {
+  width: 20px;
+  height: 20px;
 }
