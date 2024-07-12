@@ -45,9 +45,11 @@ const SideNavbar = () => {
             <p>{user?.user.firstName}</p>
           </div>
         </div>
-        <button className="logout-btn" onClick={handleClick}>
-          Logout
-        </button>
+        <Link to={"/"}>
+          <button className="logout-btn" onClick={handleClick}>
+            Logout
+          </button>
+        </Link>
       </div>
     </header>
   );

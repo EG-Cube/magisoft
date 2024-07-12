@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../styles/TopNav.css";
-
 import leftImage from "../assets/magilogo.png";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { getCode } from 'country-list';
 
 const TopNav = () => {
   const { user } = useAuthContext();
@@ -11,9 +11,11 @@ const TopNav = () => {
 
   useEffect(() => {
     if (user) {
-      const flagUrl = `https://flagsapi.com/${user.user.country.toUpperCase()}/flat/64.png`;
-      console.log(flagUrl);
-      setCountryFlag(flagUrl);
+      const countryCode = getCode(user.user.country);
+      if (countryCode) {
+        const flagUrl = `https://flagsapi.com/${countryCode.toUpperCase()}/flat/64.png`;
+        setCountryFlag(flagUrl);
+      }
     }
   }, [user]);
 
