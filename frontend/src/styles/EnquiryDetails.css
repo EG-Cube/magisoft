@@ -24,8 +24,8 @@
 
 .status span {
   margin-inline-start: 1rem;
-  color: #5D4609;
-  background-color: rgba(255,184,0, 0.55);
+  /* color: #5D4609; */
+  /* background-color: rgba(255,184,0, 0.55); */
   padding: 1rem 1.5rem;
   border-radius: 2rem;
 }

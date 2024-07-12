@@ -114,6 +114,21 @@ const EnquiryDetails = ({ enquiry }) => {
     navigate(`/enquiry/dashboard`);
   };
 
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case "Pending":
+        return { backgroundColor: "yellow" };
+      case "Ongoing":
+        return { backgroundColor: "blue", color: "white" };
+      case "Completed":
+        return { backgroundColor: "green", color: "white" };
+      case "Archived":
+        return { backgroundColor: "gray", color: "white" };
+      default:
+        return {};
+    }
+  };
+
   return (
     <div className="enquiry-details">
       <div className="enquiry-header">
@@ -143,7 +158,7 @@ const EnquiryDetails = ({ enquiry }) => {
               <img src={deleteBtn} alt="Delete" />
             </button>
           </div>
-          <span>{enquiry.status}</span>
+          <span style={getStatusStyle(enquiry.status)}>{enquiry.status}</span>
         </div>
       </div>
       <div className="enquiry-content">
