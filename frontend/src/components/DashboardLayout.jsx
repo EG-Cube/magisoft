@@ -3,6 +3,7 @@ import TopNav from "./TopNav";
 import SideNavbar from "./SideNavbar";
 import CentreSection from "./CentreSection";
 import RightSide from "./RightSide";
+import UnauthorizedPage from "./UnauthorizedPage"
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 
@@ -18,7 +19,7 @@ const DashboardLayout = ({ allowed }) => {
       <div className="main-content">
         <SideNavbar />
         <CentreSection>
-          {allowed.includes(user?.user.department) ? <Outlet /> : "Unauthorized"}
+          {allowed.includes(user?.user.department) ? <Outlet /> : <UnauthorizedPage />}
           
         </CentreSection>
         <RightSide />
