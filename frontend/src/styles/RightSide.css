@@ -1,45 +1,61 @@
 .RightSide {
-    padding: 0 1rem;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    background-color: #FFFAFA;
-  }
-  
-  .react-calendar {
-    margin-top: 1rem;
-    height: max-content;
-    border: 1px solid #a0a096;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .react-calendar__navigation button {
-    color: #1890ff;
-    min-width: 44px;
-    background: none;
-    font-size: 16px;
-    margin-top: 8px;
-  }
-  
-  .react-calendar__navigation button:enabled:hover,
-  .react-calendar__navigation button:enabled:focus {
-    background-color: #e6f7ff;
-  }
-  
-  .react-calendar__month-view__weekdays__weekday {
-    color: #000;
-  }
-  
-  .react-calendar__tile {
-    color: #000;
-  }
-  
-  .react-calendar__month-view__days__day--weekend {
-    color: red;
-  }
-  
-  .react-calendar__month-view__days__day--neighboringMonth {
-    color: gray;
-  }
-  
+  padding: 0 1rem;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  background-color: #FFFAFA;
+}
+
+.react-calendar {
+  margin-top: 1rem;
+  height: max-content;
+  border: 1px solid #a0a096;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.react-calendar__navigation {
+  background-color: rgb(128, 0, 128);
+  border-radius: 8px 8px 0 0;
+  margin: auto;
+}
+
+.react-calendar__navigation button {
+  color: white;
+  min-width: 44px;
+  background: none;
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: rgba(128, 0, 128, 0.8);
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  color: #000;
+}
+
+.react-calendar__tile {
+  color: #000;
+}
+
+.react-calendar__tile--now {
+  background: purple;
+  color: white;
+}
+
+.react-calendar__tile--now:hover,
+.react-calendar__tile--now:focus {
+  background-color: purple;
+  color: black;
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: red;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: gray;
+}
