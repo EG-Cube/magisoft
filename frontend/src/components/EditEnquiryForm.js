@@ -3,7 +3,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { EnquiryContext } from "../context/EnquiryContext";
-import "../styles/EnquiryForm.css"
+import "../styles/EnquiryForm.css";
 
 const EditEnquiryForm = ({ enquiryID }) => {
   const { user } = useAuthContext();
@@ -284,7 +284,8 @@ const EditEnquiryForm = ({ enquiryID }) => {
               onChange={(e) => handleDestinationChange(index, e.target.value)}
               className={emptyFields.includes("destinations") ? "error" : ""}
             />
-            <button className="removeBtn"
+            <button
+              className="removeBtn"
               type="button"
               onClick={() => handleRemoveDestination(index)}
             >
@@ -397,16 +398,18 @@ const EditEnquiryForm = ({ enquiryID }) => {
         </div>
       </div>
       <div className="row">
-        <label>Flight Booking Required:</label>
-        <input
-          type="checkbox"
-          name="flightBookingRequired"
-          onChange={handleChange}
-          checked={formData.flightBookingRequired}
-          className={
-            emptyFields.includes("flightBookingRequired") ? "error" : ""
-          }
-        />
+        <div className="checkbox-container">
+          <label>Flight Booking Required:</label>
+          <input
+            type="checkbox"
+            name="flightBookingRequired"
+            onChange={handleChange}
+            checked={formData.flightBookingRequired}
+            className={`checkbox ${
+              emptyFields.includes("flightBookingRequired") ? "error" : ""
+            }`}
+          />
+        </div>
       </div>
 
       <div className="row">
@@ -442,7 +445,9 @@ const EditEnquiryForm = ({ enquiryID }) => {
         />
       </div>
 
-      <div className="submitBtn"><button type="submit">Update Enquiry</button></div>
+      <div className="submitBtn">
+        <button type="submit">Update Enquiry</button>
+      </div>
       {error && <div className="error">{error}</div>}
     </form>
   );

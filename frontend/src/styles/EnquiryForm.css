@@ -65,7 +65,7 @@
   .enquiry-form button.addDestinationBtn,
   .enquiry-form button.removeBtn {
     padding: 0.5rem 1rem;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
   }
   
   .enquiry-form .destination-field {
@@ -73,14 +73,25 @@
     align-items: center;
     margin-bottom: 0.5rem;
   }
-  
+
+  .checkbox-container {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .checkbox {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+  }
+    
   .enquiry-form .error {
     border-color: red;
   }
   
   .enquiry-form .error + .error {
     color: red;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
   }
   
   .enquiry-form .submitBtn {
