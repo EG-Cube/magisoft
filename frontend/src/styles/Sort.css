@@ -1,0 +1,29 @@
+.sort{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+
+.sort h2 {
+    color: black;
+}
+
+.sort1{
+    margin-left: 100px;
+}
+
+.sort1 input{
+    margin-right: 20px;
+    font-size: 1.2rem;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: 0px none;
+    background-color: #800080;
+    color: #fff;
+    font-weight: 200;
+    border-radius: 5px;
+    cursor: pointer;
+}

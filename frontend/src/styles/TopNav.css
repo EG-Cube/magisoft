@@ -1,0 +1,41 @@
+.TopNav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f8f9fa;
+}
+
+.nav-image {
+  height: 3.5rem;
+}
+
+.left {
+  margin-right: auto;
+}
+
+.right-container {
+  display: flex;
+  align-items: center;
+}
+
+.right {
+  margin-left: 10px;
+}
+
+.nav-button {
+  padding: 0.5rem 1rem;
+  margin-left: 20px;
+  background-color: rgb(128, 0, 128);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-button:hover {
+  background-color: rgba(128, 0, 128, 0.8);
+}

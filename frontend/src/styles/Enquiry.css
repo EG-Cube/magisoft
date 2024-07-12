@@ -1,0 +1,53 @@
+.Enquiry {
+  padding: 0;
+  margin: 0;
+}
+
+.enq {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    height: 50px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    color: black;
+    margin-bottom: 1rem;
+    transition: scale 0.3s ease;
+}
+
+.enq:hover {
+  scale: 1.01;
+}
+
+  .enq div {
+    margin-right: 20px;
+  }
+  .enq div:last-child {
+    margin-right: 0;
+  }
+
+  .enq .status {
+    background-color: #fcd980;
+    color: black;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-weight: bold;
+  }
+
+  .enq .title {
+    font-size: 18px;
+  }
+
+  .enq .budget, .enq .details {
+    font-size: 18px;
+  }
+
+  .enq .details span {
+    margin: 0 10px;
+    font-weight: bold;
+  }
+
+  
+  
