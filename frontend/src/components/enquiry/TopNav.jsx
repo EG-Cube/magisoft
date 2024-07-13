@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "../styles/TopNav.css";
-import leftImage from "../assets/magilogo.png";
-import { useAuthContext } from "../hooks/useAuthContext";
+import "../../styles/TopNav.css";
+import leftImage from "../../assets/magilogo.png";
+import { useAuthContext } from "../../hooks/useAuthContext";
 import { getCode } from 'country-list';
 
 const TopNav = () => {
@@ -21,7 +21,7 @@ const TopNav = () => {
 
   return (
     <div className="TopNav">
-      <img src={leftImage} alt="Left Image" className="nav-image left" />
+      <img src={leftImage} alt="Left" className="nav-image left" />
       <div className="right-container">
         <Link to="/enquiry/create" className="nav-button">
           New Enquiry

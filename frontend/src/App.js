@@ -4,80 +4,125 @@ import "./index.css";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import CreateEnquiryForm from "./pages/enquiry/GeneralView";
-import DashboardView from "./pages/enquiry/DashboardView";
-import DetailView from "./pages/enquiry/DetailsView";
-import EditView from "./pages/enquiry/EditView";
-import ListView from "./pages/enquiry/ListView";
-import CreateView from "./pages/enquiry/CreateView";
-import DashboardLayout from "./components/DashboardLayout";
-import Auth from "./Auth";
+
+import AdminDashboardLayout from "./components/admin/AdminDashboardLayout";
+import AdminEnquiryDashboardView from "./pages/admin/AdminEnquiryDashboardView";
+import AdminEnquiryDetailView from "./pages/admin/AdminEnquiryDetailsView";
+import AdminEnquiryEditView from "./pages/admin/AdminEnquiryEditView";
+import AdminEnquiryListView from "./pages/admin/AdminEnquiryListView";
+import AdminEnquiryCreateView from "./pages/admin/AdminEnquiryCreateView";
+import AdminUserDashboardView from "./pages/admin/AdminUserDashboardView";
+import AdminUserDetailView from "./pages/admin/AdminUserDetailsView";
+import AdminUserEditView from "./pages/admin/AdminUserEditView";
+import AdminUserListView from "./pages/admin/AdminUserListView";
+import AdminUserCreateView from "./pages/admin/AdminUserCreateView";
+
+import CreateEnquiryForm from "./pages/enquiry/EnquiryGeneralView";
+import EnquiryDashboardView from "./pages/enquiry/EnquiryDashboardView";
+import EnquiryDetailView from "./pages/enquiry/EnquiryDetailsView";
+import EnquiryEditView from "./pages/enquiry/EnquiryEditView";
+import EnquiryListView from "./pages/enquiry/EnquiryListView";
+import EnquiryCreateView from "./pages/enquiry/EnquiryCreateView";
+import EnquiryDashboardLayout from "./components/enquiry/EnquiryDashboardLayout";
+
+import Unauthorized from "./pages/Unauthorized";
+import RequireAuth from "./pages/RequireAuth";
+import NotFound from "./pages/NotFound";
 
 function App() {
-  const { user } = useAuthContext();
-
   return (
     <div className="App">
       <BrowserRouter>
         <div className="pages">
           <Routes>
-            <Route path="enquiry/" element={<DashboardLayout allowed={["Admin","Sales"]} />}>
-              <Route
-                path="create/"
-                element={user ? <CreateView /> : <Navigate to="/" />}
-              />
-              <Route
-                path="edit/:id"
-                element={user ? <EditView /> : <Navigate to="/" />}
-              />
-              <Route
-                path="view/:id"
-                element={user ? <DetailView /> : <Navigate to="/" />}
-              />
-              <Route
-                path="dashboard"
-                element={user ? <DashboardView /> : <Navigate to="/" />}
-              />
-              <Route
-                path="ongoing"
-                element={
-                  user ? <ListView type={"Ongoing"} /> : <Navigate to="/" />
-                }
-              />
-              <Route
-                path="pending"
-                element={
-                  user ? <ListView type={"Pending"} /> : <Navigate to="/" />
-                }
-              />
-              <Route
-                path="completed"
-                element={
-                  user ? <ListView type={"Completed"} /> : <Navigate to="/" />
-                }
-              />
-              <Route
-                path="archive"
-                element={
-                  user ? <ListView type={"Archived"} /> : <Navigate to="/" />
-                }
-              />
-              <Route
-                path="packages"
-                element={user ? <DashboardView /> : <Navigate to="/" />}
-              />
+            {/* Admin */}
+            <Route element={<RequireAuth allowedRoles={["Admin"]} />}>
+              <Route path="admin/" element={<AdminDashboardLayout />}>
+                <Route path="enquiry/">
+                  <Route path="create/" element={<AdminEnquiryCreateView />} />
+                  <Route path="edit/:id" element={<AdminEnquiryEditView />} />
+                  <Route path="view/:id" element={<AdminEnquiryDetailView />} />
+                  <Route
+                    path="dashboard"
+                    element={<AdminEnquiryDashboardView />}
+                  />
+                  <Route
+                    path="ongoing"
+                    element={<AdminEnquiryListView type={"Ongoing"} />}
+                  />
+                  <Route
+                    path="pending"
+                    element={<AdminEnquiryListView type={"Pending"} />}
+                  />
+                  <Route
+                    path="completed"
+                    element={<AdminEnquiryListView type={"Completed"} />}
+                  />
+                  <Route
+                    path="archive"
+                    element={<AdminEnquiryListView type={"Archived"} />}
+                  />
+                </Route>
+                <Route path="user/">
+                  <Route path="create/" element={<AdminUserCreateView />} />
+                  <Route path="edit/:id" element={<AdminUserEditView />} />
+                  <Route path="view/:id" element={<AdminUserDetailView />} />
+                  <Route
+                    path="dashboard"
+                    element={<AdminUserDashboardView />}
+                  />
+                  <Route
+                    path="ongoing"
+                    element={<AdminUserListView type={"Ongoing"} />}
+                  />
+                  <Route
+                    path="pending"
+                    element={<AdminUserListView type={"Pending"} />}
+                  />
+                  <Route
+                    path="completed"
+                    element={<AdminUserListView type={"Completed"} />}
+                  />
+                  <Route
+                    path="archive"
+                    element={<AdminUserListView type={"Archived"} />}
+                  />
+                </Route>
+              </Route>
             </Route>
-            <Route
-              path="/"
-              element={!user ? <Login /> : <Navigate to="/enquiry/dashboard" />}
-            />
-            <Route
-              path="/signup"
-              element={
-                !user ? <Signup /> : <Navigate to="/enquiry/dashboard" />
-              }
-            />
+            {/* Sales */}
+            <Route element={<RequireAuth allowedRoles={["Admin", "Sales"]} />}>
+              <Route path="enquiry/" element={<EnquiryDashboardLayout />}>
+                <Route path="create/" element={<EnquiryCreateView />} />
+                <Route path="edit/:id" element={<EnquiryEditView />} />
+                <Route path="view/:id" element={<EnquiryDetailView />} />
+                <Route path="dashboard" element={<EnquiryDashboardView />} />
+                <Route
+                  path="ongoing"
+                  element={<EnquiryListView type={"Ongoing"} />}
+                />
+                <Route
+                  path="pending"
+                  element={<EnquiryListView type={"Pending"} />}
+                />
+                <Route
+                  path="completed"
+                  element={<EnquiryListView type={"Completed"} />}
+                />
+                <Route
+                  path="archive"
+                  element={<EnquiryListView type={"Archived"} />}
+                />
+              </Route>
+            </Route>
+
+            {/* No Authentication Required */}
+            <Route path="/" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/enquiry/general" element={<CreateEnquiryForm />} />
+
+            <Route path="/unauthorized" element={<Unauthorized />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
       </BrowserRouter>

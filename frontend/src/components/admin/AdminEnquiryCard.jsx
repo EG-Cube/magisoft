@@ -1,8 +1,8 @@
 import React from "react";
-import "../styles/Enquiry.css";
+import "../../styles/Enquiry.css";
 import { Link } from "react-router-dom";
 
-const EnquiryCard = ({ enquiry }) => {
+const AdminEnquiryCard = ({ enquiry }) => {
 
   const formatDestinations = (destinations) => {
     if (!destinations || destinations.length === 0) return "";
@@ -30,7 +30,7 @@ const EnquiryCard = ({ enquiry }) => {
   };
 
   return (
-    <Link to={`/enquiry/view/${enquiry._id}`} className="enq">
+    <Link to={`/admin/enquiry/view/${enquiry._id}`} className="enq">
       <div className="title" style={{ marginLeft: "10px" }}>
         {enquiry?.firstName} {enquiry?.lastName}
       </div>
@@ -53,4 +53,4 @@ const EnquiryCard = ({ enquiry }) => {
   );
 };
 
-export default EnquiryCard;
+export default AdminEnquiryCard;

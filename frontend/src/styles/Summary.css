@@ -55,7 +55,7 @@
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    align-items:start;
+    align-items:flex-start;
 }
 .infodiv h4{
     font-weight: 300;

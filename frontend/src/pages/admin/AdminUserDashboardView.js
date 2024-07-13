@@ -3,23 +3,21 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useEnquiryContext } from "../../hooks/useEnquiryContext";
 
 // components
-import EnquiryCard from "../../components/EnquiryCard";
-import Summary from "../../components/Summary";
-import Sort from "../../components/Sort";
+import EnquiryCard from "../../components/enquiry/EnquiryCard";
+import Summary from "../../components/enquiry/Summary";
+import Sort from "../../components/enquiry/Sort";
 import "../../styles/DashboardView.css";
-import { useNavigate } from "react-router-dom";
 
-const DashboardView = () => {
+const AdminUserDashboardView = () => {
   const { enquiries, dispatch } = useEnquiryContext();
   const { user } = useAuthContext();
   const [filteredEnquiries, setFilteredEnquiries] = useState([]);
   const [filter, setFilter] = useState("");
   const [sortCriteria, setSortCriteria] = useState("Date");
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEnquiries = async () => {
-      const response = await fetch("http://localhost:4000/api/enquiry", {
+      const response = await fetch(`http://localhost:4000/api/enquiry/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -58,7 +56,6 @@ const DashboardView = () => {
           enquiry.mealPlan.toLowerCase().includes(filterLower) ||
           enquiry.purpose.toLowerCase().includes(filterLower) ||
           enquiry.remarks.toLowerCase().includes(filterLower) ||
-          enquiry.enteredBy.toLowerCase().includes(filterLower) ||
           enquiry.status.toLowerCase().includes(filterLower)
         );
       })
@@ -85,4 +82,4 @@ const DashboardView = () => {
   );
 };
 
-export default DashboardView;
+export default AdminUserDashboardView;

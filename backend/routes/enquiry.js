@@ -1,12 +1,13 @@
-const express = require('express');
+const express = require("express");
 const {
   createEnquiry,
   getEnquiries,
   getEnquiry,
   deleteEnquiry,
-  updateEnquiry
-} = require('../controllers/enquiryController');
-const requireAuth = require('../middleware/requireAuth');
+  updateEnquiry,
+  getUserEnquiries,
+} = require("../controllers/enquiryController");
+const requireAuth = require("../middleware/requireAuth");
 
 const router = express.Router();
 
@@ -14,18 +15,21 @@ const router = express.Router();
 router.use(requireAuth);
 
 // GET all enquiries
-router.get('/', getEnquiries);
+router.get("/", getEnquiries);
 
 // GET a single enquiry
-router.get('/:id', getEnquiry);
+router.get("/:id", getEnquiry);
+
+// GET a user enquiries
+router.get("/filter/:id", getUserEnquiries);
 
 // POST a new enquiry
-router.post('/', createEnquiry);
+router.post("/", createEnquiry);
 
 // DELETE an enquiry
-router.delete('/:id', deleteEnquiry);
+router.delete("/:id", deleteEnquiry);
 
 // UPDATE an enquiry
-router.patch('/:id', updateEnquiry);
+router.patch("/:id", updateEnquiry);
 
 module.exports = router;

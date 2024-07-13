@@ -2,7 +2,7 @@ import React from 'react';
 import { FaLock } from 'react-icons/fa';
 import '../styles/UnauthorizedPage.css';
 
-const UnauthorizedPage = () => {
+const Unauthorized = () => {
   return (
     <div className="unauthorized-container">
       <FaLock className="unauthorized-icon" />
@@ -12,4 +12,4 @@ const UnauthorizedPage = () => {
   );
 };
 
-export default UnauthorizedPage;
+export default Unauthorized;

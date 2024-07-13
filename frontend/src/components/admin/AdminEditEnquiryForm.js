@@ -1,14 +1,16 @@
 import { useState, useEffect, useContext } from "react";
-import { useAuthContext } from "../hooks/useAuthContext";
-import { useNavigate, useParams } from "react-router-dom";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { EnquiryContext } from "../context/EnquiryContext";
-import "../styles/EnquiryForm.css";
+import { EnquiryContext } from "../../context/EnquiryContext";
+import "../../styles/EnquiryForm.css";
+import { useUserContext } from "../../hooks/useUserContext";
 
-const EditEnquiryForm = ({ enquiryID }) => {
+const AdminEditEnquiryForm = ({ enquiryID }) => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
-  const { enquiries, dispatch } = useContext(EnquiryContext);
+  const { users, dispatch: userDispatch } = useUserContext();
+  const { enquiries, dispatch: enquiryDispatch } = useContext(EnquiryContext);
 
   const initialFormData = {
     firstName: "",
@@ -62,6 +64,21 @@ const EditEnquiryForm = ({ enquiryID }) => {
       }
     };
 
+    const fetchUsers = async () => {
+      const response = await fetch(`http://localhost:4000/api/user/`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      const json = await response.json();
+
+      if (response.ok) {
+        userDispatch({ type: "SET_USERS", payload: json });
+      }
+    };
+
+    fetchUsers();
     fetchEnquiry();
   }, [enquiryID, user]);
 
@@ -165,9 +182,12 @@ const EditEnquiryForm = ({ enquiryID }) => {
       setEmptyFields([]);
       console.log("Enquiry updated", response.data);
 
-      dispatch({ type: "UPDATE_ENQUIRY", payload: response.data });
+      dispatch: enquiryDispatch({
+        type: "UPDATE_ENQUIRY",
+        payload: response.data,
+      });
 
-      navigate(`/enquiry/view/${enquiryID}`);
+      navigate(`/admin/enquiry/view/${enquiryID}`);
     } catch (error) {
       setError(error.response?.data?.error || "An error occurred");
       setEmptyFields(error.response?.data?.emptyFields || []);
@@ -445,6 +465,22 @@ const EditEnquiryForm = ({ enquiryID }) => {
         />
       </div>
 
+      <div>
+        <label>Allocated To:</label>
+        <select
+          name="allocatedTo"
+          onChange={handleChange}
+          value={formData.allocatedTo ? formData.allocatedTo : ""}
+        >
+          <option value={""}>-</option>
+          {users?.map((option) => (
+            <option key={option._id} value={option._id}>
+              {option.firstName} {option.lastName}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className="submitBtn">
         <button type="submit">Update Enquiry</button>
       </div>
@@ -453,4 +489,4 @@ const EditEnquiryForm = ({ enquiryID }) => {
   );
 };
 
-export default EditEnquiryForm;
+export default AdminEditEnquiryForm;

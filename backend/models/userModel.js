@@ -32,10 +32,9 @@ const userSchema = new Schema(
         message: "Invalid email",
       },
     },
-    department: {
-      type: String,
-      enum: ["Admin", "Sales", "Operations","Accounting", "Management"],
-      required: [true, "Department is required"],
+    roles: {
+      type: Array,
+      required: [true, "Roles is required"],
     },
     password: {
       type: String,
@@ -46,7 +45,7 @@ const userSchema = new Schema(
 );
 
 // Static signup method
-userSchema.statics.signup = async function (firstName, lastName, department, country, email, password) {
+userSchema.statics.signup = async function (firstName, lastName, roles, country, email, password) {
   if (!email || !password) {
     throw new Error("All fields must be provided");
   }
@@ -71,7 +70,7 @@ userSchema.statics.signup = async function (firstName, lastName, department, cou
     firstName,
     lastName,
     country,
-    department,
+    roles,
     email,
     password: hashedPassword,
   });

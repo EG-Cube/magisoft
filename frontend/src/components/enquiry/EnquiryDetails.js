@@ -1,15 +1,15 @@
 import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "../hooks/useAuthContext";
-import { useEnquiryContext } from "../hooks/useEnquiryContext";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useEnquiryContext } from "../../hooks/useEnquiryContext";
 import { format } from "date-fns";
 import axios from "axios";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { useState } from "react";
-import "../styles/EnquiryDetails.css";
+import "../../styles/EnquiryDetails.css";
 
-import editBtn from "../assets/edit.png";
-import archiveBtn from "../assets/archive.png";
-import deleteBtn from "../assets/delete.png";
+import editBtn from "../../assets/edit.png";
+import archiveBtn from "../../assets/archive.png";
+import deleteBtn from "../../assets/delete.png";
 
 const EnquiryDetails = ({ enquiry }) => {
   const { dispatch } = useEnquiryContext();
@@ -26,7 +26,14 @@ const EnquiryDetails = ({ enquiry }) => {
       return;
     }
 
-    let newStatus = "Archived";
+    let newStatus;    
+    switch (enquiry.status) {
+      case "Archived":
+        newStatus = "Pending";
+        break;
+      default:
+        newStatus = "Archived";
+    }
 
     try {
       const response = await axios.patch(
@@ -259,10 +266,14 @@ const EnquiryDetails = ({ enquiry }) => {
             <div>Remarks:</div>
             <div>{enquiry.remarks}</div>
           </div>
-          <div>
+          {/* <div>
             <div>Entered By:</div>
             <div>{enquiry.enteredBy}</div>
           </div>
+          <div>
+            <div>Allocated To:</div>
+            <div>{enquiry.allocatedTo}</div>
+          </div> */}
         </div>
       </div>
     </div>

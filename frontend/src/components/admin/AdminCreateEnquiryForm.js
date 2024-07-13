@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { useAuthContext } from "../hooks/useAuthContext";
-import "../styles/EnquiryForm.css";
+import { useEffect, useState } from "react";
+import "../../styles/EnquiryForm.css";
+import { useUserContext } from "../../hooks/useUserContext";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
-const CreateEnquiryForm = () => {
+const AdminCreateEnquiryForm = () => {
   const { user } = useAuthContext();
+  const { users, dispatch } = useUserContext();
 
   const initialFormData = {
     firstName: "",
@@ -29,7 +31,8 @@ const CreateEnquiryForm = () => {
     mealPlan: "CP",
     purpose: "",
     remarks: "",
-    enteredBy: user ? user.user.firstName + " " + user.user.lastName : "",
+    enteredBy: user?.user?._id,
+    allocatedTo: null,
   };
 
   const mealPlanOptions = ["CP", "MAP", "AP"];
@@ -37,6 +40,24 @@ const CreateEnquiryForm = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const response = await fetch(`http://localhost:4000/api/user/`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      const json = await response.json();
+
+      if (response.ok) {
+        dispatch({ type: "SET_USERS", payload: json });
+      }
+    };
+
+    fetchUsers();
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -90,10 +111,10 @@ const CreateEnquiryForm = () => {
       setError("You must be logged in");
       return;
     } else {
-      console.log(user, user.user.firstName + " " + user.user.lastName)
+      console.log(user, user?.user?.firstName + " " + user?.user?.lastName);
       setFormData((prevFormData) => ({
         ...prevFormData,
-        enteredBy: user.user.firstName + " " + user.user.lastName,
+        enteredBy: user?.user?._id,
       }));
     }
 
@@ -132,7 +153,7 @@ const CreateEnquiryForm = () => {
       body: JSON.stringify(formData),
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
+        Authorization: `Bearer ${user?.token}`,
       },
     });
     const json = await response.json();
@@ -258,7 +279,8 @@ const CreateEnquiryForm = () => {
               onChange={(e) => handleDestinationChange(index, e.target.value)}
               className={emptyFields.includes("destinations") ? "error" : ""}
             />
-            <button className="removeBtn"
+            <button
+              className="removeBtn"
               type="button"
               onClick={() => handleRemoveDestination(index)}
             >
@@ -266,7 +288,8 @@ const CreateEnquiryForm = () => {
             </button>
           </div>
         ))}
-        <button className="addDestinationBtn"
+        <button
+          className="addDestinationBtn"
           type="button"
           style={{ marginBottom: "20px" }}
           onClick={handleAddDestination}
@@ -415,12 +438,30 @@ const CreateEnquiryForm = () => {
           value={formData.remarks}
         />
       </div>
-      
-      <div className="submitBtn"><button type="submit">Add Enquiry</button></div>
+
+      <div>
+        <label>Allocated To:</label>
+        <select
+          name="allocatedTo"
+          onChange={handleChange}
+          value={formData.allocatedTo ? formData.allocatedTo : ""}
+        >
+          <option value={""}>-</option>
+          {users?.map((option) => (
+            <option key={option._id} value={option._id}>
+              {option.firstName} {option.lastName}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="submitBtn">
+        <button type="submit">Add Enquiry</button>
+      </div>
 
       {error && <div className="error">{error}</div>}
     </form>
   );
 };
 
-export default CreateEnquiryForm;
+export default AdminCreateEnquiryForm;

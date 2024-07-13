@@ -3,10 +3,10 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useEnquiryContext } from "../../hooks/useEnquiryContext";
 
 // components
-import EnquiryCard from "../../components/EnquiryCard";
-import Sort from "../../components/Sort";
+import EnquiryCard from "../../components/enquiry/EnquiryCard";
+import Sort from "../../components/enquiry/Sort";
 
-const ListView = ({ type }) => {
+const EnquiryListView = ({ type }) => {
   const { enquiries, dispatch } = useEnquiryContext();
   const { user } = useAuthContext();
   const [filteredEnquiries, setFilteredEnquiries] = useState([]);
@@ -14,12 +14,15 @@ const ListView = ({ type }) => {
 
   useEffect(() => {
     const fetchEnquiries = async () => {
-      const response = await fetch("http://localhost:4000/api/enquiry", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:4000/api/enquiry/filter/${user?.user?._id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
       const json = await response.json();
 
       if (response.ok) {
@@ -53,8 +56,7 @@ const ListView = ({ type }) => {
             enquiry.emailAddress.toLowerCase().includes(filterLower) ||
             enquiry.mealPlan.toLowerCase().includes(filterLower) ||
             enquiry.purpose.toLowerCase().includes(filterLower) ||
-            enquiry.remarks.toLowerCase().includes(filterLower) ||
-            enquiry.enteredBy.toLowerCase().includes(filterLower))
+            enquiry.remarks.toLowerCase().includes(filterLower))
         );
       })
     );
@@ -82,4 +84,4 @@ const ListView = ({ type }) => {
   );
 };
 
-export default ListView;
+export default EnquiryListView;

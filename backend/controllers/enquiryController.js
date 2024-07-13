@@ -32,6 +32,27 @@ const getEnquiry = async (req, res) => {
   }
 };
 
+// get a enquiries by user
+const getUserEnquiries = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ error: "No such enquiries" });
+    }
+
+    const enquiries = await Enquiry.find({ allocatedTo: id });
+
+    if (!enquiries) {
+      return res.status(404).json({ error: "No such enquiries" });
+    }
+
+    res.status(200).json(enquiries);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // create new enquiry
 const createEnquiry = async (req, res) => {
   const {
@@ -55,6 +76,7 @@ const createEnquiry = async (req, res) => {
     purpose,
     remarks,
     enteredBy,
+    allocatedTo,
   } = req.body;
 
   try {
@@ -79,6 +101,7 @@ const createEnquiry = async (req, res) => {
       purpose,
       remarks,
       enteredBy,
+      allocatedTo,
     });
     res.status(201).json(enquiry);
   } catch (error) {
@@ -135,6 +158,7 @@ const updateEnquiry = async (req, res) => {
 module.exports = {
   getEnquiries,
   getEnquiry,
+  getUserEnquiries,
   createEnquiry,
   deleteEnquiry,
   updateEnquiry,

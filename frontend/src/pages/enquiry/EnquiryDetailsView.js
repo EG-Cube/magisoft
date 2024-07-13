@@ -3,10 +3,10 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import axios from "axios";
 
 // components
-import EnquiryDetails from "../../components/EnquiryDetails";
+import EnquiryDetails from "../../components/enquiry/EnquiryDetails";
 import { useParams } from "react-router-dom";
 
-const DetailView = () => {
+const EnquiryDetailView = () => {
   const { user } = useAuthContext();
   const { id } = useParams();
 
@@ -29,7 +29,7 @@ const DetailView = () => {
     if (user) {
       fetchEnquiry();
     }
-  }, [user]);
+  }, [user, id]);
 
   return (
       <div className="home">
@@ -40,4 +40,4 @@ const DetailView = () => {
   );
 };
 
-export default DetailView;
+export default EnquiryDetailView;

@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/Summary.css";
+import "../../styles/Summary.css";
 import PieChart from "./PieChart";
 
 const Summary = ({ enquiries }) => {

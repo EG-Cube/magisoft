@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { useLogout } from "../hooks/useLogout";
-import { useAuthContext } from "../hooks/useAuthContext";
-import userImage from "../assets/user.png";
-import "../styles/Sidebar.css";
+import { useLogout } from "../../hooks/useLogout";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import userImage from "../../assets/user.png";
+import "../../styles/Sidebar.css";
 
 const SideNavbar = () => {
   const { logout } = useLogout();
@@ -17,22 +17,22 @@ const SideNavbar = () => {
       <nav className="nav">
         <ul>
           <li>
-            <Link to={"/enquiry/dashboard"}>Dashboard</Link>
+            <Link to={"/admin/enquiry/dashboard"}>Enquiry</Link>
           </li>
           <li>
-            <Link to={"/enquiry/pending"}>Pending</Link>
+            <Link to={"/admin/enquiry/pending"}>Pending</Link>
           </li>
           <li>
-            <Link to={"/enquiry/ongoing"}>Ongoing</Link>
+            <Link to={"/admin/enquiry/ongoing"}>Ongoing</Link>
           </li>
           <li>
-            <Link to={"/enquiry/completed"}>Completed</Link>
+            <Link to={"/admin/enquiry/completed"}>Completed</Link>
           </li>
           {/* <li>
-            <Link to={"/enquiry/packages"}>Packages</Link>
+            <Link to={"/admin/enquiry/packages"}>Packages</Link>
           </li> */}
           <li>
-            <Link to={"/enquiry/archive"}>Archive</Link>
+            <Link to={"/admin/enquiry/archive"}>Archive</Link>
           </li>
         </ul>
       </nav>
