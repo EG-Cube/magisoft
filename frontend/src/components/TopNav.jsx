@@ -12,6 +12,7 @@ const TopNav = () => {
   useEffect(() => {
     if (user) {
       const countryCode = getCode(user.user.country);
+      console.log("Country Code : ", user.user, countryCode)
       if (countryCode) {
         const flagUrl = `https://flagsapi.com/${countryCode.toUpperCase()}/flat/64.png`;
         setCountryFlag(flagUrl);

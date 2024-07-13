@@ -5,12 +5,22 @@ import CentreSection from "./CentreSection";
 import RightSide from "./RightSide";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useLogout } from "../hooks/useLogout";
 
 const DashboardLayout = ({ allowed }) => {
   const { user } = useAuthContext();
+  const { logout } = useLogout();
   const location = useLocation();
 
-  // useEffect(() => {console.log(user.user.department)}, [user])
+  useEffect(() => {
+    if (user && !allowed.includes(user?.user.department)) {
+      logout();
+    }
+  }, [user, allowed, logout]);
+
+  if (!allowed.includes(user?.user.department)) {
+    return <Navigate to="/" state={{ from: location }} />;
+  }
 
   return (
     <>
@@ -18,8 +28,7 @@ const DashboardLayout = ({ allowed }) => {
       <div className="main-content">
         <SideNavbar />
         <CentreSection>
-          {allowed.includes(user?.user.department) ? <Outlet /> : "Unauthorized"}
-          
+          <Outlet />
         </CentreSection>
         <RightSide />
       </div>

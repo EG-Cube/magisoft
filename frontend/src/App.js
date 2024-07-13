@@ -4,14 +4,20 @@ import "./index.css";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import CreateEnquiryForm from "./pages/enquiry/GeneralView";
-import DashboardView from "./pages/enquiry/DashboardView";
-import DetailView from "./pages/enquiry/DetailsView";
-import EditView from "./pages/enquiry/EditView";
-import ListView from "./pages/enquiry/ListView";
-import CreateView from "./pages/enquiry/CreateView";
+
+import AdminDashboardView from "./pages/admin/AdminDashboardView";
+import UserDetailView from "./pages/admin/UserDetailsView";
+import UserEditView from "./pages/admin/UserEditView";
+import UserCreateView from "./pages/admin/UserCreateView";
+
+import CreateEnquiryForm from "./pages/enquiry/EnquiryGeneralView";
+import EnquiryDashboardView from "./pages/enquiry/EnquiryDashboardView";
+import EnquiryDetailView from "./pages/enquiry/EnquiryDetailsView";
+import EnquiryEditView from "./pages/enquiry/EnquiryEditView";
+import EnquiryListView from "./pages/enquiry/EnquiryListView";
+import EnquiryCreateView from "./pages/enquiry/EnquiryCreateView";
+
 import DashboardLayout from "./components/DashboardLayout";
-import Auth from "./Auth";
 
 function App() {
   const { user } = useAuthContext();
@@ -21,55 +27,95 @@ function App() {
       <BrowserRouter>
         <div className="pages">
           <Routes>
-            <Route path="enquiry/" element={<DashboardLayout allowed={["Admin","Sales"]} />}>
+            <Route
+              path="admin/"
+              element={<DashboardLayout allowed={["Admin"]} />}
+            >
               <Route
                 path="create/"
-                element={user ? <CreateView /> : <Navigate to="/" />}
+                element={user ? <UserCreateView /> : <Navigate to="/" />}
               />
               <Route
                 path="edit/:id"
-                element={user ? <EditView /> : <Navigate to="/" />}
+                element={user ? <UserEditView /> : <Navigate to="/" />}
               />
               <Route
                 path="view/:id"
-                element={user ? <DetailView /> : <Navigate to="/" />}
+                element={user ? <UserDetailView /> : <Navigate to="/" />}
               />
               <Route
                 path="dashboard"
-                element={user ? <DashboardView /> : <Navigate to="/" />}
+                element={user ? <AdminDashboardView /> : <Navigate to="/" />}
+              />
+            </Route>
+            <Route
+              path="enquiry/"
+              element={<DashboardLayout allowed={["Admin", "Sales"]} />}
+            >
+              <Route
+                path="create/"
+                element={user ? <EnquiryCreateView /> : <Navigate to="/" />}
+              />
+              <Route
+                path="edit/:id"
+                element={user ? <EnquiryEditView /> : <Navigate to="/" />}
+              />
+              <Route
+                path="view/:id"
+                element={user ? <EnquiryDetailView /> : <Navigate to="/" />}
+              />
+              <Route
+                path="dashboard"
+                element={user ? <EnquiryDashboardView /> : <Navigate to="/" />}
               />
               <Route
                 path="ongoing"
                 element={
-                  user ? <ListView type={"Ongoing"} /> : <Navigate to="/" />
+                  user ? (
+                    <EnquiryListView type={"Ongoing"} />
+                  ) : (
+                    <Navigate to="/" />
+                  )
                 }
               />
               <Route
                 path="pending"
                 element={
-                  user ? <ListView type={"Pending"} /> : <Navigate to="/" />
+                  user ? (
+                    <EnquiryListView type={"Pending"} />
+                  ) : (
+                    <Navigate to="/" />
+                  )
                 }
               />
               <Route
                 path="completed"
                 element={
-                  user ? <ListView type={"Completed"} /> : <Navigate to="/" />
+                  user ? (
+                    <EnquiryListView type={"Completed"} />
+                  ) : (
+                    <Navigate to="/" />
+                  )
                 }
               />
               <Route
                 path="archive"
                 element={
-                  user ? <ListView type={"Archived"} /> : <Navigate to="/" />
+                  user ? (
+                    <EnquiryListView type={"Archived"} />
+                  ) : (
+                    <Navigate to="/" />
+                  )
                 }
               />
               <Route
                 path="packages"
-                element={user ? <DashboardView /> : <Navigate to="/" />}
+                element={user ? <EnquiryDashboardView /> : <Navigate to="/" />}
               />
             </Route>
             <Route
               path="/"
-              element={!user ? <Login /> : <Navigate to="/enquiry/dashboard" />}
+              element={!user ? <Login /> : user.department === "Admin" ? <Navigate to="/admin/dashboard" /> : <Navigate to="/enquiry/dashboard" />}
             />
             <Route
               path="/signup"
