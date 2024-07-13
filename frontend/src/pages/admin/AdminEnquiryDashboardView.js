@@ -3,7 +3,6 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useEnquiryContext } from "../../hooks/useEnquiryContext";
 
 // components
-import EnquiryCard from "../../components/enquiry/EnquiryCard";
 import Summary from "../../components/enquiry/Summary";
 import Sort from "../../components/enquiry/Sort";
 import "../../styles/DashboardView.css";
@@ -12,7 +11,7 @@ import { useUserContext } from "../../hooks/useUserContext";
 
 const AdminEnquiryDashboardView = () => {
   const { enquiries, dispatch: enquiryDispatch } = useEnquiryContext();
-  const { users, dispatch: userDispatch } = useUserContext()
+  const { dispatch: userDispatch } = useUserContext()
   const { user } = useAuthContext();
   const [filteredEnquiries, setFilteredEnquiries] = useState([]);
   const [filter, setFilter] = useState("");

@@ -80,7 +80,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
 
     fetchUsers();
     fetchEnquiry();
-  }, [enquiryID, user]);
+  }, [enquiryID, user, users]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

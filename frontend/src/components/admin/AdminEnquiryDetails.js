@@ -4,7 +4,7 @@ import { useEnquiryContext } from "../../hooks/useEnquiryContext";
 import { format } from "date-fns";
 import axios from "axios";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "../../styles/EnquiryDetails.css";
 
 import editBtn from "../../assets/edit.png";

@@ -22,9 +22,14 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      navigate(from, { replace: true });
+      if (from !== location.pathname) navigate(from, { replace: true });
+      else if (user.user.roles.find((r) => r === "Admin")) {
+        navigate("/admin/enquiry/dashboard", { replace: true });
+      } else if (user.user.roles.find((r) => r === "Sales")) {
+        navigate("/enquiry/dashboard", { replace: true });
+      }
     }
-  }, [user]);
+  }, [user, from, location, navigate]);
 
   return (
     <form className="login" onSubmit={handleSubmit}>
