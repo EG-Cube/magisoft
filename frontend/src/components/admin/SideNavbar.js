@@ -17,22 +17,10 @@ const SideNavbar = () => {
       <nav className="nav">
         <ul>
           <li>
+            <Link to={"/admin/user/dashboard"}>User</Link>
+          </li>
+          <li>
             <Link to={"/admin/enquiry/dashboard"}>Enquiry</Link>
-          </li>
-          <li>
-            <Link to={"/admin/enquiry/pending"}>Pending</Link>
-          </li>
-          <li>
-            <Link to={"/admin/enquiry/ongoing"}>Ongoing</Link>
-          </li>
-          <li>
-            <Link to={"/admin/enquiry/completed"}>Completed</Link>
-          </li>
-          {/* <li>
-            <Link to={"/admin/enquiry/packages"}>Packages</Link>
-          </li> */}
-          <li>
-            <Link to={"/admin/enquiry/archive"}>Archive</Link>
           </li>
         </ul>
       </nav>

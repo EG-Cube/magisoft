@@ -1,41 +1,19 @@
-import { useState, useEffect, useContext } from "react";
-import { useAuthContext } from "../../hooks/useAuthContext";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { EnquiryContext } from "../../context/EnquiryContext";
-import "../../styles/EnquiryForm.css";
+import { useEffect, useState } from "react";
+import "../../styles/UserForm.css";
 import { useUserContext } from "../../hooks/useUserContext";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
-const AdminEditEnquiryForm = ({ enquiryID }) => {
+const AdminCreateUserForm = () => {
   const { user } = useAuthContext();
-  const navigate = useNavigate();
-  const { users, dispatch: userDispatch } = useUserContext();
-  const { enquiries, dispatch: enquiryDispatch } = useContext(EnquiryContext);
+  const { users, dispatch } = useUserContext();
 
   const initialFormData = {
     firstName: "",
     lastName: "",
-    fromDate: "",
-    toDate: "",
-    passengers: {
-      adults: 0,
-      children: 0,
-      infants: 0,
-    },
-    destinations: [""],
-    fromLocation: "",
-    toLocation: "",
-    hotelStarRating: 1,
-    budget: 0,
-    numberOfDays: 0,
-    numberOfRooms: 0,
-    roomComments: "",
-    phoneNumber: "",
-    emailAddress: "",
-    flightBookingRequired: false,
-    mealPlan: "CP",
-    purpose: "",
-    remarks: "",
+    roles: [""],
+    email: "",
+    password: "",
+    allocatedTo: null,
   };
 
   const mealPlanOptions = ["CP", "MAP", "AP"];
@@ -45,25 +23,6 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
   const [emptyFields, setEmptyFields] = useState([]);
 
   useEffect(() => {
-    const fetchEnquiry = async () => {
-      if (!user) {
-        setError("You must be logged in");
-        return;
-      }
-
-      try {
-        const response = await axios.get(`/api/enquiry/${enquiryID}`, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
-
-        setFormData(response.data);
-      } catch (error) {
-        setError(error.response?.data?.error || "An error occurred");
-      }
-    };
-
     const fetchUsers = async () => {
       const response = await fetch(`http://localhost:4000/api/user/`, {
         method: "GET",
@@ -74,13 +33,12 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
       const json = await response.json();
 
       if (response.ok) {
-        userDispatch({ type: "SET_USERS", payload: json });
+        dispatch({ type: "SET_USERS", payload: json });
       }
     };
 
     fetchUsers();
-    fetchEnquiry();
-  }, [enquiryID, user]);
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -133,6 +91,12 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
     if (!user) {
       setError("You must be logged in");
       return;
+    } else {
+      console.log(user, user?.user?.firstName + " " + user?.user?.lastName);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        enteredBy: user?.user?._id,
+      }));
     }
 
     const requiredFields = [
@@ -149,7 +113,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
       "numberOfDays",
       "numberOfRooms",
       "phoneNumber",
-      "emailAddress",
+      "email",
       "mealPlan",
       "purpose",
     ];
@@ -162,41 +126,33 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
     if (missingFields.length > 0) {
       setEmptyFields(missingFields);
       setError("Please fill in all the required fields");
-      console.log(missingFields);
       return;
     }
 
-    try {
-      const response = await axios.patch(
-        `/api/enquiry/${enquiryID}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
+    const response = await fetch("/api/user", {
+      method: "POST",
+      body: JSON.stringify(formData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user?.token}`,
+      },
+    });
+    const json = await response.json();
 
+    if (!response.ok) {
+      setError(json.error);
+      setEmptyFields(json.emptyFields || []);
+    } else {
+      setFormData(initialFormData);
       setError(null);
       setEmptyFields([]);
-      console.log("Enquiry updated", response.data);
-
-      dispatch: enquiryDispatch({
-        type: "UPDATE_ENQUIRY",
-        payload: response.data,
-      });
-
-      navigate(`/admin/enquiry/view/${enquiryID}`);
-    } catch (error) {
-      setError(error.response?.data?.error || "An error occurred");
-      setEmptyFields(error.response?.data?.emptyFields || []);
+      console.log("New user added", json);
     }
   };
 
   return (
-    <form className="enquiry-form" onSubmit={handleSubmit}>
-      <h3>Edit Enquiry</h3>
+    <form className="user-form" onSubmit={handleSubmit}>
+      <h3>Add a New User</h3>
 
       <div className="row">
         <div>
@@ -229,7 +185,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
             type="date"
             name="fromDate"
             onChange={handleChange}
-            value={formData.fromDate.substring(0, 10)}
+            value={formData.fromDate}
             className={emptyFields.includes("fromDate") ? "error" : ""}
           />
         </div>
@@ -240,7 +196,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
             type="date"
             name="toDate"
             onChange={handleChange}
-            value={formData.toDate.substring(0, 10)}
+            value={formData.toDate}
             className={emptyFields.includes("toDate") ? "error" : ""}
           />
         </div>
@@ -314,6 +270,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
           </div>
         ))}
         <button
+          className="addDestinationBtn"
           type="button"
           style={{ marginBottom: "20px" }}
           onClick={handleAddDestination}
@@ -410,26 +367,24 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
           <label>Email Address:</label>
           <input
             type="email"
-            name="emailAddress"
+            name="email"
             onChange={handleChange}
-            value={formData.emailAddress}
-            className={emptyFields.includes("emailAddress") ? "error" : ""}
+            value={formData.email}
+            className={emptyFields.includes("email") ? "error" : ""}
           />
         </div>
       </div>
       <div className="row">
-        <div className="checkbox-container">
-          <label>Flight Booking Required:</label>
-          <input
-            type="checkbox"
-            name="flightBookingRequired"
-            onChange={handleChange}
-            checked={formData.flightBookingRequired}
-            className={`checkbox ${
-              emptyFields.includes("flightBookingRequired") ? "error" : ""
-            }`}
-          />
-        </div>
+        <label>Flight Booking Required:</label>
+        <input
+          type="checkbox"
+          name="flightBookingRequired"
+          onChange={handleChange}
+          checked={formData.flightBookingRequired}
+          className={
+            emptyFields.includes("flightBookingRequired") ? "error" : ""
+          }
+        />
       </div>
 
       <div className="row">
@@ -482,11 +437,12 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
       </div>
 
       <div className="submitBtn">
-        <button type="submit">Update Enquiry</button>
+        <button type="submit">Add User</button>
       </div>
+
       {error && <div className="error">{error}</div>}
     </form>
   );
 };
 
-export default AdminEditEnquiryForm;
+export default AdminCreateUserForm;

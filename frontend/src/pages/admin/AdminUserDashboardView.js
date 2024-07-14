@@ -1,71 +1,57 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useEnquiryContext } from "../../hooks/useEnquiryContext";
+import { useUserContext } from "../../hooks/useUserContext";
 
 // components
-import EnquiryCard from "../../components/enquiry/EnquiryCard";
-import Summary from "../../components/enquiry/Summary";
-import Sort from "../../components/enquiry/Sort";
+import UserCard from "../../components/user/UserCard";
+import Summary from "../../components/admin/Summary";
 import "../../styles/DashboardView.css";
 
 const AdminUserDashboardView = () => {
-  const { enquiries, dispatch } = useEnquiryContext();
+  const { users, dispatch } = useUserContext();
   const { user } = useAuthContext();
-  const [filteredEnquiries, setFilteredEnquiries] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [filter, setFilter] = useState("");
   const [sortCriteria, setSortCriteria] = useState("Date");
 
   useEffect(() => {
-    const fetchEnquiries = async () => {
-      const response = await fetch(`http://localhost:4000/api/enquiry/`, {
+    const fetchUsers = async () => {
+      const response = await fetch(`http://localhost:4000/api/user/`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       });
       const json = await response.json();
 
       if (response.ok) {
-        dispatch({ type: "SET_ENQUIRIES", payload: json });
+        dispatch({ type: "SET_USERS", payload: json });
       }
     };
 
     if (user) {
-      fetchEnquiries();
+      fetchUsers();
     }
   }, [dispatch, user]);
 
   useEffect(() => {
-    setFilteredEnquiries(
-      enquiries?.filter((enquiry) => {
+    setFilteredUsers(
+      users?.filter((user) => {
         const filterLower = filter.toLowerCase();
         return (
-          enquiry.firstName.toLowerCase().includes(filterLower) ||
-          enquiry.lastName.toLowerCase().includes(filterLower) ||
-          enquiry.fromDate.toLowerCase().includes(filterLower) ||
-          enquiry.toDate.toLowerCase().includes(filterLower) ||
-          enquiry.destinations.some((destination) =>
-            destination.toLowerCase().includes(filterLower)
-          ) ||
-          enquiry.fromLocation.toLowerCase().includes(filterLower) ||
-          enquiry.toLocation.toLowerCase().includes(filterLower) ||
-          enquiry.budget.toString().includes(filterLower) ||
-          enquiry.roomComments.toLowerCase().includes(filterLower) ||
-          enquiry.phoneNumber.toLowerCase().includes(filterLower) ||
-          enquiry.emailAddress.toLowerCase().includes(filterLower) ||
-          enquiry.mealPlan.toLowerCase().includes(filterLower) ||
-          enquiry.purpose.toLowerCase().includes(filterLower) ||
-          enquiry.remarks.toLowerCase().includes(filterLower) ||
-          enquiry.status.toLowerCase().includes(filterLower)
+          user?.firstName.toLowerCase().includes(filterLower) ||
+          user?.lastName.toLowerCase().includes(filterLower) ||
+          user?.email.toLowerCase().includes(filterLower) ||
+          user?.roles.some((role) => role.toLowerCase().includes(filterLower))
         );
       })
     );
-  }, [filter, enquiries]);
+  }, [filter, users]);
 
   return (
     <div className="home">
-      <div className="enquiries">
-        <Summary enquiries={enquiries} />
+      <div className="users">
+        <Summary users={users} />
         <input
           id="search"
           type="text"
@@ -73,9 +59,9 @@ const AdminUserDashboardView = () => {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         />
-        <Sort sortCriteria={sortCriteria} set />
-        {filteredEnquiries?.map((enquiry) => (
-          <EnquiryCard key={enquiry._id} enquiry={enquiry} />
+        {/* <Sort sortCriteria={sortCriteria} set /> */}
+        {filteredUsers?.map((user) => (
+          <UserCard key={user?._id} user={user} />
         ))}
       </div>
     </div>

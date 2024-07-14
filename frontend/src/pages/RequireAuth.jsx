@@ -6,10 +6,6 @@ const RequireAuth = ({ allowedRoles }) => {
   const { user } = useAuthContext();
   const location = useLocation();
 
-  useEffect(() => {
-    console.log(allowedRoles, user?.user);
-  }, []);
-
   return user?.user?.roles?.find((role) => allowedRoles?.includes(role)) ? (
     <Outlet />
   ) : user?.user ? (

@@ -1,8 +1,8 @@
-import CreateEnquiryForm from "../../components/enquiry/CreateEnquiryForm";
+import CreateUserForm from "../../components/user/CreateUserForm";
 
 const AdminUserCreateView = () => {
   return (
-      <CreateEnquiryForm />
+      <CreateUserForm />
   );
 };
 

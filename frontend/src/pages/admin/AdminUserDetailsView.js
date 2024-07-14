@@ -1,42 +1,38 @@
 import { useEffect, useState } from "react";
-import { useAuthContext } from "../../hooks/useAuthContext";
 import axios from "axios";
 
 // components
-import EnquiryDetails from "../../components/enquiry/EnquiryDetails";
+import UserDetails from "../../components/user/UserDetails";
 import { useParams } from "react-router-dom";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const AdminUserDetailView = () => {
   const { user } = useAuthContext();
   const { id } = useParams();
 
-  const [enquiry, setEnquiry] = useState();
+  const [userData, setUserData] = useState();
 
   useEffect(() => {
-    const fetchEnquiry = async () => {
-      const response = await axios.get(
-        `http://localhost:4000/api/enquiry/${id}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-      setEnquiry(response.data);
+    const fetchUser = async () => {
+      const response = await axios.get(`http://localhost:4000/api/user/${id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      setUserData(response.data);
     };
 
-    if (user) {
-      fetchEnquiry();
-    }
-  }, [user, id]);
+    fetchUser();
+    console.log(userData);
+  }, []);
 
   return (
-      <div className="home">
-        <div className="enquiries">
-          {enquiry && <EnquiryDetails key={id} enquiry={enquiry} />}
-        </div>
+    <div className="home">
+      <div className="enquiries">
+        <UserDetails key={id} user={userData} />
       </div>
+    </div>
   );
 };
 

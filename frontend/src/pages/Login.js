@@ -24,7 +24,7 @@ const Login = () => {
     if (user) {
       if (from !== location.pathname) navigate(from, { replace: true });
       else if (user.user.roles.find((r) => r === "Admin")) {
-        navigate("/admin/enquiry/dashboard", { replace: true });
+        navigate("/admin/user/dashboard", { replace: true });
       } else if (user.user.roles.find((r) => r === "Sales")) {
         navigate("/enquiry/dashboard", { replace: true });
       }

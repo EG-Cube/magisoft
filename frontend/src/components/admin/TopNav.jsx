@@ -26,6 +26,9 @@ const TopNav = () => {
         <Link to="/admin/enquiry/create" className="nav-button">
           New Enquiry
         </Link>
+        <Link to="/admin/user/create" className="nav-button">
+          New User
+        </Link>
         {countryFlag && <img src={countryFlag} alt={user?.user.country} className="nav-image right" />}
       </div>
     </div>

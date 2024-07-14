@@ -14,7 +14,6 @@ import AdminEnquiryCreateView from "./pages/admin/AdminEnquiryCreateView";
 import AdminUserDashboardView from "./pages/admin/AdminUserDashboardView";
 import AdminUserDetailView from "./pages/admin/AdminUserDetailsView";
 import AdminUserEditView from "./pages/admin/AdminUserEditView";
-import AdminUserListView from "./pages/admin/AdminUserListView";
 import AdminUserCreateView from "./pages/admin/AdminUserCreateView";
 
 import CreateEnquiryForm from "./pages/enquiry/EnquiryGeneralView";
@@ -70,22 +69,6 @@ function App() {
                   <Route
                     path="dashboard"
                     element={<AdminUserDashboardView />}
-                  />
-                  <Route
-                    path="ongoing"
-                    element={<AdminUserListView type={"Ongoing"} />}
-                  />
-                  <Route
-                    path="pending"
-                    element={<AdminUserListView type={"Pending"} />}
-                  />
-                  <Route
-                    path="completed"
-                    element={<AdminUserListView type={"Completed"} />}
-                  />
-                  <Route
-                    path="archive"
-                    element={<AdminUserListView type={"Archived"} />}
                   />
                 </Route>
               </Route>
