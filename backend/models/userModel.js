@@ -33,8 +33,8 @@ const userSchema = new Schema(
       },
     },
     roles: {
-      type: Array,
-      required: [true, "Roles is required"],
+      type: [String],
+      required: true,
     },
     password: {
       type: String,
@@ -45,7 +45,14 @@ const userSchema = new Schema(
 );
 
 // Static signup method
-userSchema.statics.signup = async function (firstName, lastName, roles, country, email, password) {
+userSchema.statics.signup = async function (
+  firstName,
+  lastName,
+  country,
+  roles,
+  email,
+  password
+) {
   if (!email || !password) {
     throw new Error("All fields must be provided");
   }

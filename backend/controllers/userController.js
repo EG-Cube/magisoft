@@ -80,25 +80,6 @@ const getUser = async (req, res) => {
   }
 };
 
-// create new user
-const createUser = async (req, res) => {
-  const { firstName, lastName, country, email, roles, password } = req.body;
-
-  try {
-    const user = await User.create({
-      firstName,
-      lastName,
-      country,
-      email,
-      roles,
-      password,
-    });
-    res.status(201).json(user);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
 // delete an user
 const deleteUser = async (req, res) => {
   const { id } = req.params;
@@ -150,7 +131,6 @@ module.exports = {
   loginUser,
   getUsers,
   getUser,
-  createUser,
   deleteUser,
   updateUser,
 };

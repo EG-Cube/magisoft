@@ -13,8 +13,8 @@ const CreateUserForm = () => {
     firstName: "",
     lastName: "",
     country: "",
-    email: "",
     roles: [""],
+    email: "",
     password: "",
     confirmPassword: "", // Add confirm password field
   };
@@ -68,9 +68,9 @@ const CreateUserForm = () => {
     const requiredFields = [
       "firstName",
       "lastName",
-      "email",
       "country",
       "roles",
+      "email",
       "password",
       "confirmPassword",
     ];
@@ -89,7 +89,7 @@ const CreateUserForm = () => {
       return;
     }
 
-    const response = await fetch(`${API_URL}/api/user`, {
+    const response = await fetch(`${API_URL}/api/user/signup`, {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {
@@ -107,7 +107,7 @@ const CreateUserForm = () => {
       setError(null);
       setEmptyFields([]);
       console.log("New user added", json);
-      navigate(`/admin/user/view/${json._id}`)
+      navigate(`/admin/user/view/${json.user._id}`)
     }
 
   };
