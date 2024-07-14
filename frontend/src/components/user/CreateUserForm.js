@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 const CreateUserForm = () => {
   const { user } = useAuthContext();
   const navigate = useNavigate()
+  
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const initialFormData = {
     firstName: "",
@@ -87,7 +89,7 @@ const CreateUserForm = () => {
       return;
     }
 
-    const response = await fetch("/api/user", {
+    const response = await fetch(`${API_URL}/api/user`, {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {

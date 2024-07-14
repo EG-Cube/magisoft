@@ -16,6 +16,8 @@ const UserDetails = ({ user }) => {
   const { dispatch } = useUserContext();
   const [isUpdated, setIsUpdated] = useState(false);
   const navigate = useNavigate();
+  
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     console.log(user);
@@ -30,7 +32,7 @@ const UserDetails = ({ user }) => {
       return;
     }
 
-    const response = await fetch("/api/user/" + user?._id, {
+    const response = await fetch(`${API_URL}/api/user/` + user?._id, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${admin?.token}`,

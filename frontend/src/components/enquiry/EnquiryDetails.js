@@ -108,7 +108,7 @@ const EnquiryDetails = ({ enquiry }) => {
       return;
     }
 
-    const response = await fetch("/api/enquiry/" + enquiry._id, {
+    const response = await fetch(`${API_URL}/api/enquiry/` + enquiry._id, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${user.token}`,

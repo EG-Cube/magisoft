@@ -11,10 +11,12 @@ const AdminEnquiryListView = ({ type }) => {
   const { user } = useAuthContext();
   const [filteredEnquiries, setFilteredEnquiries] = useState([]);
   const [filter, setFilter] = useState("");
+  
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchEnquiries = async () => {
-      const response = await fetch("/api/enquiry", {
+      const response = await fetch(`${API_URL}/api/enquiry`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${user.token}`,

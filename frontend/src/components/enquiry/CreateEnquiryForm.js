@@ -131,7 +131,7 @@ const CreateEnquiryForm = () => {
       return;
     }
 
-    const response = await fetch("/api/enquiry", {
+    const response = await fetch(`${API_URL}/api/enquiry`, {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {
