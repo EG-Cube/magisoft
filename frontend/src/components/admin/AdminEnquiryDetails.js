@@ -20,6 +20,8 @@ const AdminEnquiryDetails = ({ enquiry }) => {
   const navigate = useNavigate();
   const enteredUser = users?.filter((u) => u._id === enquiry.enteredBy)[0];
   const allocatedUser = users?.filter((u) => u._id === enquiry.allocatedTo)[0];
+  
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const handleEdit = async () => {
     navigate(`/admin/enquiry/edit/${enquiry._id}`);
@@ -41,7 +43,7 @@ const AdminEnquiryDetails = ({ enquiry }) => {
 
     try {
       const response = await axios.patch(
-        `/api/enquiry/${enquiry._id}`,
+        `${API_URL}/api/enquiry/${enquiry._id}`,
         {
           ...enquiry,
           status: newStatus,
@@ -81,7 +83,7 @@ const AdminEnquiryDetails = ({ enquiry }) => {
 
     try {
       const response = await axios.patch(
-        `/api/enquiry/${enquiry._id}`,
+        `${API_URL}/api/enquiry/${enquiry._id}`,
         {
           ...enquiry,
           status: newStatus,
@@ -110,7 +112,7 @@ const AdminEnquiryDetails = ({ enquiry }) => {
       return;
     }
 
-    const response = await fetch("/api/enquiry/" + enquiry._id, {
+    const response = await fetch(`${API_URL}/api/enquiry/` + enquiry._id, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${user.token}`,

@@ -1,5 +1,5 @@
 {
-  "proxy": "http://localhost:4000",
+  "proxy": "https://api.magiholidays.com/",
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
@@ -12,6 +12,7 @@
     "chartjs": "^0.3.24",
     "country-list": "^2.3.0",
     "date-fns": "^2.30.0",
+    "nginx": "^1.0.8",
     "react": "^18.1.0",
     "react-calendar": "^5.0.0",
     "react-calendars": "^1.0.9",

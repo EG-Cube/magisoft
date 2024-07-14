@@ -7,6 +7,8 @@ const AdminCreateEnquiryForm = () => {
   const { user } = useAuthContext();
   const { users, dispatch } = useUserContext();
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const initialFormData = {
     firstName: "",
     lastName: "",
@@ -43,7 +45,7 @@ const AdminCreateEnquiryForm = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const response = await fetch(`http://localhost:4000/api/user/`, {
+      const response = await fetch(`${API_URL}/api/user/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -148,7 +150,7 @@ const AdminCreateEnquiryForm = () => {
       return;
     }
 
-    const response = await fetch("/api/enquiry", {
+    const response = await fetch(`${API_URL}/api/enquiry`, {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {

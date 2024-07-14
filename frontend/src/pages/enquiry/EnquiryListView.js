@@ -11,11 +11,13 @@ const EnquiryListView = ({ type }) => {
   const { user } = useAuthContext();
   const [filteredEnquiries, setFilteredEnquiries] = useState([]);
   const [filter, setFilter] = useState("");
+  
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchEnquiries = async () => {
       const response = await fetch(
-        `http://localhost:4000/api/enquiry/filter/${user?.user?._id}`,
+        `${API_URL}/api/enquiry/filter/${user?.user?._id}`,
         {
           method: "GET",
           headers: {

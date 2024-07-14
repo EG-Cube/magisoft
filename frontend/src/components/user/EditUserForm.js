@@ -23,6 +23,8 @@ const EditUserForm = ({ userID }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
+  
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -32,7 +34,7 @@ const EditUserForm = ({ userID }) => {
       }
 
       try {
-        const response = await axios.get(`/api/user/${userID}`, {
+        const response = await axios.get(`${API_URL}/api/user/${userID}`, {
           headers: {
             Authorization: `Bearer ${admin.token}`,
           },
@@ -116,7 +118,7 @@ const EditUserForm = ({ userID }) => {
     }
 
     try {
-      const response = await axios.patch(`/api/user/${userID}`, formData, {
+      const response = await axios.patch(`${API_URL}/api/user/${userID}`, formData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${admin.token}`,

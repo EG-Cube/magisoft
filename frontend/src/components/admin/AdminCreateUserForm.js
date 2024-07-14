@@ -7,6 +7,8 @@ const AdminCreateUserForm = () => {
   const { user } = useAuthContext();
   const { users, dispatch } = useUserContext();
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const initialFormData = {
     firstName: "",
     lastName: "",
@@ -24,7 +26,7 @@ const AdminCreateUserForm = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const response = await fetch(`http://localhost:4000/api/user/`, {
+      const response = await fetch(`${API_URL}/api/user/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -129,7 +131,7 @@ const AdminCreateUserForm = () => {
       return;
     }
 
-    const response = await fetch("/api/user", {
+    const response = await fetch(`${API_URL}/api/user`, {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {

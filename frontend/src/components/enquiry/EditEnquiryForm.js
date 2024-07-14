@@ -9,6 +9,8 @@ const EditEnquiryForm = ({ enquiryID }) => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const { enquiries, dispatch } = useContext(EnquiryContext);
+  
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const initialFormData = {
     firstName: "",
@@ -50,7 +52,7 @@ const EditEnquiryForm = ({ enquiryID }) => {
       }
 
       try {
-        const response = await axios.get(`/api/enquiry/${enquiryID}`, {
+        const response = await axios.get(`${API_URL}/api/enquiry/${enquiryID}`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
@@ -151,7 +153,7 @@ const EditEnquiryForm = ({ enquiryID }) => {
 
     try {
       const response = await axios.patch(
-        `/api/enquiry/${enquiryID}`,
+        `${API_URL}/api/enquiry/${enquiryID}`,
         formData,
         {
           headers: {

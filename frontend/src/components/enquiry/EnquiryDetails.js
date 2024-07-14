@@ -16,6 +16,8 @@ const EnquiryDetails = ({ enquiry }) => {
   const { user } = useAuthContext();
   const [isUpdated, setIsUpdated] = useState(false);
   const navigate = useNavigate();
+  
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const handleEdit = async () => {
     navigate(`/enquiry/edit/${enquiry._id}`);
@@ -37,7 +39,7 @@ const EnquiryDetails = ({ enquiry }) => {
 
     try {
       const response = await axios.patch(
-        `/api/enquiry/${enquiry._id}`,
+        `${API_URL}/api/enquiry/${enquiry._id}`,
         {
           ...enquiry,
           status: newStatus,
@@ -77,7 +79,7 @@ const EnquiryDetails = ({ enquiry }) => {
 
     try {
       const response = await axios.patch(
-        `/api/enquiry/${enquiry._id}`,
+        `${API_URL}/api/enquiry/${enquiry._id}`,
         {
           ...enquiry,
           status: newStatus,

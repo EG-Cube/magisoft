@@ -14,7 +14,7 @@ const AdminEnquiryListView = ({ type }) => {
 
   useEffect(() => {
     const fetchEnquiries = async () => {
-      const response = await fetch("http://localhost:4000/api/enquiry", {
+      const response = await fetch("/api/enquiry", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${user.token}`,

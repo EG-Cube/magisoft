@@ -22,10 +22,10 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      if (from !== location.pathname) navigate(from, { replace: true });
-      else if (user.user.roles.find((r) => r === "Admin")) {
+      if (from !== location?.pathname) navigate(from, { replace: true });
+      else if (user?.user?.roles?.find((r) => r === "Admin")) {
         navigate("/admin/user/dashboard", { replace: true });
-      } else if (user.user.roles.find((r) => r === "Sales")) {
+      } else if (user?.user?.roles?.find((r) => r === "Sales")) {
         navigate("/enquiry/dashboard", { replace: true });
       }
     }

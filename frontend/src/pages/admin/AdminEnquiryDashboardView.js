@@ -16,10 +16,12 @@ const AdminEnquiryDashboardView = () => {
   const [filteredEnquiries, setFilteredEnquiries] = useState([]);
   const [filter, setFilter] = useState("");
   const [sortCriteria, setSortCriteria] = useState("Date");
+  
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchEnquiries = async () => {
-      const response = await fetch(`http://localhost:4000/api/enquiry/`, {
+      const response = await fetch(`${API_URL}/api/enquiry/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -33,7 +35,7 @@ const AdminEnquiryDashboardView = () => {
     };
 
     const fetchUsers = async () => {
-      const response = await fetch(`http://localhost:4000/api/user/`, {
+      const response = await fetch(`${API_URL}/api/user/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${user.token}`,

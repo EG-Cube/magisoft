@@ -9,12 +9,14 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 const AdminUserDetailView = () => {
   const { user } = useAuthContext();
   const { id } = useParams();
+  
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const [userData, setUserData] = useState();
 
   useEffect(() => {
     const fetchUser = async () => {
-      const response = await axios.get(`http://localhost:4000/api/user/${id}`, {
+      const response = await axios.get(`${API_URL}/api/user/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${user.token}`,

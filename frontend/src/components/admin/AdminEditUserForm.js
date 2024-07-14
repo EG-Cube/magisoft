@@ -11,6 +11,8 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
   const navigate = useNavigate();
   const { users, dispatch: userDispatch } = useUserContext();
   const { enquiries, dispatch: enquiryDispatch } = useContext(EnquiryContext);
+  
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const initialFormData = {
     firstName: "",
@@ -52,7 +54,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
       }
 
       try {
-        const response = await axios.get(`/api/enquiry/${enquiryID}`, {
+        const response = await axios.get(`${API_URL}/api/enquiry/${enquiryID}`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
@@ -65,7 +67,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
     };
 
     const fetchUsers = async () => {
-      const response = await fetch(`http://localhost:4000/api/user/`, {
+      const response = await fetch(`${API_URL}/api/user/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -168,7 +170,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
 
     try {
       const response = await axios.patch(
-        `/api/enquiry/${enquiryID}`,
+        `${API_URL}/api/enquiry/${enquiryID}`,
         formData,
         {
           headers: {

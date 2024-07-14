@@ -9,13 +9,15 @@ import AdminEnquiryDetails from "../../components/admin/AdminEnquiryDetails";
 const AdminEnquiryDetailView = () => {
   const { user } = useAuthContext();
   const { id } = useParams();
+  
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const [enquiry, setEnquiry] = useState();
 
   useEffect(() => {
     const fetchEnquiry = async () => {
       const response = await axios.get(
-        `http://localhost:4000/api/enquiry/${id}`,
+        `${API_URL}/api/enquiry/${id}`,
         {
           method: "GET",
           headers: {
