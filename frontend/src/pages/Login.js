@@ -50,9 +50,9 @@ const Login = () => {
         Login
       </button>
       {error && <div className="error">{error}</div>}
-      <div className="signup-link">
+      {/* <div className="signup-link">
         Don't have an account? <Link to="/signup">Sign up</Link>
-      </div>
+      </div> */}
     </form>
   );
 };
