@@ -4,6 +4,10 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors');
 
+const transportRoutes = require('./routes/transport')
+const restaurantRoutes = require('./routes/restaurant')
+const hotelRoutes = require('./routes/hotel')
+const siteRoutes = require('./routes/site')
 const enquiryRoutes = require('./routes/enquiry')
 const itineraryRoutes = require('./routes/itinerary')
 const userRoutes = require('./routes/user')
@@ -27,6 +31,10 @@ app.use((req, res, next) => {
 })
 
 // routes
+app.use('/api/transport', transportRoutes)
+app.use('/api/restaurant', restaurantRoutes)
+app.use('/api/hotel', hotelRoutes)
+app.use('/api/site', siteRoutes)
 app.use('/api/enquiry', enquiryRoutes)
 app.use('/api/itinerary', itineraryRoutes)
 app.use('/api/user', userRoutes)
