@@ -6,23 +6,25 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
 import AdminDashboardLayout from "./components/admin/AdminDashboardLayout";
-import AdminEnquiryDashboardView from "./pages/admin/AdminEnquiryDashboardView";
+
+import AdminSalesDashboardView from "./pages/admin/AdminSalesDashboardView";
 import AdminEnquiryDetailView from "./pages/admin/AdminEnquiryDetailsView";
 import AdminEnquiryEditView from "./pages/admin/AdminEnquiryEditView";
 import AdminEnquiryListView from "./pages/admin/AdminEnquiryListView";
 import AdminEnquiryCreateView from "./pages/admin/AdminEnquiryCreateView";
+
 import AdminUserDashboardView from "./pages/admin/AdminUserDashboardView";
 import AdminUserDetailView from "./pages/admin/AdminUserDetailsView";
 import AdminUserEditView from "./pages/admin/AdminUserEditView";
 import AdminUserCreateView from "./pages/admin/AdminUserCreateView";
 
-import CreateEnquiryForm from "./pages/enquiry/EnquiryGeneralView";
-import EnquiryDashboardView from "./pages/enquiry/EnquiryDashboardView";
-import EnquiryDetailView from "./pages/enquiry/EnquiryDetailsView";
-import EnquiryEditView from "./pages/enquiry/EnquiryEditView";
-import EnquiryListView from "./pages/enquiry/EnquiryListView";
-import EnquiryCreateView from "./pages/enquiry/EnquiryCreateView";
-import EnquiryDashboardLayout from "./components/enquiry/EnquiryDashboardLayout";
+import CreateEnquiryForm from "./pages/sales/EnquiryGeneralView";
+import SalesDashboardView from "./pages/sales/SalesDashboardView";
+import EnquiryDetailView from "./pages/sales/EnquiryDetailsView";
+import EnquiryEditView from "./pages/sales/EnquiryEditView";
+import EnquiryListView from "./pages/sales/EnquiryListView";
+import EnquiryCreateView from "./pages/sales/EnquiryCreateView";
+import SalesDashboardLayout from "./components/sales/SalesDashboardLayout";
 
 import Unauthorized from "./pages/Unauthorized";
 import RequireAuth from "./pages/RequireAuth";
@@ -43,7 +45,7 @@ function App() {
                   <Route path="view/:id" element={<AdminEnquiryDetailView />} />
                   <Route
                     path="dashboard"
-                    element={<AdminEnquiryDashboardView />}
+                    element={<AdminSalesDashboardView />}
                   />
                   <Route
                     path="ongoing"
@@ -75,11 +77,11 @@ function App() {
             </Route>
             {/* Sales */}
             <Route element={<RequireAuth allowedRoles={["Admin", "Sales"]} />}>
-              <Route path="enquiry/" element={<EnquiryDashboardLayout />}>
+              <Route path="enquiry/" element={<SalesDashboardLayout />}>
                 <Route path="create/" element={<EnquiryCreateView />} />
                 <Route path="edit/:id" element={<EnquiryEditView />} />
                 <Route path="view/:id" element={<EnquiryDetailView />} />
-                <Route path="dashboard" element={<EnquiryDashboardView />} />
+                <Route path="dashboard" element={<SalesDashboardView />} />
                 <Route
                   path="ongoing"
                   element={<EnquiryListView type={"Ongoing"} />}

@@ -3,13 +3,13 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useEnquiryContext } from "../../hooks/useEnquiryContext";
 
 // components
-import Summary from "../../components/enquiry/Summary";
-import Sort from "../../components/enquiry/Sort";
+import Summary from "../../components/sales/Summary";
+import Sort from "../../components/sales/Sort";
 import "../../styles/DashboardView.css";
 import AdminEnquiryCard from "../../components/admin/AdminEnquiryCard";
 import { useUserContext } from "../../hooks/useUserContext";
 
-const AdminEnquiryDashboardView = () => {
+const AdminSalesDashboardView = () => {
   const { enquiries, dispatch: enquiryDispatch } = useEnquiryContext();
   const { dispatch: userDispatch } = useUserContext()
   const { user } = useAuthContext();
@@ -101,4 +101,4 @@ const AdminEnquiryDashboardView = () => {
   );
 };
 
-export default AdminEnquiryDashboardView;
+export default AdminSalesDashboardView;

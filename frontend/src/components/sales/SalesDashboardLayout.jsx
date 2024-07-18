@@ -5,7 +5,7 @@ import CentreSection from "../CentreSection";
 import RightSide from "../RightSide";
 import { Outlet } from "react-router-dom";
 
-const EnquiryDashboardLayout = () => {
+const SalesDashboardLayout = () => {
   return (
     <>
       <TopNav />
@@ -20,4 +20,4 @@ const EnquiryDashboardLayout = () => {
   );
 };
 
-export default EnquiryDashboardLayout;
+export default SalesDashboardLayout;

@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import axios from "axios";
 
 // components
-import EnquiryDetails from "../../components/enquiry/EnquiryDetails";
+import EnquiryDetails from "../../components/sales/EnquiryDetails";
 import { useParams } from "react-router-dom";
 
 const EnquiryDetailView = () => {

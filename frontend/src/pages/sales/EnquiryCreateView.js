@@ -1,4 +1,4 @@
-import CreateEnquiryForm from "../../components/enquiry/CreateEnquiryForm";
+import CreateEnquiryForm from "../../components/sales/CreateEnquiryForm";
 
 const EnquiryCreateView = () => {
   return (

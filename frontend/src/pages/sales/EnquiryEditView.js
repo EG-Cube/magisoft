@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import EditEnquiryForm from "../../components/enquiry/EditEnquiryForm";
+import EditEnquiryForm from "../../components/sales/EditEnquiryForm";
 
 const EnquiryEditFormView = () => {
   const { id } = useParams();

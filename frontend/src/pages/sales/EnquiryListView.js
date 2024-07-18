@@ -3,8 +3,8 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useEnquiryContext } from "../../hooks/useEnquiryContext";
 
 // components
-import EnquiryCard from "../../components/enquiry/EnquiryCard";
-import Sort from "../../components/enquiry/Sort";
+import EnquiryCard from "../../components/sales/EnquiryCard";
+import Sort from "../../components/sales/Sort";
 
 const EnquiryListView = ({ type }) => {
   const { enquiries, dispatch } = useEnquiryContext();
