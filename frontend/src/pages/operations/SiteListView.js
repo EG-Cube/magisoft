@@ -3,28 +3,25 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useSiteContext } from "../../hooks/useSiteContext";
 
 // components
-import SiteCard from "../../components/site/SiteCard";
-import Sort from "../../components/site/Sort";
+import SiteCard from "../../components/operations/SiteCard";
+import Sort from "../../components/operations/Sort";
 
 const SiteListView = ({ type }) => {
   const { sites, dispatch } = useSiteContext();
   const { user } = useAuthContext();
-  const [filteredEnquiries, setFilteredEnquiries] = useState([]);
+  const [filteredSites, setFilteredSites] = useState([]);
   const [filter, setFilter] = useState("");
-  
+
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
-    const fetchEnquiries = async () => {
-      const response = await fetch(
-        `${API_URL}/api/site/filter/${user?.user?._id}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
+    const fetchSites = async () => {
+      const response = await fetch(`${API_URL}/api/site/`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
       const json = await response.json();
 
       if (response.ok) {
@@ -33,32 +30,23 @@ const SiteListView = ({ type }) => {
     };
 
     if (user) {
-      fetchEnquiries();
+      fetchSites();
     }
   }, [dispatch, user]);
 
   useEffect(() => {
-    setFilteredEnquiries(
+    setFilteredSites(
       sites?.filter((site) => {
-        const filterLower = filter.toLowerCase();
+        const filterLower = filter?.toLowerCase();
         return (
-          site.status === type &&
-          (site.firstName.toLowerCase().includes(filterLower) ||
-            site.lastName.toLowerCase().includes(filterLower) ||
-            site.fromDate.toLowerCase().includes(filterLower) ||
-            site.toDate.toLowerCase().includes(filterLower) ||
-            site.destinations.some((destination) =>
-              destination.toLowerCase().includes(filterLower)
-            ) ||
-            site.fromLocation.toLowerCase().includes(filterLower) ||
-            site.toLocation.toLowerCase().includes(filterLower) ||
-            site.budget.toString().includes(filterLower) ||
-            site.roomComments.toLowerCase().includes(filterLower) ||
-            site.phoneNumber.toLowerCase().includes(filterLower) ||
-            site.emailAddress.toLowerCase().includes(filterLower) ||
-            site.mealPlan.toLowerCase().includes(filterLower) ||
-            site.purpose.toLowerCase().includes(filterLower) ||
-            site.remarks.toLowerCase().includes(filterLower))
+          site?.name.toLowerCase().includes(filterLower) ||
+          site?.address.toLowerCase().includes(filterLower) ||
+          site?.city.toLowerCase().includes(filterLower) ||
+          site?.state.toLowerCase().includes(filterLower) ||
+          site?.country.toLowerCase().includes(filterLower) ||
+          site?.pincode.toLowerCase().includes(filterLower) ||
+          site?.duration.toLowerCase().includes(filterLower) ||
+          site?.type.toString().includes(filterLower)
         );
       })
     );
@@ -66,7 +54,7 @@ const SiteListView = ({ type }) => {
 
   return (
     <div className="home">
-      <h1>{type} Enquiries</h1>
+      <h1>{type} Sites</h1>
       <div className="sites">
         <input
           id="search"
@@ -76,10 +64,10 @@ const SiteListView = ({ type }) => {
           onChange={(e) => setFilter(e.target.value)}
         />
         <Sort />
-        {filteredEnquiries
+        {filteredSites
           ?.sort((a, b) => a.createdAt < b.createdAt)
           .map((site) => (
-            <SiteCard key={site._id} site={site} />
+            <SiteCard key={site?._id} site={site} />
           ))}
       </div>
     </div>

@@ -2,19 +2,6 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-// Sub-schema for Available Meals
-const MealSchema = new Schema({
-  mealType: {
-    type: String,
-    required: true,
-    enum: ["Breakfast", "Lunch", "Dinner", "Snacks"], // Example meal types, adjust as needed
-  },
-  availability: {
-    type: Boolean,
-    required: true,
-  },
-});
-
 // Main Restaurant Schema
 const restaurantSchema = new Schema(
   {
@@ -48,9 +35,33 @@ const restaurantSchema = new Schema(
       required: true,
       trim: true,
     },
-    availableMeals: {
-      type: [MealSchema],
+    pincode: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    contactNumber: {
+      type: String,
       required: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    website: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    availableMeals: {
+      type: [String],
+      required: true,
+    },
+    amenities: {
+      type: [String],
+      required: false,
     },
   },
   { timestamps: true }

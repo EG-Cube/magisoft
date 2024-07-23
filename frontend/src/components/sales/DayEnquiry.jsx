@@ -1,6 +1,6 @@
 import React from "react";
 import Enquiry from "./EnquiryCard";
-import "../styles/DayEnquiry.css";
+import "../styles/Daycard.css";
 
 const DayEnquiry = ({ date, enquiries }) => {
   return (

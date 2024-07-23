@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../../context/UserContext";
-import "../../styles/EnquiryForm.css";
+import "../../styles/form.css";
 
 const EditUserForm = ({ userID }) => {
   const { user: admin } = useAuthContext();
@@ -139,7 +139,7 @@ const EditUserForm = ({ userID }) => {
   };
 
   return (
-    <form className="enquiry-form" onSubmit={handleSubmit}>
+    <form className="form" onSubmit={handleSubmit}>
       <h3>Edit User</h3>
 
       <div className="row">

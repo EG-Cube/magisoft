@@ -2,6 +2,19 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
+const VisitingHoursSchema = new Schema({
+  start: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  end: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+});
+
 // Site Schema
 const siteSchema = new Schema(
   {
@@ -35,14 +48,27 @@ const siteSchema = new Schema(
       required: true,
       trim: true,
     },
-    duration: {
-      type: Number,
-      required: true,
-    },
     type: {
       type: String,
       required: true,
-      enum: ["Tourist", "Historical", "Business", "Recreational"], // Example enum values, adjust as needed
+      enum: ["Tourist", "Historical", "Business", "Recreational", "Religious"],
+    },
+    description: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    image: {
+      type: String,
+      required: false,
+    },
+    visitingHours: {
+      type: VisitingHoursSchema,
+      required: true,
+    },
+    facilities: {
+      type: [String],
+      required: false,
     },
   },
   { timestamps: true }

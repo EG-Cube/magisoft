@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import EditSiteForm from "../../components/site/EditSiteForm";
+import EditSiteForm from "../../components/operations/EditSiteForm";
 
 const SiteEditFormView = () => {
   const { id } = useParams();

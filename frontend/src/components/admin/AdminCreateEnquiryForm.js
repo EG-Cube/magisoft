@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../../styles/EnquiryForm.css";
+import "../../styles/form.css";
 import { useUserContext } from "../../hooks/useUserContext";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
@@ -172,7 +172,7 @@ const AdminCreateEnquiryForm = () => {
   };
 
   return (
-    <form className="enquiry-form" onSubmit={handleSubmit}>
+    <form className="form" onSubmit={handleSubmit}>
       <h3>Add a New Enquiry</h3>
 
       <div className="row">

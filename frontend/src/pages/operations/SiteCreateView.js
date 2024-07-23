@@ -1,4 +1,4 @@
-import CreateSiteForm from "../../components/site/CreateSiteForm";
+import CreateSiteForm from "../../components/operations/CreateSiteForm";
 
 const SiteCreateView = () => {
   return (

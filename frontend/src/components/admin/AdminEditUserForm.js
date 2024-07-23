@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { EnquiryContext } from "../../context/EnquiryContext";
-import "../../styles/EnquiryForm.css";
+import "../../styles/form.css";
 import { useUserContext } from "../../hooks/useUserContext";
 
 const AdminEditEnquiryForm = ({ enquiryID }) => {
@@ -197,7 +197,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
   };
 
   return (
-    <form className="enquiry-form" onSubmit={handleSubmit}>
+    <form className="form" onSubmit={handleSubmit}>
       <h3>Edit Enquiry</h3>
 
       <div className="row">

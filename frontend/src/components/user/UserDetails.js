@@ -1,20 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useUserContext } from "../../hooks/useUserContext";
-import { format } from "date-fns";
-import axios from "axios";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { useEffect, useState } from "react";
-import "../../styles/EnquiryDetails.css";
+import "../../styles/details.css";
 
 import editBtn from "../../assets/edit.png";
-import archiveBtn from "../../assets/archive.png";
 import deleteBtn from "../../assets/delete.png";
 
 const UserDetails = ({ user }) => {
   const { user: admin } = useAuthContext();
   const { dispatch } = useUserContext();
-  const [isUpdated, setIsUpdated] = useState(false);
   const navigate = useNavigate();
   
   const API_URL = process.env.REACT_APP_API_URL;

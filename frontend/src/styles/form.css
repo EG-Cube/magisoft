@@ -1,4 +1,4 @@
-.enquiry-form {
+.form {
     margin: 0 auto;
     padding: 1rem 2rem;
     background: #f9f9f9;
@@ -6,46 +6,46 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
-  .enquiry-form h3 {
+  .form h3 {
     margin-bottom: 1rem;
     text-align: center;
   }
   
-  .enquiry-form .row {
+  .form .row {
     display: flex;
     justify-content: space-between;
     margin-bottom: 1rem;
   }
   
-  .enquiry-form .row > div {
+  .form .row > div {
     flex: 1;
     margin-right: 1rem;
   }
   
-  .enquiry-form .row > div:last-child {
+  .form .row > div:last-child {
     margin-right: 0;
   }
   
-  .enquiry-form label {
+  .form label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
   }
   
-  .enquiry-form input,
-  .enquiry-form select,
-  .enquiry-form textarea {
+  .form input,
+  .form select,
+  .form textarea {
     width: 100%;
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 4px;
   }
   
-  .enquiry-form textarea {
+  .form textarea {
     height: 100px;
   }
   
-  .enquiry-form button {
+  .form button {
     display: inline-block;
     padding: 0.75rem 1.5rem;
     border: none;
@@ -57,18 +57,18 @@
     text-align: center;
   }
   
-  .enquiry-form button.removeBtn {
+  .form button.removeBtn {
     background-color: #dc3545;
     margin-left: 10px;
   }
   
-  .enquiry-form button.addDestinationBtn,
-  .enquiry-form button.removeBtn {
+  .form button.addDestinationBtn,
+  .form button.removeBtn {
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
   }
   
-  .enquiry-form .destination-field {
+  .form .destination-field {
     display: flex;
     align-items: center;
     margin-bottom: 0.5rem;
@@ -85,20 +85,20 @@
     margin: 0;
   }
     
-  .enquiry-form .error {
+  .form .error {
     border-color: red;
   }
   
-  .enquiry-form .error + .error {
+  .form .error + .error {
     color: red;
     font-size: 0.8rem;
   }
   
-  .enquiry-form .submitBtn {
+  .form .submitBtn {
     text-align: center;
   }
   
-  .enquiry-form .error {
+  .form .error {
     color: red;
     text-align: center;
     margin-top: 1rem;

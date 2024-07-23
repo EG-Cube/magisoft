@@ -34,8 +34,19 @@ const getSite = async (req, res) => {
 
 // create new site
 const createSite = async (req, res) => {
-  const { name, address, city, state, country, pincode, duration, type } =
-    req.body;
+  const {
+    name,
+    address,
+    city,
+    state,
+    country,
+    pincode,
+    type,
+    description,
+    image,
+    visitingHours,
+    facilities,
+  } = req.body;
 
   try {
     const site = await Site.create({
@@ -45,8 +56,11 @@ const createSite = async (req, res) => {
       state,
       country,
       pincode,
-      duration,
       type,
+      description,
+      image,
+      visitingHours,
+      facilities,
     });
     res.status(201).json(site);
   } catch (error) {

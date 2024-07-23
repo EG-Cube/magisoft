@@ -6,6 +6,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
 import AdminDashboardLayout from "./components/admin/AdminDashboardLayout";
+import SalesDashboardLayout from "./components/sales/SalesDashboardLayout";
+import OperationsDashboardLayout from "./components/operations/OperationsDashboardLayout";
 
 import AdminSalesDashboardView from "./pages/admin/AdminSalesDashboardView";
 import AdminEnquiryDetailView from "./pages/admin/AdminEnquiryDetailsView";
@@ -18,13 +20,18 @@ import AdminUserDetailView from "./pages/admin/AdminUserDetailsView";
 import AdminUserEditView from "./pages/admin/AdminUserEditView";
 import AdminUserCreateView from "./pages/admin/AdminUserCreateView";
 
-import CreateEnquiryForm from "./pages/sales/EnquiryGeneralView";
 import SalesDashboardView from "./pages/sales/SalesDashboardView";
+import CreateEnquiryForm from "./pages/sales/EnquiryGeneralView";
 import EnquiryDetailView from "./pages/sales/EnquiryDetailsView";
 import EnquiryEditView from "./pages/sales/EnquiryEditView";
 import EnquiryListView from "./pages/sales/EnquiryListView";
 import EnquiryCreateView from "./pages/sales/EnquiryCreateView";
-import SalesDashboardLayout from "./components/sales/SalesDashboardLayout";
+
+import OperationsDashboardView from "./pages/operations/OperationsDashboardView";
+import SiteDetailView from "./pages/operations/SiteDetailsView";
+import SiteEditView from "./pages/operations/SiteEditView";
+import SiteListView from "./pages/operations/SiteListView";
+import SiteCreateView from "./pages/operations/SiteCreateView";
 
 import Unauthorized from "./pages/Unauthorized";
 import RequireAuth from "./pages/RequireAuth";
@@ -98,6 +105,21 @@ function App() {
                   path="archive"
                   element={<EnquiryListView type={"Archived"} />}
                 />
+              </Route>
+            </Route>
+
+            {/* Operations */}
+            <Route
+              element={<RequireAuth allowedRoles={["Admin", "Operations"]} />}
+            >
+              <Route path="operations/" element={<OperationsDashboardLayout />}>
+              <Route path="dashboard/" element={<OperationsDashboardView />} />
+                <Route path="site/">
+                  <Route path="create/" element={<SiteCreateView />} />
+                  <Route path="edit/:id" element={<SiteEditView />} />
+                  <Route path="view/:id" element={<SiteDetailView />} />
+                  <Route path="list/" element={<SiteListView />} />
+                </Route>
               </Route>
             </Route>
 

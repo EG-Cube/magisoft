@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import axios from "axios";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { useState } from "react";
-import "../../styles/EnquiryDetails.css";
+import "../../styles/details.css";
 
 import editBtn from "../../assets/edit.png";
 import archiveBtn from "../../assets/archive.png";

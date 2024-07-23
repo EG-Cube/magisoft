@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import "../../styles/EnquiryForm.css";
+import "../../styles/form.css";
 
 const CreateEnquiryForm = () => {
   const { user } = useAuthContext();
@@ -153,7 +153,7 @@ const CreateEnquiryForm = () => {
   };
 
   return (
-    <form className="enquiry-form" onSubmit={handleSubmit}>
+    <form className="form" onSubmit={handleSubmit}>
       <h3>Add a New Enquiry</h3>
 
       <div className="row">

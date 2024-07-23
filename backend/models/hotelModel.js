@@ -2,32 +2,6 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-// Sub-schema for Available Room Types
-const RoomTypeSchema = new Schema({
-  roomType: {
-    type: String,
-    required: true,
-    enum: ["Single", "Double", "Suite", "Deluxe"], // Example room types, adjust as needed
-  },
-  availability: {
-    type: Boolean,
-    required: true,
-  },
-});
-
-// Sub-schema for Available Meal Plans
-const MealPlanSchema = new Schema({
-  mealPlan: {
-    type: String,
-    required: true,
-    enum: ["CP", "MAP", "AP"], // Example meal plans, adjust as needed
-  },
-  availability: {
-    type: Boolean,
-    required: true,
-  },
-});
-
 // Main Hotel Schema
 const hotelSchema = new Schema(
   {
@@ -56,19 +30,43 @@ const hotelSchema = new Schema(
       required: true,
       trim: true,
     },
+    pincode: {
+      type: String,
+      required: false,
+      trim: true,
+    },
     starRating: {
       type: Number,
       required: true,
       min: 1,
       max: 5,
     },
+    contactNumber: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    website: {
+      type: String,
+      required: false,
+      trim: true,
+    },
     availableRoomTypes: {
-      type: [RoomTypeSchema],
+      type: [String],
       required: true,
     },
     availableMealPlans: {
-      type: [MealPlanSchema],
+      type: [String],
       required: true,
+    },
+    amenities: {
+      type: [String],
+      required: false,
     },
   },
   { timestamps: true }

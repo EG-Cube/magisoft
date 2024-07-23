@@ -13,7 +13,7 @@ const transportSchema = new Schema(
     modeOfTransport: {
       type: String,
       required: true,
-      enum: ["Bus", "Train", "Flight", "Ship"], // Example transport modes, adjust as needed
+      enum: ["Cab","Bus", "Train", "Flight", "Ship"], // Example transport modes, adjust as needed
     },
     fromLocation: {
       type: String,
@@ -24,6 +24,29 @@ const transportSchema = new Schema(
       type: String,
       required: true,
       trim: true,
+    },
+    contactNumber: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    description: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    distance: {
+      type: Number,
+      required: true,
+    },
+    duration: {
+      type: Number,
+      required: true,
     },
   },
   { timestamps: true }
