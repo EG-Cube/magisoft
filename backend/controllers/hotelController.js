@@ -40,9 +40,14 @@ const createHotel = async (req, res) => {
     city,
     state,
     country,
+    pincode,
     starRating,
+    contactNumber,
+    email,
+    website,
     availableRoomTypes,
     availableMealPlans,
+    amenities,
   } = req.body;
 
   try {
@@ -52,9 +57,14 @@ const createHotel = async (req, res) => {
       city,
       state,
       country,
+      pincode,
       starRating,
+      contactNumber,
+      email,
+      website,
       availableRoomTypes,
       availableMealPlans,
+      amenities,
     });
     res.status(201).json(hotel);
   } catch (error) {

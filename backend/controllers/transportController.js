@@ -34,7 +34,17 @@ const getTransport = async (req, res) => {
 
 // create new transport
 const createTransport = async (req, res) => {
-  const { company, modeOfTransport, fromLocation, toLocation } = req.body;
+  const {
+    company,
+    modeOfTransport,
+    fromLocation,
+    toLocation,
+    contactNumber,
+    email,
+    description,
+    distance,
+    duration,
+  } = req.body;
 
   try {
     const transport = await Transport.create({
@@ -42,6 +52,11 @@ const createTransport = async (req, res) => {
       modeOfTransport,
       fromLocation,
       toLocation,
+      contactNumber,
+      email,
+      description,
+      distance,
+      duration,
     });
     res.status(201).json(transport);
   } catch (error) {

@@ -34,8 +34,20 @@ const getRestaurant = async (req, res) => {
 
 // create new restaurant
 const createRestaurant = async (req, res) => {
-  const { name, cuisine, address, city, state, country, availableMeals } =
-    req.body;
+  const {
+    name,
+    cuisine,
+    address,
+    city,
+    state,
+    country,
+    pincode,
+    contactNumber,
+    email,
+    website,
+    availableMeals,
+    amenities,
+  } = req.body;
 
   try {
     const restaurant = await Restaurant.create({
@@ -45,7 +57,12 @@ const createRestaurant = async (req, res) => {
       city,
       state,
       country,
+      pincode,
+      contactNumber,
+      email,
+      website,
       availableMeals,
+      amenities,
     });
     res.status(201).json(restaurant);
   } catch (error) {
