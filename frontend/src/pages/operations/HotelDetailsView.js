@@ -12,20 +12,20 @@ const HotelDetailView = () => {
   
   const API_URL = process.env.REACT_APP_API_URL;
 
-  const [site, setHotel] = useState();
+  const [hotel, setHotel] = useState(); // Updated state name
 
   useEffect(() => {
     const fetchHotel = async () => {
-      const response = await axios.get(
-        `${API_URL}/api/site/${id}`,
-        {
-          method: "GET",
+      try {
+        const response = await axios.get(`${API_URL}/api/hotel/${id}`, { // Updated endpoint
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
-        }
-      );
-      setHotel(response.data);
+        });
+        setHotel(response.data);
+      } catch (error) {
+        console.error("Error fetching hotel:", error);
+      }
     };
 
     if (user) {
@@ -34,11 +34,11 @@ const HotelDetailView = () => {
   }, [user, id]);
 
   return (
-      <div className="home">
-        <div className="sites">
-          {site && <HotelDetails key={id} site={site} />}
-        </div>
+    <div className="home">
+      <div className="hotels"> {/* Changed className */}
+        {hotel && <HotelDetails key={id} hotel={hotel} />} {/* Updated prop */}
       </div>
+    </div>
   );
 };
 

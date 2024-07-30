@@ -7,7 +7,7 @@ import HotelCard from "../../components/operations/HotelCard";
 import Sort from "../../components/operations/Sort";
 
 const HotelListView = ({ type }) => {
-  const { sites, dispatch } = useHotelContext();
+  const { hotels, dispatch } = useHotelContext(); // Use 'hotels' instead of 'sites'
   const { user } = useAuthContext();
   const [filteredHotels, setFilteredHotels] = useState([]);
   const [filter, setFilter] = useState("");
@@ -16,7 +16,7 @@ const HotelListView = ({ type }) => {
 
   useEffect(() => {
     const fetchHotels = async () => {
-      const response = await fetch(`${API_URL}/api/site/`, {
+      const response = await fetch(`${API_URL}/api/hotel/`, { // Updated endpoint
         method: "GET",
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -25,7 +25,7 @@ const HotelListView = ({ type }) => {
       const json = await response.json();
 
       if (response.ok) {
-        dispatch({ type: "SET_SITES", payload: json });
+        dispatch({ type: "SET_HOTELS", payload: json }); // Updated action type
       }
     };
 
@@ -36,26 +36,26 @@ const HotelListView = ({ type }) => {
 
   useEffect(() => {
     setFilteredHotels(
-      sites?.filter((site) => {
+      hotels?.filter((hotel) => { // Use 'hotel' instead of 'site'
         const filterLower = filter?.toLowerCase();
         return (
-          site?.name.toLowerCase().includes(filterLower) ||
-          site?.address.toLowerCase().includes(filterLower) ||
-          site?.city.toLowerCase().includes(filterLower) ||
-          site?.state.toLowerCase().includes(filterLower) ||
-          site?.country.toLowerCase().includes(filterLower) ||
-          site?.pincode.toLowerCase().includes(filterLower) ||
-          site?.duration.toLowerCase().includes(filterLower) ||
-          site?.type.toString().includes(filterLower)
+          hotel?.name.toLowerCase().includes(filterLower) ||
+          hotel?.address.toLowerCase().includes(filterLower) ||
+          hotel?.city.toLowerCase().includes(filterLower) ||
+          hotel?.state.toLowerCase().includes(filterLower) ||
+          hotel?.country.toLowerCase().includes(filterLower) ||
+          hotel?.pincode.toLowerCase().includes(filterLower) ||
+          hotel?.availableRoomTypes.join(", ").toLowerCase().includes(filterLower) ||
+          hotel?.availableMealPlans.join(", ").toLowerCase().includes(filterLower)
         );
       })
     );
-  }, [filter, sites, type]);
+  }, [filter, hotels, type]);
 
   return (
     <div className="home">
       <h1>{type} Hotels</h1>
-      <div className="sites">
+      <div className="hotels"> {/* Changed className to reflect hotels */}
         <input
           id="search"
           type="text"
@@ -65,9 +65,9 @@ const HotelListView = ({ type }) => {
         />
         <Sort />
         {filteredHotels
-          ?.sort((a, b) => a.createdAt < b.createdAt)
-          .map((site) => (
-            <HotelCard key={site?._id} site={site} />
+          ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by date
+          .map((hotel) => (
+            <HotelCard key={hotel?._id} hotel={hotel} />
           ))}
       </div>
     </div>

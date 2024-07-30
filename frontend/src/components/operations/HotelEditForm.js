@@ -1,14 +1,14 @@
-import { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { SiteContext } from "../../context/SiteContext";
+import { HotelContext } from "../../context/HotelContext";
 import "../../styles/form.css";
 
-const SiteEditForm = ({ siteID }) => {
+const HotelEditForm = ({ hotelID }) => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
-  const { sites, dispatch } = useContext(SiteContext);
+  const { dispatch } = useContext(HotelContext);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -19,30 +19,28 @@ const SiteEditForm = ({ siteID }) => {
     state: "",
     country: "",
     pincode: "",
-    duration: 0,
-    type: "",
+    starRating: 1,
+    contactNumber: "",
+    email: "",
+    website: "",
+    availableRoomTypes: [],
+    availableMealPlans: [],
+    amenities: [],
   };
 
-  const typeOptions = [
-    "Tourist",
-    "Historical",
-    "Business",
-    "Recreational",
-    "Religious",
-  ];
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
   useEffect(() => {
-    const fetchSite = async () => {
+    const fetchHotel = async () => {
       if (!user) {
         setError("You must be logged in");
         return;
       }
 
       try {
-        const response = await axios.get(`${API_URL}/api/site/${siteID}`, {
+        const response = await axios.get(`${API_URL}/api/hotel/${hotelID}`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
@@ -54,21 +52,20 @@ const SiteEditForm = ({ siteID }) => {
       }
     };
 
-    fetchSite();
-  }, [siteID, user]);
+    fetchHotel();
+  }, [hotelID, user, API_URL]); // Added API_URL to dependency array
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
-    if (name.includes("visitingHours.")) {
-      const timeType = name.split(".")[1];
+    if (name.includes("availableRoomTypes") || name.includes("availableMealPlans") || name.includes("amenities")) {
+      const [key, index] = name.split('.');
+      const updatedArray = [...formData[key]];
+      updatedArray[index] = newValue;
       setFormData((prevFormData) => ({
         ...prevFormData,
-        visitingHours: {
-          ...prevFormData.visitingHours,
-          [timeType]: newValue,
-        },
+        [key]: updatedArray,
       }));
     } else {
       setFormData((prevFormData) => ({
@@ -78,27 +75,27 @@ const SiteEditForm = ({ siteID }) => {
     }
   };
 
-  const handleFacilityChange = (index, value) => {
-    const newFacilities = [...formData?.facilities];
-    newFacilities[index] = value;
+  const handleArrayChange = (type, index, value) => {
+    const updatedArray = [...formData[type]];
+    updatedArray[index] = value;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      facilities: newFacilities,
+      [type]: updatedArray,
     }));
   };
 
-  const handleAddFacility = () => {
+  const handleAddItem = (type) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      facilities: [...prevFormData.facilities, ""],
+      [type]: [...prevFormData[type], ""],
     }));
   };
 
-  const handleRemoveFacility = (index) => {
-    const newFacilities = formData?.facilities.filter((_, i) => i !== index);
+  const handleRemoveItem = (type, index) => {
+    const updatedArray = formData[type].filter((_, i) => i !== index);
     setFormData((prevFormData) => ({
       ...prevFormData,
-      facilities: newFacilities,
+      [type]: updatedArray,
     }));
   };
 
@@ -117,26 +114,24 @@ const SiteEditForm = ({ siteID }) => {
       "state",
       "country",
       "pincode",
-      "type",
-      "visitingHours.start",
-      "visitingHours.end",
+      "starRating",
+      "contactNumber",
+      "email",
+      "availableRoomTypes",
+      "availableMealPlans",
     ];
 
-    const missingFields = requiredFields.filter((field) => {
-      const [mainField, subField] = field.split(".");
-      return subField ? !formData[mainField][subField] : !formData[mainField];
-    });
+    const missingFields = requiredFields.filter((field) => !formData[field] || (Array.isArray(formData[field]) && formData[field].length === 0));
 
     if (missingFields.length > 0) {
       setEmptyFields(missingFields);
       setError("Please fill in all the required fields");
-      console.log(missingFields);
       return;
     }
 
     try {
       const response = await axios.patch(
-        `${API_URL}/api/site/${siteID}`,
+        `${API_URL}/api/hotel/${hotelID}`,
         formData,
         {
           headers: {
@@ -148,11 +143,11 @@ const SiteEditForm = ({ siteID }) => {
 
       setError(null);
       setEmptyFields([]);
-      console.log("Site updated", response.data);
+      console.log("Hotel updated", response.data);
 
-      dispatch({ type: "UPDATE_SITE", payload: response.data });
+      dispatch({ type: "UPDATE_HOTEL", payload: response.data });
 
-      navigate(`/operations/site/view/${siteID}`);
+      navigate(`/operations/hotel/view/${hotelID}`);
     } catch (error) {
       setError(error.response?.data?.error || "An error occurred");
       setEmptyFields(error.response?.data?.emptyFields || []);
@@ -161,7 +156,7 @@ const SiteEditForm = ({ siteID }) => {
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      <h3>Edit Site</h3>
+      <h3>Edit Hotel</h3>
 
       <div className="row">
         <div>
@@ -230,82 +225,61 @@ const SiteEditForm = ({ siteID }) => {
           className={emptyFields.includes("pincode") ? "error" : ""}
         />
       </div>
-      <div className="row">
-        <div>
-          <label>Type:</label>
-          <select
-            name="type"
-            onChange={handleChange}
-            value={formData?.type}
-            className={emptyFields.includes("type") ? "error" : ""}
-          >
-            <option key={""} value={""}>
-              {""}
-            </option>
-            {typeOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
       <div>
-        <label>Description:</label>
-        <textarea
-          name="description"
+        <label>Star Rating:</label>
+        <input
+          type="number"
+          name="starRating"
           onChange={handleChange}
-          value={formData?.description}
-          className={emptyFields.includes("description") ? "error" : ""}
+          value={formData?.starRating}
+          min="1"
+          max="5"
+          className={emptyFields.includes("starRating") ? "error" : ""}
         />
       </div>
       <div>
-        <label>Image:</label>
+        <label>Contact Number:</label>
         <input
           type="text"
-          name="image"
+          name="contactNumber"
           onChange={handleChange}
-          value={formData?.image}
+          value={formData?.contactNumber}
+          className={emptyFields.includes("contactNumber") ? "error" : ""}
         />
       </div>
-      <div className="row">
-        <div>
-          <label>Visiting Hours Start:</label>
-          <input
-            type="time"
-            name="visitingHours.start"
-            onChange={handleChange}
-            value={formData?.visitingHours?.start}
-            className={
-              emptyFields.includes("visitingHours.start") ? "error" : ""
-            }
-          />
-        </div>
-        <div>
-          <label>Visiting Hours End:</label>
-          <input
-            type="time"
-            name="visitingHours.end"
-            onChange={handleChange}
-            value={formData?.visitingHours?.end}
-            className={emptyFields.includes("visitingHours.end") ? "error" : ""}
-          />
-        </div>
+      <div>
+        <label>Email:</label>
+        <input
+          type="email"
+          name="email"
+          onChange={handleChange}
+          value={formData?.email}
+          className={emptyFields.includes("email") ? "error" : ""}
+        />
       </div>
       <div>
-        <label>Facilities:</label>
-        {formData?.facilities?.map((item, index) => (
+        <label>Website:</label>
+        <input
+          type="text"
+          name="website"
+          onChange={handleChange}
+          value={formData?.website}
+        />
+      </div>
+      <div>
+        <label>Available Room Types:</label>
+        {formData?.availableRoomTypes?.map((item, index) => (
           <div key={index} className="destination-field">
             <input
               type="text"
               value={item}
-              onChange={(e) => handleFacilityChange(index, e.target.value)}
-              className={emptyFields.includes("facilities") ? "error" : ""}
+              onChange={(e) => handleArrayChange('availableRoomTypes', index, e.target.value)}
+              className={emptyFields.includes("availableRoomTypes") ? "error" : ""}
             />
             <button
               className="removeBtn"
               type="button"
-              onClick={() => handleRemoveFacility(index)}
+              onClick={() => handleRemoveItem('availableRoomTypes', index)}
             >
               Remove
             </button>
@@ -315,17 +289,73 @@ const SiteEditForm = ({ siteID }) => {
           className="addFacilityBtn"
           type="button"
           style={{ marginBottom: "20px" }}
-          onClick={handleAddFacility}
+          onClick={() => handleAddItem('availableRoomTypes')}
         >
-          Add Facility
+          Add Room Type
+        </button>
+      </div>
+      <div>
+        <label>Available Meal Plans:</label>
+        {formData?.availableMealPlans?.map((item, index) => (
+          <div key={index} className="destination-field">
+            <input
+              type="text"
+              value={item}
+              onChange={(e) => handleArrayChange('availableMealPlans', index, e.target.value)}
+              className={emptyFields.includes("availableMealPlans") ? "error" : ""}
+            />
+            <button
+              className="removeBtn"
+              type="button"
+              onClick={() => handleRemoveItem('availableMealPlans', index)}
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+        <button
+          className="addFacilityBtn"
+          type="button"
+          style={{ marginBottom: "20px" }}
+          onClick={() => handleAddItem('availableMealPlans')}
+        >
+          Add Meal Plan
+        </button>
+      </div>
+      <div>
+        <label>Amenities:</label>
+        {formData?.amenities?.map((item, index) => (
+          <div key={index} className="destination-field">
+            <input
+              type="text"
+              value={item}
+              onChange={(e) => handleArrayChange('amenities', index, e.target.value)}
+              className={emptyFields.includes("amenities") ? "error" : ""}
+            />
+            <button
+              className="removeBtn"
+              type="button"
+              onClick={() => handleRemoveItem('amenities', index)}
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+        <button
+          className="addFacilityBtn"
+          type="button"
+          style={{ marginBottom: "20px" }}
+          onClick={() => handleAddItem('amenities')}
+        >
+          Add Amenity
         </button>
       </div>
       <div className="submitBtn">
-        <button type="submit">Update Site</button>
+        <button type="submit">Update Hotel</button>
       </div>
       {error && <div className="error">{error}</div>}
     </form>
   );
 };
 
-export default SiteEditForm;
+export default HotelEditForm;

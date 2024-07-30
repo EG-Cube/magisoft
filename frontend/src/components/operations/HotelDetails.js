@@ -1,6 +1,7 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useSiteContext } from "../../hooks/useSiteContext";
+import { useHotelContext } from "../../hooks/useHotelContext"; // Updated context hook
 import axios from "axios";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { useState } from "react";
@@ -9,15 +10,15 @@ import "../../styles/details.css";
 import editBtn from "../../assets/edit.png";
 import deleteBtn from "../../assets/delete.png";
 
-const SiteDetails = ({ site }) => {
-  const { dispatch } = useSiteContext();
+const HotelDetails = ({ hotel }) => {
+  const { dispatch } = useHotelContext(); // Updated context hook
   const { user } = useAuthContext();
   const navigate = useNavigate();
 
   const API_URL = process.env.REACT_APP_API_URL;
 
   const handleEdit = async () => {
-    navigate(`/operations/site/edit/${site?._id}`);
+    navigate(`/operations/hotel/edit/${hotel?._id}`); // Updated route
   };
 
   const handleDelete = async () => {
@@ -25,41 +26,29 @@ const SiteDetails = ({ site }) => {
       return;
     }
 
-    const response = await fetch(`${API_URL}/api/site/` + site?._id, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    });
-    const json = await response.json();
+    try {
+      const response = await axios.delete(`${API_URL}/api/hotel/${hotel?._id}`, { // Updated endpoint
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
 
-    if (response.ok) {
-      dispatch({ type: "DELETE_SITE", payload: json });
+      if (response.status === 200) {
+        dispatch({ type: "DELETE_HOTEL", payload: response.data }); // Updated action type
+        navigate(`/operations/hotel/list`); // Updated route
+      }
+    } catch (error) {
+      console.error("Error deleting hotel:", error);
     }
-
-    navigate(`/operations/site/list`);
   };
 
-  const getTypeStyle = (type) => {
-    switch (type) {
-      case "Tourist":
-        return { backgroundColor: "#FDD1D2", color: "black" };
-      case "Historical":
-        return { backgroundColor: "#87cefa", color: "black" };
-      case "Business":
-        return { backgroundColor: "#98fb98", color: "black" };
-      case "Recreational":
-        return { backgroundColor: "#d3d3d3", color: "black" };
-      case "Religious":
-        return { backgroundColor: "#ffe86b", color: "black" };
-      default:
-        return { backgroundColor: "#fff", color: "black" };
-    }
+  const getStarRatingStyle = (rating) => {
+    return { color: "#FFD700" }; // Gold color for star rating
   };
 
   return (
-    <div className="site-details">
-      <div className="site-header">
+    <div className="hotel-details">
+      <div className="hotel-header">
         <div className="status">
           <div className="actions">
             <button className="edit-btn" onClick={handleEdit}>
@@ -69,39 +58,43 @@ const SiteDetails = ({ site }) => {
               <img src={deleteBtn} alt="Delete" />
             </button>
           </div>
-          <span style={getTypeStyle(site?.type)}>{site?.type}</span>
+          <span style={getStarRatingStyle(hotel?.starRating)}>
+            {`★`.repeat(hotel?.starRating)}
+          </span>
         </div>
       </div>
-      <div className="site-content">
+      <div className="hotel-content">
         <div className="row">
           <div>
             <div>Name:</div>
-            <div>{site?.name}</div>
+            <div>{hotel?.name}</div>
           </div>
           <div>
             <div>Address:</div>
             <div>
-              {site?.address}, {site?.city}, {site?.state}, {site?.country} -{" "}
-              {site?.pincode}
+              {hotel?.address}, {hotel?.city}, {hotel?.state}, {hotel?.country} -{" "}
+              {hotel?.pincode}
             </div>
           </div>
         </div>
         <div className="row">
           <div>
             <div>Description:</div>
-            <div>{site?.description}</div>
+            <div>{hotel?.description}</div>
           </div>
         </div>
         <div className="row">
           <div>
             <div>Facilities:</div>
-            <div>{site?.facilities?.join(", ")}</div>
+            <div>{hotel?.amenities?.join(", ")}</div> {/* Updated field */}
           </div>
           <div>
-            <div>Visiting Hours:</div>
-            <div>
-              {site?.visitingHours?.start} - {site?.visitingHours?.end}
-            </div>
+            <div>Available Room Types:</div>
+            <div>{hotel?.availableRoomTypes?.join(", ")}</div>
+          </div>
+          <div>
+            <div>Available Meal Plans:</div>
+            <div>{hotel?.availableMealPlans?.join(", ")}</div>
           </div>
         </div>
       </div>
@@ -109,4 +102,4 @@ const SiteDetails = ({ site }) => {
   );
 };
 
-export default SiteDetails;
+export default HotelDetails;
