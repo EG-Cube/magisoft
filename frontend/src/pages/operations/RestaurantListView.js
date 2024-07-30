@@ -7,7 +7,7 @@ import RestaurantCard from "../../components/operations/RestaurantCard";
 import Sort from "../../components/operations/Sort";
 
 const RestaurantListView = ({ type }) => {
-  const { sites, dispatch } = useRestaurantContext();
+  const { restaurants, dispatch } = useRestaurantContext(); // Changed from `sites` to `restaurants`
   const { user } = useAuthContext();
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [filter, setFilter] = useState("");
@@ -16,7 +16,7 @@ const RestaurantListView = ({ type }) => {
 
   useEffect(() => {
     const fetchRestaurants = async () => {
-      const response = await fetch(`${API_URL}/api/site/`, {
+      const response = await fetch(`${API_URL}/api/restaurant/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -25,37 +25,36 @@ const RestaurantListView = ({ type }) => {
       const json = await response.json();
 
       if (response.ok) {
-        dispatch({ type: "SET_SITES", payload: json });
+        dispatch({ type: "SET_RESTAURANTS", payload: json }); // Changed action type
       }
     };
 
     if (user) {
       fetchRestaurants();
     }
-  }, [dispatch, user]);
+  }, [dispatch, user, API_URL]); // Added API_URL to dependencies
 
   useEffect(() => {
     setFilteredRestaurants(
-      sites?.filter((site) => {
+      restaurants?.filter((restaurant) => { // Changed from `site` to `restaurant`
         const filterLower = filter?.toLowerCase();
         return (
-          site?.name.toLowerCase().includes(filterLower) ||
-          site?.address.toLowerCase().includes(filterLower) ||
-          site?.city.toLowerCase().includes(filterLower) ||
-          site?.state.toLowerCase().includes(filterLower) ||
-          site?.country.toLowerCase().includes(filterLower) ||
-          site?.pincode.toLowerCase().includes(filterLower) ||
-          site?.duration.toLowerCase().includes(filterLower) ||
-          site?.type.toString().includes(filterLower)
+          restaurant?.name.toLowerCase().includes(filterLower) ||
+          restaurant?.address.toLowerCase().includes(filterLower) ||
+          restaurant?.city.toLowerCase().includes(filterLower) ||
+          restaurant?.state.toLowerCase().includes(filterLower) ||
+          restaurant?.country.toLowerCase().includes(filterLower) ||
+          restaurant?.pincode.toLowerCase().includes(filterLower) ||
+          restaurant?.cuisine.toLowerCase().includes(filterLower)
         );
       })
     );
-  }, [filter, sites, type]);
+  }, [filter, restaurants, type]);
 
   return (
     <div className="home">
       <h1>{type} Restaurants</h1>
-      <div className="sites">
+      <div className="restaurants">
         <input
           id="search"
           type="text"
@@ -65,9 +64,9 @@ const RestaurantListView = ({ type }) => {
         />
         <Sort />
         {filteredRestaurants
-          ?.sort((a, b) => a.createdAt < b.createdAt)
-          .map((site) => (
-            <RestaurantCard key={site?._id} site={site} />
+          ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Changed to sort correctly by date
+          .map((restaurant) => (
+            <RestaurantCard key={restaurant?._id} restaurant={restaurant} />
           ))}
       </div>
     </div>
