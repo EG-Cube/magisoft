@@ -1,23 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useSiteContext } from "../../hooks/useSiteContext";
-import axios from "axios";
-import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import { useState } from "react";
+import { useTransportContext } from "../../hooks/useTransportContext";
 import "../../styles/details.css";
 
 import editBtn from "../../assets/edit.png";
 import deleteBtn from "../../assets/delete.png";
 
-const SiteDetails = ({ site }) => {
-  const { dispatch } = useSiteContext();
+const TransportDetails = ({ transport }) => {
+  const { dispatch } = useTransportContext();
   const { user } = useAuthContext();
   const navigate = useNavigate();
 
   const API_URL = process.env.REACT_APP_API_URL;
 
   const handleEdit = async () => {
-    navigate(`/operations/site/edit/${site?._id}`);
+    navigate(`/operations/transport/edit/${transport?._id}`);
   };
 
   const handleDelete = async () => {
@@ -25,7 +22,7 @@ const SiteDetails = ({ site }) => {
       return;
     }
 
-    const response = await fetch(`${API_URL}/api/site/` + site?._id, {
+    const response = await fetch(`${API_URL}/api/transport/` + transport?._id, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -34,23 +31,23 @@ const SiteDetails = ({ site }) => {
     const json = await response.json();
 
     if (response.ok) {
-      dispatch({ type: "DELETE_SITE", payload: json });
+      dispatch({ type: "DELETE_TRANSPORT", payload: json });
     }
 
-    navigate(`/operations/site/list`);
+    navigate(`/operations/transport/list`);
   };
 
-  const getTypeStyle = (type) => {
-    switch (type) {
-      case "Tourist":
+  const getTypeStyle = (modeOfTransport) => {
+    switch (modeOfTransport) {
+      case "Cab":
         return { backgroundColor: "#FDD1D2", color: "black" };
-      case "Historical":
+      case "Bus":
         return { backgroundColor: "#87cefa", color: "black" };
-      case "Business":
+      case "Train":
         return { backgroundColor: "#98fb98", color: "black" };
-      case "Recreational":
+      case "Flight":
         return { backgroundColor: "#d3d3d3", color: "black" };
-      case "Religious":
+      case "Ship":
         return { backgroundColor: "#ffe86b", color: "black" };
       default:
         return { backgroundColor: "#fff", color: "black" };
@@ -58,8 +55,8 @@ const SiteDetails = ({ site }) => {
   };
 
   return (
-    <div className="site-details">
-      <div className="site-header">
+    <div className="transport-details">
+      <div className="transport-header">
         <div className="status">
           <div className="actions">
             <button className="edit-btn" onClick={handleEdit}>
@@ -69,39 +66,50 @@ const SiteDetails = ({ site }) => {
               <img src={deleteBtn} alt="Delete" />
             </button>
           </div>
-          <span style={getTypeStyle(site?.type)}>{site?.type}</span>
+          <span style={getTypeStyle(transport?.modeOfTransport)}>
+            {transport?.modeOfTransport}
+          </span>
         </div>
       </div>
-      <div className="site-content">
+      <div className="transport-content">
         <div className="row">
           <div>
-            <div>Name:</div>
-            <div>{site?.name}</div>
+            <div>Company:</div>
+            <div>{transport?.company}</div>
           </div>
           <div>
-            <div>Address:</div>
-            <div>
-              {site?.address}, {site?.city}, {site?.state}, {site?.country} -{" "}
-              {site?.pincode}
-            </div>
+            <div>From Location:</div>
+            <div>{transport?.fromLocation}</div>
           </div>
         </div>
         <div className="row">
+          <div>
+            <div>To Location:</div>
+            <div>{transport?.toLocation}</div>
+          </div>
+          <div>
+            <div>Contact Number:</div>
+            <div>{transport?.contactNumber}</div>
+          </div>
+        </div>
+        <div className="row">
+          <div>
+            <div>Email:</div>
+            <div>{transport?.email}</div>
+          </div>
           <div>
             <div>Description:</div>
-            <div>{site?.description}</div>
+            <div>{transport?.description}</div>
           </div>
         </div>
         <div className="row">
           <div>
-            <div>Facilities:</div>
-            <div>{site?.facilities?.join(", ")}</div>
+            <div>Distance:</div>
+            <div>{transport?.distance} km</div>
           </div>
           <div>
-            <div>Visiting Hours:</div>
-            <div>
-              {site?.visitingHours?.start} - {site?.visitingHours?.end}
-            </div>
+            <div>Duration:</div>
+            <div>{transport?.duration} hours</div>
           </div>
         </div>
       </div>
@@ -109,4 +117,4 @@ const SiteDetails = ({ site }) => {
   );
 };
 
-export default SiteDetails;
+export default TransportDetails;

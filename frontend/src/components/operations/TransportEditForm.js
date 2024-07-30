@@ -2,47 +2,42 @@ import { useState, useEffect, useContext } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { SiteContext } from "../../context/SiteContext";
+import { TransportContext } from "../../context/TransportContext";
 import "../../styles/form.css";
 
-const SiteEditForm = ({ siteID }) => {
+const TransportEditForm = ({ transportID }) => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
-  const { sites, dispatch } = useContext(SiteContext);
+  const { dispatch } = useContext(TransportContext);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
   const initialFormData = {
-    name: "",
-    address: "",
-    city: "",
-    state: "",
-    country: "",
-    pincode: "",
+    company: "",
+    fromLocation: "",
+    toLocation: "",
+    contactNumber: "",
+    email: "",
+    description: "",
+    distance: 0,
     duration: 0,
-    type: "",
+    modeOfTransport: "",
   };
 
-  const typeOptions = [
-    "Tourist",
-    "Historical",
-    "Business",
-    "Recreational",
-    "Religious",
-  ];
+  const modeOfTransportOptions = ["Cab", "Bus", "Train", "Flight", "Ship"];
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
   useEffect(() => {
-    const fetchSite = async () => {
+    const fetchTransport = async () => {
       if (!user) {
         setError("You must be logged in");
         return;
       }
 
       try {
-        const response = await axios.get(`${API_URL}/api/site/${siteID}`, {
+        const response = await axios.get(`${API_URL}/api/transport/${transportID}`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
@@ -54,51 +49,15 @@ const SiteEditForm = ({ siteID }) => {
       }
     };
 
-    fetchSite();
-  }, [siteID, user]);
+    fetchTransport();
+  }, [transportID, user, API_URL]);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const newValue = type === "checkbox" ? checked : value;
+    const { name, value } = e.target;
 
-    if (name.includes("visitingHours.")) {
-      const timeType = name.split(".")[1];
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        visitingHours: {
-          ...prevFormData.visitingHours,
-          [timeType]: newValue,
-        },
-      }));
-    } else {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: newValue,
-      }));
-    }
-  };
-
-  const handleFacilityChange = (index, value) => {
-    const newFacilities = [...formData?.facilities];
-    newFacilities[index] = value;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      facilities: newFacilities,
-    }));
-  };
-
-  const handleAddFacility = () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      facilities: [...prevFormData.facilities, ""],
-    }));
-  };
-
-  const handleRemoveFacility = (index) => {
-    const newFacilities = formData?.facilities.filter((_, i) => i !== index);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      facilities: newFacilities,
+      [name]: value,
     }));
   };
 
@@ -111,21 +70,15 @@ const SiteEditForm = ({ siteID }) => {
     }
 
     const requiredFields = [
-      "name",
-      "address",
-      "city",
-      "state",
-      "country",
-      "pincode",
-      "type",
-      "visitingHours.start",
-      "visitingHours.end",
+      "company",
+      "fromLocation",
+      "toLocation",
+      "contactNumber",
+      "email",
+      "modeOfTransport",
     ];
 
-    const missingFields = requiredFields.filter((field) => {
-      const [mainField, subField] = field.split(".");
-      return subField ? !formData[mainField][subField] : !formData[mainField];
-    });
+    const missingFields = requiredFields.filter((field) => !formData[field]);
 
     if (missingFields.length > 0) {
       setEmptyFields(missingFields);
@@ -136,7 +89,7 @@ const SiteEditForm = ({ siteID }) => {
 
     try {
       const response = await axios.patch(
-        `${API_URL}/api/site/${siteID}`,
+        `${API_URL}/api/transport/${transportID}`,
         formData,
         {
           headers: {
@@ -148,11 +101,11 @@ const SiteEditForm = ({ siteID }) => {
 
       setError(null);
       setEmptyFields([]);
-      console.log("Site updated", response.data);
+      console.log("Transport updated", response.data);
 
-      dispatch({ type: "UPDATE_SITE", payload: response.data });
+      dispatch({ type: "UPDATE_TRANSPORT", payload: response.data });
 
-      navigate(`/operations/site/view/${siteID}`);
+      navigate(`/operations/transport/view/${transportID}`);
     } catch (error) {
       setError(error.response?.data?.error || "An error occurred");
       setEmptyFields(error.response?.data?.emptyFields || []);
@@ -161,93 +114,62 @@ const SiteEditForm = ({ siteID }) => {
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      <h3>Edit Site</h3>
+      <h3>Edit Transport</h3>
 
       <div className="row">
         <div>
-          <label>Name:</label>
+          <label>Company:</label>
           <input
             type="text"
-            name="name"
+            name="company"
             onChange={handleChange}
-            value={formData?.name}
-            className={emptyFields.includes("name") ? "error" : ""}
+            value={formData?.company}
+            className={emptyFields.includes("company") ? "error" : ""}
           />
         </div>
       </div>
       <div className="row">
         <div>
-          <label>Address:</label>
+          <label>From Location:</label>
           <input
             type="text"
-            name="address"
+            name="fromLocation"
             onChange={handleChange}
-            value={formData?.address}
-            className={emptyFields.includes("address") ? "error" : ""}
+            value={formData?.fromLocation}
+            className={emptyFields.includes("fromLocation") ? "error" : ""}
           />
         </div>
-
         <div>
-          <label>City:</label>
+          <label>To Location:</label>
           <input
             type="text"
-            name="city"
+            name="toLocation"
             onChange={handleChange}
-            value={formData?.city}
-            className={emptyFields.includes("city") ? "error" : ""}
+            value={formData?.toLocation}
+            className={emptyFields.includes("toLocation") ? "error" : ""}
           />
         </div>
       </div>
       <div className="row">
         <div>
-          <label>State:</label>
+          <label>Contact Number:</label>
           <input
             type="text"
-            name="state"
+            name="contactNumber"
             onChange={handleChange}
-            value={formData?.state}
-            className={emptyFields.includes("state") ? "error" : ""}
+            value={formData?.contactNumber}
+            className={emptyFields.includes("contactNumber") ? "error" : ""}
           />
         </div>
         <div>
-          <label>Country:</label>
+          <label>Email:</label>
           <input
-            type="text"
-            name="country"
+            type="email"
+            name="email"
             onChange={handleChange}
-            value={formData?.country}
-            className={emptyFields.includes("country") ? "error" : ""}
+            value={formData?.email}
+            className={emptyFields.includes("email") ? "error" : ""}
           />
-        </div>
-      </div>
-      <div>
-        <label>Pincode:</label>
-        <input
-          type="text"
-          name="pincode"
-          onChange={handleChange}
-          value={formData?.pincode}
-          className={emptyFields.includes("pincode") ? "error" : ""}
-        />
-      </div>
-      <div className="row">
-        <div>
-          <label>Type:</label>
-          <select
-            name="type"
-            onChange={handleChange}
-            value={formData?.type}
-            className={emptyFields.includes("type") ? "error" : ""}
-          >
-            <option key={""} value={""}>
-              {""}
-            </option>
-            {typeOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
         </div>
       </div>
       <div>
@@ -260,72 +182,51 @@ const SiteEditForm = ({ siteID }) => {
         />
       </div>
       <div>
-        <label>Image:</label>
+        <label>Distance (km):</label>
         <input
-          type="text"
-          name="image"
+          type="number"
+          name="distance"
           onChange={handleChange}
-          value={formData?.image}
+          value={formData?.distance}
+          className={emptyFields.includes("distance") ? "error" : ""}
+        />
+      </div>
+      <div>
+        <label>Duration (hours):</label>
+        <input
+          type="number"
+          name="duration"
+          onChange={handleChange}
+          value={formData?.duration}
+          className={emptyFields.includes("duration") ? "error" : ""}
         />
       </div>
       <div className="row">
         <div>
-          <label>Visiting Hours Start:</label>
-          <input
-            type="time"
-            name="visitingHours.start"
+          <label>Mode of Transport:</label>
+          <select
+            name="modeOfTransport"
             onChange={handleChange}
-            value={formData?.visitingHours?.start}
-            className={
-              emptyFields.includes("visitingHours.start") ? "error" : ""
-            }
-          />
+            value={formData?.modeOfTransport}
+            className={emptyFields.includes("modeOfTransport") ? "error" : ""}
+          >
+            <option key={""} value={""}>
+              {""}
+            </option>
+            {modeOfTransportOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
         </div>
-        <div>
-          <label>Visiting Hours End:</label>
-          <input
-            type="time"
-            name="visitingHours.end"
-            onChange={handleChange}
-            value={formData?.visitingHours?.end}
-            className={emptyFields.includes("visitingHours.end") ? "error" : ""}
-          />
-        </div>
-      </div>
-      <div>
-        <label>Facilities:</label>
-        {formData?.facilities?.map((item, index) => (
-          <div key={index} className="destination-field">
-            <input
-              type="text"
-              value={item}
-              onChange={(e) => handleFacilityChange(index, e.target.value)}
-              className={emptyFields.includes("facilities") ? "error" : ""}
-            />
-            <button
-              className="removeBtn"
-              type="button"
-              onClick={() => handleRemoveFacility(index)}
-            >
-              Remove
-            </button>
-          </div>
-        ))}
-        <button
-          className="addFacilityBtn"
-          type="button"
-          style={{ marginBottom: "20px" }}
-          onClick={handleAddFacility}
-        >
-          Add Facility
-        </button>
       </div>
       <div className="submitBtn">
-        <button type="submit">Update Site</button>
+        <button type="submit">Update Transport</button>
       </div>
       {error && <div className="error">{error}</div>}
     </form>
   );
 };
 
-export default SiteEditForm;
+export default TransportEditForm;

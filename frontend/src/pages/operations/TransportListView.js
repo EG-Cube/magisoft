@@ -7,7 +7,7 @@ import TransportCard from "../../components/operations/TransportCard";
 import Sort from "../../components/operations/Sort";
 
 const TransportListView = ({ type }) => {
-  const { sites, dispatch } = useTransportContext();
+  const { transports, dispatch } = useTransportContext();
   const { user } = useAuthContext();
   const [filteredTransports, setFilteredTransports] = useState([]);
   const [filter, setFilter] = useState("");
@@ -16,7 +16,7 @@ const TransportListView = ({ type }) => {
 
   useEffect(() => {
     const fetchTransports = async () => {
-      const response = await fetch(`${API_URL}/api/site/`, {
+      const response = await fetch(`${API_URL}/api/transport/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -25,37 +25,38 @@ const TransportListView = ({ type }) => {
       const json = await response.json();
 
       if (response.ok) {
-        dispatch({ type: "SET_SITES", payload: json });
+        dispatch({ type: "SET_TRANSPORTS", payload: json });
       }
     };
 
     if (user) {
       fetchTransports();
     }
-  }, [dispatch, user]);
+  }, [dispatch, user, API_URL]);
 
   useEffect(() => {
     setFilteredTransports(
-      sites?.filter((site) => {
+      transports?.filter((transport) => {
         const filterLower = filter?.toLowerCase();
         return (
-          site?.name.toLowerCase().includes(filterLower) ||
-          site?.address.toLowerCase().includes(filterLower) ||
-          site?.city.toLowerCase().includes(filterLower) ||
-          site?.state.toLowerCase().includes(filterLower) ||
-          site?.country.toLowerCase().includes(filterLower) ||
-          site?.pincode.toLowerCase().includes(filterLower) ||
-          site?.duration.toLowerCase().includes(filterLower) ||
-          site?.type.toString().includes(filterLower)
+          transport?.company.toLowerCase().includes(filterLower) ||
+          transport?.fromLocation.toLowerCase().includes(filterLower) ||
+          transport?.toLocation.toLowerCase().includes(filterLower) ||
+          transport?.modeOfTransport.toLowerCase().includes(filterLower) ||
+          transport?.contactNumber?.toLowerCase().includes(filterLower) ||
+          transport?.email?.toLowerCase().includes(filterLower) ||
+          transport?.description?.toLowerCase().includes(filterLower) ||
+          transport?.distance.toString().includes(filterLower) ||
+          transport?.duration.toString().includes(filterLower)
         );
       })
     );
-  }, [filter, sites, type]);
+  }, [filter, transports, type]);
 
   return (
     <div className="home">
       <h1>{type} Transports</h1>
-      <div className="sites">
+      <div className="transports">
         <input
           id="search"
           type="text"
@@ -66,8 +67,8 @@ const TransportListView = ({ type }) => {
         <Sort />
         {filteredTransports
           ?.sort((a, b) => a.createdAt < b.createdAt)
-          .map((site) => (
-            <TransportCard key={site?._id} site={site} />
+          .map((transport) => (
+            <TransportCard key={transport?._id} transport={transport} />
           ))}
       </div>
     </div>
