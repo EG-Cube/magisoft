@@ -63,7 +63,7 @@ const TransportListView = ({ type }) => {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         />
-        <Sort />
+        {/* <Sort /> */}
         {filteredTransports
           ?.sort((a, b) => a.createdAt < b.createdAt)
           .map((site) => (

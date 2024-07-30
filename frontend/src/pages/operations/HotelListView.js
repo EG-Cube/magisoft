@@ -63,7 +63,7 @@ const HotelListView = ({ type }) => {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         />
-        <Sort />
+        {/* <Sort /> */}
         {filteredHotels
           ?.sort((a, b) => a.createdAt < b.createdAt)
           .map((site) => (

@@ -63,7 +63,7 @@ const RestaurantListView = ({ type }) => {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         />
-        <Sort />
+        {/* <Sort /> */}
         {filteredRestaurants
           ?.sort((a, b) => a.createdAt < b.createdAt)
           .map((site) => (
