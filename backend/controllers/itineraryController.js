@@ -17,7 +17,7 @@ const getItinerary = async (req, res) => {
     return res.status(404).json({ error: "No such itinerary" });
   }
 
-  const itinerary = await Itinerary.findById(id);
+  const itinerary = await Itinerary.findById(id).populate("days.sites");
 
   if (!itinerary) {
     return res.status(404).json({ error: "No such itinerary" });
@@ -26,59 +26,40 @@ const getItinerary = async (req, res) => {
   res.status(200).json(itinerary);
 };
 
+// get a itineraries by user
+const getUserItineraries = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ error: "No such itineraries" });
+    }
+
+    const itineraries = await Itinerary.find({ allocatedTo: id });
+
+    if (!itineraries) {
+      return res.status(404).json({ error: "No such itineraries" });
+    }
+
+    res.status(200).json(itineraries);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // create new itinerary
 const createItinerary = async (req, res) => {
   const {
-    fromDate,
-    toDate,
-    passengers,
-    destinations,
-    fromLocation,
-    toLocation,
-    hotelStarRating,
-    budget,
-    numberOfDays,
-    numberOfRooms,
-    roomComments,
-    phoneNumber,
-    emailAddress,
-    flightBookingRequired,
-    mealPlan,
-    purpose,
-    itineraryDays,
-    inclusions,
-    exclusions,
-    termsAndConditions,
-    disclaimer,
+    name,
+    description,
+    days,
   } = req.body;
 
   let emptyFields = [];
 
   // Required fields validation
-  if (!fromDate) emptyFields.push("fromDate");
-  if (!toDate) emptyFields.push("toDate");
-  if (
-    !passengers ||
-    !passengers.adults ||
-    !passengers.children ||
-    !passengers.infants
-  )
-    emptyFields.push("passengers");
-  if (!destinations || destinations.length === 0)
-    emptyFields.push("destinations");
-  if (!fromLocation) emptyFields.push("fromLocation");
-  if (!toLocation) emptyFields.push("toLocation");
-  if (!hotelStarRating) emptyFields.push("hotelStarRating");
-  if (!budget) emptyFields.push("budget");
-  if (!numberOfDays) emptyFields.push("numberOfDays");
-  if (!numberOfRooms) emptyFields.push("numberOfRooms");
-  if (!phoneNumber) emptyFields.push("phoneNumber");
-  if (!emailAddress) emptyFields.push("emailAddress");
-  if (!flightBookingRequired) emptyFields.push("flightBookingRequired");
-  if (!mealPlan) emptyFields.push("mealPlan");
-  if (!purpose) emptyFields.push("purpose");
-  if (!itineraryDays || itineraryDays.length === 0)
-    emptyFields.push("itineraryDays");
+  if (!name) emptyFields.push("name");
+  if (!days || days.length === 0) emptyFields.push("days");
 
   if (emptyFields.length > 0) {
     return res
@@ -90,27 +71,9 @@ const createItinerary = async (req, res) => {
   try {
     const user_id = req.user._id;
     const itinerary = await Itinerary.create({
-      fromDate,
-      toDate,
-      passengers,
-      destinations,
-      fromLocation,
-      toLocation,
-      hotelStarRating,
-      budget,
-      numberOfDays,
-      numberOfRooms,
-      roomComments,
-      phoneNumber,
-      emailAddress,
-      flightBookingRequired,
-      mealPlan,
-      purpose,
-      itineraryDays,
-      inclusions,
-      exclusions,
-      termsAndConditions,
-      disclaimer,
+      name,
+      description,
+      days,
       user_id,
     });
     res.status(200).json(itinerary);
@@ -119,7 +82,7 @@ const createItinerary = async (req, res) => {
   }
 };
 
-// delete a itinerary
+// delete an itinerary
 const deleteItinerary = async (req, res) => {
   const { id } = req.params;
 
@@ -136,7 +99,7 @@ const deleteItinerary = async (req, res) => {
   res.status(200).json(itinerary);
 };
 
-// update a itinerary
+// update an itinerary
 const updateItinerary = async (req, res) => {
   const { id } = req.params;
 
@@ -148,8 +111,9 @@ const updateItinerary = async (req, res) => {
     { _id: id },
     {
       ...req.body,
-    }
-  );
+    },
+    { new: true }
+  ).populate("days.sites");
 
   if (!itinerary) {
     return res.status(400).json({ error: "No such itinerary" });
@@ -161,6 +125,7 @@ const updateItinerary = async (req, res) => {
 module.exports = {
   getItineraries,
   getItinerary,
+  getUserItineraries,
   createItinerary,
   deleteItinerary,
   updateItinerary,

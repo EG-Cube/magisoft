@@ -4,29 +4,26 @@ import { useItineraryContext } from "../../hooks/useItineraryContext";
 
 // components
 import ItineraryCard from "../../components/operations/ItineraryCard";
-import Sort from "../../components/operations/Sort";
-import "../../styles/DashboardView.css";
+// import Sort from "../../components/operations/Sort";
 
-const OperationsDashboardView = () => {
+const ItineraryListView = ({ type }) => {
   const { itineraries, dispatch } = useItineraryContext();
   const { user } = useAuthContext();
   const [filteredItineraries, setFilteredItineraries] = useState([]);
   const [filter, setFilter] = useState("");
-  const [sortCriteria, setSortCriteria] = useState("Date");
   
+
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchItineraries = async () => {
-      const response = await fetch(`${API_URL}/api/itinerary/filter/${user.user._id}`, {
+      const response = await fetch(`${API_URL}/api/itinerary/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       });
       const json = await response.json();
-
-      console.log(json)
 
       if (response.ok) {
         dispatch({ type: "SET_ITINERARIES", payload: json });
@@ -41,17 +38,18 @@ const OperationsDashboardView = () => {
   useEffect(() => {
     setFilteredItineraries(
       itineraries?.filter((itinerary) => {
-        const filterLower = filter.toLowerCase();
+        const filterLower = filter?.toLowerCase();
         return (
-          itinerary.name.toLowerCase().includes(filterLower) ||
-          itinerary.description.toLowerCase().includes(filterLower)
+          itinerary?.name.toLowerCase().includes(filterLower) ||
+          itinerary?.description.toLowerCase().includes(filterLower)
         );
       })
     );
-  }, [filter, itineraries]);
+  }, [filter, itineraries, type]);
 
   return (
     <div className="home">
+      <h1>{type} Itineraries</h1>
       <div className="itineraries">
         <input
           id="search"
@@ -60,12 +58,14 @@ const OperationsDashboardView = () => {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         />
-        {filteredItineraries?.map((itinerary) => (
-          <ItineraryCard key={itinerary._id} itinerary={itinerary} />
-        ))}
+        {filteredItineraries
+          ?.sort((a, b) => a.createdAt < b.createdAt)
+          .map((itinerary) => (
+            <ItineraryCard key={itinerary?._id} itinerary={itinerary} />
+          ))}
       </div>
     </div>
   );
 };
 
-export default OperationsDashboardView;
+export default ItineraryListView;

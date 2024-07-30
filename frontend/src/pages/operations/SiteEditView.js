@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
-import EditSiteForm from "../../components/operations/EditSiteForm";
+import SiteEditForm from "../../components/operations/SiteEditForm";
 
 const SiteEditFormView = () => {
   const { id } = useParams();
   return (
-      <EditSiteForm siteID={id} />
+      <SiteEditForm siteID={id} />
   );
 };
 

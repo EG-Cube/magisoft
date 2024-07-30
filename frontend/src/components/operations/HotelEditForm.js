@@ -5,7 +5,7 @@ import axios from "axios";
 import { SiteContext } from "../../context/SiteContext";
 import "../../styles/form.css";
 
-const EditSiteForm = ({ siteID }) => {
+const SiteEditForm = ({ siteID }) => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const { sites, dispatch } = useContext(SiteContext);
@@ -328,4 +328,4 @@ const EditSiteForm = ({ siteID }) => {
   );
 };
 
-export default EditSiteForm;
+export default SiteEditForm;

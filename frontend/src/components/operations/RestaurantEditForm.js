@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { SiteContext } from "../../context/SiteContext";
 import "../../styles/form.css";
 
-const CreateSiteForm = () => {
+const SiteEditForm = ({ siteID }) => {
   const { user } = useAuthContext();
+  const navigate = useNavigate();
+  const { sites, dispatch } = useContext(SiteContext);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -14,14 +19,8 @@ const CreateSiteForm = () => {
     state: "",
     country: "",
     pincode: "",
+    duration: 0,
     type: "",
-    description: "",
-    image: "",
-    visitingHours: {
-      start: "",
-      end: "",
-    },
-    facilities: [""],
   };
 
   const typeOptions = [
@@ -31,10 +30,32 @@ const CreateSiteForm = () => {
     "Recreational",
     "Religious",
   ];
-
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
+
+  useEffect(() => {
+    const fetchSite = async () => {
+      if (!user) {
+        setError("You must be logged in");
+        return;
+      }
+
+      try {
+        const response = await axios.get(`${API_URL}/api/site/${siteID}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+
+        setFormData(response.data);
+      } catch (error) {
+        setError(error.response?.data?.error || "An error occurred");
+      }
+    };
+
+    fetchSite();
+  }, [siteID, user]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -58,7 +79,7 @@ const CreateSiteForm = () => {
   };
 
   const handleFacilityChange = (index, value) => {
-    const newFacilities = [...formData.facilities];
+    const newFacilities = [...formData?.facilities];
     newFacilities[index] = value;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -74,7 +95,7 @@ const CreateSiteForm = () => {
   };
 
   const handleRemoveFacility = (index) => {
-    const newFacilities = formData.facilities.filter((_, i) => i !== index);
+    const newFacilities = formData?.facilities.filter((_, i) => i !== index);
     setFormData((prevFormData) => ({
       ...prevFormData,
       facilities: newFacilities,
@@ -109,33 +130,38 @@ const CreateSiteForm = () => {
     if (missingFields.length > 0) {
       setEmptyFields(missingFields);
       setError("Please fill in all the required fields");
+      console.log(missingFields);
       return;
     }
 
-    const response = await fetch(`${API_URL}/api/site`, {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user?.token}`,
-      },
-    });
-    const json = await response.json();
+    try {
+      const response = await axios.patch(
+        `${API_URL}/api/site/${siteID}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
 
-    if (!response.ok) {
-      setError(json.error);
-      setEmptyFields(json.emptyFields || []);
-    } else {
-      setFormData(initialFormData);
       setError(null);
       setEmptyFields([]);
-      console.log("New site added", json);
+      console.log("Site updated", response.data);
+
+      dispatch({ type: "UPDATE_SITE", payload: response.data });
+
+      navigate(`/operations/site/view/${siteID}`);
+    } catch (error) {
+      setError(error.response?.data?.error || "An error occurred");
+      setEmptyFields(error.response?.data?.emptyFields || []);
     }
   };
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      <h3>Add a New Site</h3>
+      <h3>Edit Site</h3>
 
       <div className="row">
         <div>
@@ -144,7 +170,7 @@ const CreateSiteForm = () => {
             type="text"
             name="name"
             onChange={handleChange}
-            value={formData.name}
+            value={formData?.name}
             className={emptyFields.includes("name") ? "error" : ""}
           />
         </div>
@@ -156,7 +182,7 @@ const CreateSiteForm = () => {
             type="text"
             name="address"
             onChange={handleChange}
-            value={formData.address}
+            value={formData?.address}
             className={emptyFields.includes("address") ? "error" : ""}
           />
         </div>
@@ -167,7 +193,7 @@ const CreateSiteForm = () => {
             type="text"
             name="city"
             onChange={handleChange}
-            value={formData.city}
+            value={formData?.city}
             className={emptyFields.includes("city") ? "error" : ""}
           />
         </div>
@@ -179,7 +205,7 @@ const CreateSiteForm = () => {
             type="text"
             name="state"
             onChange={handleChange}
-            value={formData.state}
+            value={formData?.state}
             className={emptyFields.includes("state") ? "error" : ""}
           />
         </div>
@@ -189,7 +215,7 @@ const CreateSiteForm = () => {
             type="text"
             name="country"
             onChange={handleChange}
-            value={formData.country}
+            value={formData?.country}
             className={emptyFields.includes("country") ? "error" : ""}
           />
         </div>
@@ -200,7 +226,7 @@ const CreateSiteForm = () => {
           type="text"
           name="pincode"
           onChange={handleChange}
-          value={formData.pincode}
+          value={formData?.pincode}
           className={emptyFields.includes("pincode") ? "error" : ""}
         />
       </div>
@@ -210,7 +236,7 @@ const CreateSiteForm = () => {
           <select
             name="type"
             onChange={handleChange}
-            value={formData.type}
+            value={formData?.type}
             className={emptyFields.includes("type") ? "error" : ""}
           >
             <option key={""} value={""}>
@@ -229,7 +255,7 @@ const CreateSiteForm = () => {
         <textarea
           name="description"
           onChange={handleChange}
-          value={formData.description}
+          value={formData?.description}
           className={emptyFields.includes("description") ? "error" : ""}
         />
       </div>
@@ -239,7 +265,7 @@ const CreateSiteForm = () => {
           type="text"
           name="image"
           onChange={handleChange}
-          value={formData.image}
+          value={formData?.image}
         />
       </div>
       <div className="row">
@@ -249,7 +275,7 @@ const CreateSiteForm = () => {
             type="time"
             name="visitingHours.start"
             onChange={handleChange}
-            value={formData.visitingHours.start}
+            value={formData?.visitingHours?.start}
             className={
               emptyFields.includes("visitingHours.start") ? "error" : ""
             }
@@ -261,14 +287,14 @@ const CreateSiteForm = () => {
             type="time"
             name="visitingHours.end"
             onChange={handleChange}
-            value={formData.visitingHours.end}
+            value={formData?.visitingHours?.end}
             className={emptyFields.includes("visitingHours.end") ? "error" : ""}
           />
         </div>
       </div>
       <div>
         <label>Facilities:</label>
-        {formData.facilities.map((item, index) => (
+        {formData?.facilities?.map((item, index) => (
           <div key={index} className="destination-field">
             <input
               type="text"
@@ -294,14 +320,12 @@ const CreateSiteForm = () => {
           Add Facility
         </button>
       </div>
-
       <div className="submitBtn">
-        <button type="submit">Add Site</button>
+        <button type="submit">Update Site</button>
       </div>
-
       {error && <div className="error">{error}</div>}
     </form>
   );
 };
 
-export default CreateSiteForm;
+export default SiteEditForm;

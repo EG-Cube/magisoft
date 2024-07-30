@@ -3,6 +3,7 @@ const {
   createItinerary,
   getItineraries,
   getItinerary,
+  getUserItineraries,
   deleteItinerary,
   updateItinerary
 } = require('../controllers/itineraryController')
@@ -18,6 +19,9 @@ router.get('/', getItineraries)
 
 //GET a single itinerary
 router.get('/:id', getItinerary)
+
+// GET a user enquiries
+router.get("/filter/:id", getUserItineraries);
 
 // POST a new itinerary
 router.post('/', createItinerary)

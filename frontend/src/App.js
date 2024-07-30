@@ -28,14 +28,35 @@ import EnquiryListView from "./pages/sales/EnquiryListView";
 import EnquiryCreateView from "./pages/sales/EnquiryCreateView";
 
 import OperationsDashboardView from "./pages/operations/OperationsDashboardView";
+
 import SiteDetailView from "./pages/operations/SiteDetailsView";
 import SiteEditView from "./pages/operations/SiteEditView";
 import SiteListView from "./pages/operations/SiteListView";
 import SiteCreateView from "./pages/operations/SiteCreateView";
 
+import TransportDetailView from "./pages/operations/TransportDetailsView";
+import TransportEditView from "./pages/operations/TransportEditView";
+import TransportListView from "./pages/operations/TransportListView";
+import TransportCreateView from "./pages/operations/TransportCreateView";
+
+import HotelDetailView from "./pages/operations/HotelDetailsView";
+import HotelEditView from "./pages/operations/HotelEditView";
+import HotelListView from "./pages/operations/HotelListView";
+import HotelCreateView from "./pages/operations/HotelCreateView";
+
+import RestaurantDetailView from "./pages/operations/RestaurantDetailsView";
+import RestaurantEditView from "./pages/operations/RestaurantEditView";
+import RestaurantListView from "./pages/operations/RestaurantListView";
+import RestaurantCreateView from "./pages/operations/RestaurantCreateView";
+
+import ItineraryCreateView from "./pages/operations/ItineraryCreateView";
+import ItineraryEditView from "./pages/operations/ItineraryEditView";
+import ItineraryDetailsView from "./pages/operations/ItineraryDetailsView";
+
 import Unauthorized from "./pages/Unauthorized";
 import RequireAuth from "./pages/RequireAuth";
 import NotFound from "./pages/NotFound";
+import ItineraryListView from "./pages/operations/ItineraryListView";
 
 function App() {
   return (
@@ -119,6 +140,30 @@ function App() {
                   <Route path="edit/:id" element={<SiteEditView />} />
                   <Route path="view/:id" element={<SiteDetailView />} />
                   <Route path="list/" element={<SiteListView />} />
+                </Route>
+                <Route path="hotel/">
+                  <Route path="create/" element={<HotelCreateView />} />
+                  <Route path="edit/:id" element={<HotelEditView />} />
+                  <Route path="view/:id" element={<HotelDetailView />} />
+                  <Route path="list/" element={<HotelListView />} />
+                </Route>
+                <Route path="restaurant/">
+                  <Route path="create/" element={<RestaurantCreateView />} />
+                  <Route path="edit/:id" element={<RestaurantEditView />} />
+                  <Route path="view/:id" element={<RestaurantDetailView />} />
+                  <Route path="list/" element={<RestaurantListView />} />
+                </Route>
+                <Route path="transport/">
+                  <Route path="create/" element={<TransportCreateView />} />
+                  <Route path="edit/:id" element={<TransportEditView />} />
+                  <Route path="view/:id" element={<TransportDetailView />} />
+                  <Route path="list/" element={<TransportListView />} />
+                </Route>
+                <Route path="itinerary/">
+                  <Route path="create/" element={<ItineraryCreateView />} />
+                  <Route path="edit/:id" element={<ItineraryEditView />} />
+                  <Route path="view/:id" element={<ItineraryDetailsView />} />
+                  <Route path="list/" element={<ItineraryListView />} />
                 </Route>
               </Route>
             </Route>

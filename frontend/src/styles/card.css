@@ -47,3 +47,46 @@
   margin: 0 10px;
   font-weight: bold;
 }
+
+.itinerary-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px;
+  background-color: #fff;
+  text-decoration: none;
+  color: #333;
+  transition: box-shadow 0.3s ease;
+}
+
+.itinerary-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  margin-bottom: 12px;
+}
+
+.card-header .title {
+  font-size: 1.5em;
+  margin: 0;
+}
+
+.card-header .description {
+  font-size: 1em;
+  color: #777;
+}
+
+.card-body .itinerary-day {
+  margin-bottom: 8px;
+}
+
+.card-body .itinerary-day h4 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.card-body .itinerary-day p {
+  margin: 4px 0 0 0;
+  color: #555;
+}

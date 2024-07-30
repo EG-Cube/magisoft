@@ -20,7 +20,22 @@ const SideNavbar = () => {
             <Link to={"/operations/dashboard"}>Dashboard</Link>
           </li>
           <li>
+            <Link to={"/operations/enquiry/list"}>Enquiries</Link>
+          </li>
+          <li>
+            <Link to={"/operations/itinerary/list"}>Itineraries</Link>
+          </li>
+          <li>
             <Link to={"/operations/site/list"}>Sites</Link>
+          </li>
+          <li>
+            <Link to={"/operations/hotel/list"}>Hotels</Link>
+          </li>
+          <li>
+            <Link to={"/operations/restaurant/list"}>Restaurants</Link>
+          </li>
+          <li>
+            <Link to={"/operations/transport/list"}>Transports</Link>
           </li>
         </ul>
       </nav>
