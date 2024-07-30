@@ -70,12 +70,8 @@ const EnquiryDetails = ({ enquiry }) => {
 
     let newStatus = "";
     if (enquiry.status === "Pending") {
-      newStatus = "Ongoing";
-    } else if (enquiry.status === "Ongoing") {
-      newStatus = "Completed";
-    } else if (enquiry.status === "Completed") {
-      newStatus = "Pending";
-    }
+      newStatus = "Verified";
+    } 
 
     try {
       const response = await axios.patch(
@@ -149,11 +145,9 @@ const EnquiryDetails = ({ enquiry }) => {
         </div>
 
         <div className="status">
-          {!isUpdated && enquiry.status !== "Archived" && (
+          {!isUpdated && enquiry.status !== "Archived" && enquiry.status !== "Verified" && (
             <button className="edit-status-btn" onClick={handleUpdateStatus}>
-              Update to {enquiry.status === "Pending" ? "Ongoing" : ""}
-              {enquiry.status === "Ongoing" ? "Completed" : ""}
-              {enquiry.status === "Completed" ? "Reopened" : ""}
+              Verify
             </button>
           )}
           <div className="actions">

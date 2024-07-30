@@ -74,11 +74,7 @@ const AdminEnquiryDetails = ({ enquiry }) => {
 
     let newStatus = "";
     if (enquiry.status === "Pending") {
-      newStatus = "Ongoing";
-    } else if (enquiry.status === "Ongoing") {
-      newStatus = "Completed";
-    } else if (enquiry.status === "Completed") {
-      newStatus = "Pending";
+      newStatus = "Verified";
     }
 
     try {
@@ -131,9 +127,7 @@ const AdminEnquiryDetails = ({ enquiry }) => {
     switch (status) {
       case "Pending":
         return { backgroundColor: "#FDD1D2", color: "black" };
-      case "Ongoing":
-        return { backgroundColor: "#87cefa", color: "black" };
-      case "Completed":
+      case "Verified":
         return { backgroundColor: "#98fb98", color: "black" };
       case "Archived":
         return { backgroundColor: "#d3d3d3", color: "black" };
@@ -153,11 +147,9 @@ const AdminEnquiryDetails = ({ enquiry }) => {
         </div>
 
         <div className="status">
-          {!isUpdated && enquiry.status !== "Archived" && (
+          {!isUpdated && enquiry.status !== "Archived" && enquiry.status !== "Verified" && (
             <button className="edit-status-btn" onClick={handleUpdateStatus}>
-              Update to {enquiry.status === "Pending" ? "Ongoing" : ""}
-              {enquiry.status === "Ongoing" ? "Completed" : ""}
-              {enquiry.status === "Completed" ? "Reopened" : ""}
+              {enquiry.status === "Pending" ? "Verify" : ""}
             </button>
           )}
           <div className="actions">

@@ -18,9 +18,7 @@ const EnquiryCard = ({ enquiry }) => {
     switch (status) {
       case "Pending":
         return { backgroundColor: "#FDD1D2", color: "black" };
-      case "Ongoing":
-        return { backgroundColor: "#87cefa", color: "black" };
-      case "Completed":
+      case "Verified":
         return { backgroundColor: "#98fb98", color: "black" };
       case "Archived":
         return { backgroundColor: "#d3d3d3", color: "black" };

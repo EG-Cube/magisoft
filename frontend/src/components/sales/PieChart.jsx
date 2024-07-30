@@ -5,16 +5,16 @@ import '../../styles/PieChart.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PieChart = ({ pending, ongoing, completed }) => {
+const PieChart = ({ pending, verified, archived }) => {
   // Data for the pie chart
   const data = {
-    labels: ["Pending", "Ongoing", "Completed"],
+    labels: ["Pending", "Verified", "Archived"],
     datasets: [
       {
         label: "",
-        data: [pending, ongoing, completed], // Use the passed props for data values
-        backgroundColor: ["#652361", "#F3BF39", "#9E7C9C"],
-        hoverBackgroundColor: ["#652361", "#F3BF39", "#9E7C9C"],
+        data: [pending, verified, archived], // Use the passed props for data values
+        backgroundColor: ["#652361","#F3BF39", "#9E7C9C"],
+        hoverBackgroundColor: ["#652361","#F3BF39", "#9E7C9C"],
       },
     ],
   };

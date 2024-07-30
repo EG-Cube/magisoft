@@ -19,17 +19,23 @@ const Summary = ({ enquiries }) => {
   ];
 
   const d = new Date();
-  let month = months[d.getMonth()];
+  const currentMonth = d.getMonth();
+  const currentYear = d.getFullYear();
 
-  const total = enquiries?.reduce((acc, enquiry) => {
+  const enquiriesThisMonth = enquiries?.filter(enquiry => {
+    const enquiryDate = new Date(enquiry.date); // Assuming 'date' field exists in enquiry object
+    return enquiryDate.getMonth() === currentMonth && enquiryDate.getFullYear() === currentYear;
+  });
+
+  const total = enquiriesThisMonth?.reduce((acc, enquiry) => {
     if (enquiry.status !== "Archived") {
       acc += 1;
     }
     return acc;
   }, 0);
 
-  const ongoing = enquiries?.reduce((acc, enquiry) => {
-    if (enquiry.status === "Ongoing") {
+  const verified = enquiries?.reduce((acc, enquiry) => {
+    if (enquiry.status === "Verified") {
       acc += 1;
     }
     return acc;
@@ -42,8 +48,8 @@ const Summary = ({ enquiries }) => {
     return acc;
   }, 0);
 
-  const completed = enquiries?.reduce((acc, enquiry) => {
-    if (enquiry.status === "Completed") {
+  const archived = enquiries?.reduce((acc, enquiry) => {
+    if (enquiry.status === "Archived") {
       acc += 1;
     }
     return acc;
@@ -53,7 +59,7 @@ const Summary = ({ enquiries }) => {
     <div className="centre-section1">
       <div className="section1">
         <div className="month-div">
-          <h2>{month}'s Enquiries</h2>
+          <h2>{months[currentMonth]}'s Enquiries</h2>
           <h1>{total}</h1>
         </div>
         <div className="pen3div">
@@ -65,20 +71,20 @@ const Summary = ({ enquiries }) => {
           </div>
           <div className="infodiv">
             <div className="info-div-flex">
-              <h4>Ongoing</h4>
-              <h5 style={{ color: "#F3BF39" }}>{ongoing}</h5>
+              <h4>Verified</h4>
+              <h5 style={{ color: "#F3BF39" }}>{verified}</h5>
             </div>
           </div>
           <div className="infodiv">
             <div className="info-div-flex">
-              <h4>Completed</h4>
-              <h5 style={{ color: "#9E7C9C" }}>{completed}</h5>
+              <h4>Archived</h4>
+              <h5 style={{ color: "#9E7C9C" }}>{archived}</h5>
             </div>
           </div>
         </div>
       </div>
       <div className="pie">
-        <PieChart pending={pending} ongoing={ongoing} completed={completed} />
+        <PieChart pending={pending} verified={verified} archived={archived} />
       </div>
     </div>
   );

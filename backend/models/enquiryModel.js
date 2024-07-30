@@ -108,7 +108,7 @@ const enquirySchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["Pending", "Ongoing", "Completed", "Archived"],
+      enum: ["Pending", "Verified", "Archived"],
       default: "Pending",
     },
   },
