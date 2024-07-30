@@ -2,82 +2,59 @@ import { useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import "../../styles/form.css";
 
-const SiteCreateForm = () => {
+const RestaurantCreateForm = () => {
   const { user } = useAuthContext();
 
   const API_URL = process.env.REACT_APP_API_URL;
 
   const initialFormData = {
     name: "",
+    cuisine: "",
     address: "",
     city: "",
     state: "",
     country: "",
     pincode: "",
-    type: "",
-    description: "",
-    image: "",
-    visitingHours: {
-      start: "",
-      end: "",
-    },
-    facilities: [""],
+    contactNumber: "",
+    email: "",
+    website: "",
+    availableMeals: [""],
+    amenities: [""],
   };
-
-  const typeOptions = [
-    "Tourist",
-    "Historical",
-    "Business",
-    "Recreational",
-    "Religious",
-  ];
 
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const newValue = type === "checkbox" ? checked : value;
-
-    if (name.includes("visitingHours.")) {
-      const timeType = name.split(".")[1];
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        visitingHours: {
-          ...prevFormData.visitingHours,
-          [timeType]: newValue,
-        },
-      }));
-    } else {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: newValue,
-      }));
-    }
-  };
-
-  const handleFacilityChange = (index, value) => {
-    const newFacilities = [...formData.facilities];
-    newFacilities[index] = value;
+    const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      facilities: newFacilities,
+      [name]: value,
     }));
   };
 
-  const handleAddFacility = () => {
+  const handleArrayChange = (index, value, field) => {
+    const newArray = [...formData[field]];
+    newArray[index] = value;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      facilities: [...prevFormData.facilities, ""],
+      [field]: newArray,
     }));
   };
 
-  const handleRemoveFacility = (index) => {
-    const newFacilities = formData.facilities.filter((_, i) => i !== index);
+  const handleAddField = (field) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      facilities: newFacilities,
+      [field]: [...prevFormData[field], ""],
+    }));
+  };
+
+  const handleRemoveField = (index, field) => {
+    const newArray = formData[field].filter((_, i) => i !== index);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [field]: newArray,
     }));
   };
 
@@ -91,20 +68,15 @@ const SiteCreateForm = () => {
 
     const requiredFields = [
       "name",
+      "cuisine",
       "address",
       "city",
       "state",
       "country",
-      "pincode",
-      "type",
-      "visitingHours.start",
-      "visitingHours.end",
+      "contactNumber",
     ];
 
-    const missingFields = requiredFields.filter((field) => {
-      const [mainField, subField] = field.split(".");
-      return subField ? !formData[mainField][subField] : !formData[mainField];
-    });
+    const missingFields = requiredFields.filter((field) => !formData[field]);
 
     if (missingFields.length > 0) {
       setEmptyFields(missingFields);
@@ -112,7 +84,13 @@ const SiteCreateForm = () => {
       return;
     }
 
-    const response = await fetch(`${API_URL}/api/site`, {
+    // Check if email format is valid if provided
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setError("Please provide a valid email address");
+      return;
+    }
+
+    const response = await fetch(`${API_URL}/api/restaurant`, {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {
@@ -129,13 +107,13 @@ const SiteCreateForm = () => {
       setFormData(initialFormData);
       setError(null);
       setEmptyFields([]);
-      console.log("New site added", json);
+      console.log("New restaurant added", json);
     }
   };
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      <h3>Add a New Site</h3>
+      <h3>Add a New Restaurant</h3>
 
       <div className="row">
         <div>
@@ -146,6 +124,18 @@ const SiteCreateForm = () => {
             onChange={handleChange}
             value={formData.name}
             className={emptyFields.includes("name") ? "error" : ""}
+          />
+        </div>
+      </div>
+      <div className="row">
+        <div>
+          <label>Cuisine:</label>
+          <input
+            type="text"
+            name="cuisine"
+            onChange={handleChange}
+            value={formData.cuisine}
+            className={emptyFields.includes("cuisine") ? "error" : ""}
           />
         </div>
       </div>
@@ -201,85 +191,52 @@ const SiteCreateForm = () => {
           name="pincode"
           onChange={handleChange}
           value={formData.pincode}
-          className={emptyFields.includes("pincode") ? "error" : ""}
-        />
-      </div>
-      <div className="row">
-        <div>
-          <label>Type:</label>
-          <select
-            name="type"
-            onChange={handleChange}
-            value={formData.type}
-            className={emptyFields.includes("type") ? "error" : ""}
-          >
-            <option key={""} value={""}>
-              {""}
-            </option>
-            {typeOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-      <div>
-        <label>Description:</label>
-        <textarea
-          name="description"
-          onChange={handleChange}
-          value={formData.description}
-          className={emptyFields.includes("description") ? "error" : ""}
         />
       </div>
       <div>
-        <label>Image:</label>
+        <label>Contact Number:</label>
         <input
           type="text"
-          name="image"
+          name="contactNumber"
           onChange={handleChange}
-          value={formData.image}
+          value={formData.contactNumber}
+          className={emptyFields.includes("contactNumber") ? "error" : ""}
         />
       </div>
-      <div className="row">
-        <div>
-          <label>Visiting Hours Start:</label>
-          <input
-            type="time"
-            name="visitingHours.start"
-            onChange={handleChange}
-            value={formData.visitingHours.start}
-            className={
-              emptyFields.includes("visitingHours.start") ? "error" : ""
-            }
-          />
-        </div>
-        <div>
-          <label>Visiting Hours End:</label>
-          <input
-            type="time"
-            name="visitingHours.end"
-            onChange={handleChange}
-            value={formData.visitingHours.end}
-            className={emptyFields.includes("visitingHours.end") ? "error" : ""}
-          />
-        </div>
+      <div>
+        <label>Email:</label>
+        <input
+          type="email"
+          name="email"
+          onChange={handleChange}
+          value={formData.email}
+        />
       </div>
       <div>
-        <label>Facilities:</label>
-        {formData.facilities.map((item, index) => (
+        <label>Website:</label>
+        <input
+          type="text"
+          name="website"
+          onChange={handleChange}
+          value={formData.website}
+        />
+      </div>
+      <div>
+        <label>Available Meals:</label>
+        {formData.availableMeals.map((item, index) => (
           <div key={index} className="destination-field">
             <input
               type="text"
               value={item}
-              onChange={(e) => handleFacilityChange(index, e.target.value)}
-              className={emptyFields.includes("facilities") ? "error" : ""}
+              onChange={(e) =>
+                handleArrayChange(index, e.target.value, "availableMeals")
+              }
+              className={emptyFields.includes("availableMeals") ? "error" : ""}
             />
             <button
               className="removeBtn"
               type="button"
-              onClick={() => handleRemoveFacility(index)}
+              onClick={() => handleRemoveField(index, "availableMeals")}
             >
               Remove
             </button>
@@ -289,14 +246,44 @@ const SiteCreateForm = () => {
           className="addFacilityBtn"
           type="button"
           style={{ marginBottom: "20px" }}
-          onClick={handleAddFacility}
+          onClick={() => handleAddField("availableMeals")}
         >
-          Add Facility
+          Add Meal
+        </button>
+      </div>
+      <div>
+        <label>Amenities:</label>
+        {formData.amenities.map((item, index) => (
+          <div key={index} className="destination-field">
+            <input
+              type="text"
+              value={item}
+              onChange={(e) =>
+                handleArrayChange(index, e.target.value, "amenities")
+              }
+              className={emptyFields.includes("amenities") ? "error" : ""}
+            />
+            <button
+              className="removeBtn"
+              type="button"
+              onClick={() => handleRemoveField(index, "amenities")}
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+        <button
+          className="addFacilityBtn"
+          type="button"
+          style={{ marginBottom: "20px" }}
+          onClick={() => handleAddField("amenities")}
+        >
+          Add Amenity
         </button>
       </div>
 
       <div className="submitBtn">
-        <button type="submit">Add Site</button>
+        <button type="submit">Add Restaurant</button>
       </div>
 
       {error && <div className="error">{error}</div>}
@@ -304,4 +291,4 @@ const SiteCreateForm = () => {
   );
 };
 
-export default SiteCreateForm;
+export default RestaurantCreateForm;
