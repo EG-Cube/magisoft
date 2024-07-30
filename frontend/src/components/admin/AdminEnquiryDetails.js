@@ -23,6 +23,8 @@ const AdminEnquiryDetails = ({ enquiry }) => {
   
   const API_URL = process.env.REACT_APP_API_URL;
 
+  console.log(enquiry)
+
   const handleEdit = async () => {
     navigate(`/admin/enquiry/edit/${enquiry._id}`);
   };
@@ -273,6 +275,7 @@ const AdminEnquiryDetails = ({ enquiry }) => {
           <div>
             <div>Allocated To:</div>
             <div>
+              
               {allocatedUser?.firstName} {allocatedUser?.lastName}
             </div>
           </div>

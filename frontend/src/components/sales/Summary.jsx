@@ -23,9 +23,11 @@ const Summary = ({ enquiries }) => {
   const currentYear = d.getFullYear();
 
   const enquiriesThisMonth = enquiries?.filter(enquiry => {
-    const enquiryDate = new Date(enquiry.date); // Assuming 'date' field exists in enquiry object
+    const enquiryDate = new Date(enquiry.createdAt); // Assuming 'date' field exists in enquiry object
     return enquiryDate.getMonth() === currentMonth && enquiryDate.getFullYear() === currentYear;
   });
+
+  console.log("This month : ",enquiriesThisMonth)
 
   const total = enquiriesThisMonth?.reduce((acc, enquiry) => {
     if (enquiry.status !== "Archived") {

@@ -57,6 +57,9 @@ import Unauthorized from "./pages/Unauthorized";
 import RequireAuth from "./pages/RequireAuth";
 import NotFound from "./pages/NotFound";
 import ItineraryListView from "./pages/operations/ItineraryListView";
+import { SiteContextProvider } from "./context/SiteContext";
+import { TransportContextProvider } from "./context/TransportContext";
+import { HotelContextProvider } from "./context/HotelContext";
 
 function App() {
   return (
@@ -111,16 +114,12 @@ function App() {
                 <Route path="view/:id" element={<EnquiryDetailView />} />
                 <Route path="dashboard" element={<SalesDashboardView />} />
                 <Route
-                  path="ongoing"
-                  element={<EnquiryListView type={"Ongoing"} />}
-                />
-                <Route
                   path="pending"
                   element={<EnquiryListView type={"Pending"} />}
                 />
                 <Route
-                  path="completed"
-                  element={<EnquiryListView type={"Completed"} />}
+                  path="verified"
+                  element={<EnquiryListView type={"Verified"} />}
                 />
                 <Route
                   path="archive"
@@ -135,6 +134,10 @@ function App() {
             >
               <Route path="operations/" element={<OperationsDashboardLayout />}>
               <Route path="dashboard/" element={<OperationsDashboardView />} />
+                <Route path="enquiry/">
+                  <Route path="view/:id" element={<EnquiryDetailView />} />
+                  <Route path="list/" element={<EnquiryListView />} />
+                </Route>
                 <Route path="site/">
                   <Route path="create/" element={<SiteCreateView />} />
                   <Route path="edit/:id" element={<SiteEditView />} />
@@ -167,7 +170,6 @@ function App() {
                 </Route>
               </Route>
             </Route>
-
             {/* No Authentication Required */}
             <Route path="/" element={<Login />} />
             {/* <Route path="/signup" element={<Signup />} /> */}

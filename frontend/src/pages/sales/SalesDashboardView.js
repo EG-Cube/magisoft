@@ -14,7 +14,7 @@ const SalesDashboardView = () => {
   const [filteredEnquiries, setFilteredEnquiries] = useState([]);
   const [filter, setFilter] = useState("");
   const [sortCriteria, setSortCriteria] = useState("Date");
-  
+
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
@@ -64,6 +64,28 @@ const SalesDashboardView = () => {
     );
   }, [filter, enquiries]);
 
+  const groupEnquiriesByMonth = (enquiries) => {
+    const grouped = enquiries?.reduce((acc, enquiry) => {
+      const date = new Date(enquiry.createdAt); // Assuming 'date' field exists in enquiry object
+      const month = date.toLocaleString('default', { month: 'long' });
+      const year = date.getFullYear();
+      const key = `${month} ${year}`;
+
+      console.log(enquiry.date, month, year, key)
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(enquiry);
+
+      return acc;
+    }, {});
+
+    console.log(grouped)
+    return grouped;
+  };
+
+  const groupedEnquiries = groupEnquiriesByMonth(filteredEnquiries);
+
   return (
     <div className="home">
       <div className="enquiries">
@@ -75,9 +97,14 @@ const SalesDashboardView = () => {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         />
-        <Sort sortCriteria={sortCriteria} set />
-        {filteredEnquiries?.map((enquiry) => (
-          <EnquiryCard key={enquiry._id} enquiry={enquiry} />
+        {/* <Sort sortCriteria={sortCriteria} set /> */}
+        {groupedEnquiries && Object.keys(groupedEnquiries)?.map((month) => (
+          <div key={month} className="month-group">
+            <h2>{month}</h2>
+            {groupedEnquiries[month].map((enquiry) => (
+              <EnquiryCard key={enquiry._id} enquiry={enquiry} />
+            ))}
+          </div>
         ))}
       </div>
     </div>

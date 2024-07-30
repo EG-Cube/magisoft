@@ -16,7 +16,7 @@ const EnquiryDetails = ({ enquiry }) => {
   const { user } = useAuthContext();
   const [isUpdated, setIsUpdated] = useState(false);
   const navigate = useNavigate();
-  
+
   const API_URL = process.env.REACT_APP_API_URL;
 
   const handleEdit = async () => {
@@ -28,7 +28,7 @@ const EnquiryDetails = ({ enquiry }) => {
       return;
     }
 
-    let newStatus;    
+    let newStatus;
     switch (enquiry.status) {
       case "Archived":
         newStatus = "Pending";
@@ -71,7 +71,7 @@ const EnquiryDetails = ({ enquiry }) => {
     let newStatus = "";
     if (enquiry.status === "Pending") {
       newStatus = "Verified";
-    } 
+    }
 
     try {
       const response = await axios.patch(
@@ -123,9 +123,7 @@ const EnquiryDetails = ({ enquiry }) => {
     switch (status) {
       case "Pending":
         return { backgroundColor: "#FDD1D2", color: "black" };
-      case "Ongoing":
-        return { backgroundColor: "#87cefa", color: "black" };
-      case "Completed":
+      case "Verified":
         return { backgroundColor: "#98fb98", color: "black" };
       case "Archived":
         return { backgroundColor: "#d3d3d3", color: "black" };
@@ -145,22 +143,27 @@ const EnquiryDetails = ({ enquiry }) => {
         </div>
 
         <div className="status">
-          {!isUpdated && enquiry.status !== "Archived" && enquiry.status !== "Verified" && (
-            <button className="edit-status-btn" onClick={handleUpdateStatus}>
-              Verify
-            </button>
+          {!isUpdated &&
+            enquiry.status !== "Archived" &&
+            enquiry.status !== "Verified" && (
+              <button className="edit-status-btn" onClick={handleUpdateStatus}>
+                Verify
+              </button>
+            )}
+          {enquiry.status !== "Verified" && (
+            <div className="actions">
+              <button className="edit-btn" onClick={handleEdit}>
+                <img src={editBtn} alt="Edit" />
+              </button>
+              <button className="archive-btn" onClick={handleArchive}>
+                <img src={archiveBtn} alt="Archive" />
+              </button>
+              <button className="delete-btn" onClick={handleDelete}>
+                <img src={deleteBtn} alt="Delete" />
+              </button>
+            </div>
           )}
-          <div className="actions">
-            <button className="edit-btn" onClick={handleEdit}>
-              <img src={editBtn} alt="Edit" />
-            </button>
-            <button className="archive-btn" onClick={handleArchive}>
-              <img src={archiveBtn} alt="Archive" />
-            </button>
-            <button className="delete-btn" onClick={handleDelete}>
-              <img src={deleteBtn} alt="Delete" />
-            </button>
-          </div>
+
           <span style={getStatusStyle(enquiry.status)}>{enquiry.status}</span>
         </div>
       </div>

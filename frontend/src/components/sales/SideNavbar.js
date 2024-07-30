@@ -23,10 +23,7 @@ const SideNavbar = () => {
             <Link to={"/enquiry/pending"}>Pending</Link>
           </li>
           <li>
-            <Link to={"/enquiry/ongoing"}>Ongoing</Link>
-          </li>
-          <li>
-            <Link to={"/enquiry/completed"}>Completed</Link>
+            <Link to={"/enquiry/verified"}>Verified</Link>
           </li>
           {/* <li>
             <Link to={"/enquiry/packages"}>Packages</Link>

@@ -72,7 +72,7 @@ const AdminEnquiryListView = ({ type }) => {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         />
-        <Sort />
+        {/* <Sort /> */}
         {filteredEnquiries
           ?.sort((a, b) => a.createdAt < b.createdAt)
           .map((enquiry) => (
