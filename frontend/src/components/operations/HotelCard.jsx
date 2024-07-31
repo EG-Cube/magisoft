@@ -2,45 +2,39 @@ import React from "react";
 import "../../styles/card.css";
 import { Link } from "react-router-dom";
 
-const SiteCard = ({ site }) => {
-  const formatDestinations = (destinations) => {
-    if (!destinations || destinations.length === 0) return "";
+const HotelCard = ({ hotel }) => {
+  const formatRoomTypes = (roomTypes) => {
+    if (!roomTypes || roomTypes.length === 0) return "";
 
-    let joinedDestinations = destinations?.join(", ");
-    if (joinedDestinations.length > 12) {
-      joinedDestinations = joinedDestinations.slice(0, 12) + "...";
+    let joinedRoomTypes = roomTypes?.join(", ");
+    if (joinedRoomTypes.length > 12) {
+      joinedRoomTypes = joinedRoomTypes.slice(0, 12) + "...";
     }
-    return joinedDestinations;
+    return joinedRoomTypes;
   };
 
-  const getTypeStyle = (type) => {
-    switch (type) {
-      case "Tourist":
-        return { backgroundColor: "#FDD1D2", color: "black" };
-      case "Historical":
-        return { backgroundColor: "#87cefa", color: "black" };
-      case "Business":
-        return { backgroundColor: "#98fb98", color: "black" };
-      case "Recreational":
-        return { backgroundColor: "#d3d3d3", color: "black" };
-      case "Religious":
-        return { backgroundColor: "#ffe86b", color: "black" };
-      default:
-        return { backgroundColor: "#fff", color: "black" };
+  const getStarRatingStyle = (rating) => {
+    const starColors = ["#FFDDC1", "#FFDDC1", "#FFDDC1", "#FFDDC1", "#FFDDC1"];
+    for (let i = 0; i < rating; i++) {
+      starColors[i] = "#FFD700"; // gold color for star rating
     }
+    return { color: starColors.join(",") };
   };
 
   return (
-    <Link to={`/operations/site/view/${site._id}`} className="enq">
+    <Link to={`/operations/hotel/view/${hotel._id}`} className="enq">
       <div className="title" style={{ marginLeft: "10px" }}>
-        {site?.name}
+        {hotel?.name}
       </div>
-      <div className="budget">{site?.country}</div>
-      <div className="status" style={getTypeStyle(site?.type)}>
-        {site?.type}
+      <div className="budget">{hotel?.country}</div>
+      <div className="rating" style={getStarRatingStyle(hotel?.starRating)}>
+        {`★`.repeat(hotel?.starRating)}
+      </div>
+      <div className="roomTypes">
+        {formatRoomTypes(hotel?.availableRoomTypes)}
       </div>
     </Link>
   );
 };
 
-export default SiteCard;
+export default HotelCard;

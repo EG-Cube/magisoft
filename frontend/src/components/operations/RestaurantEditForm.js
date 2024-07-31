@@ -2,13 +2,13 @@ import { useState, useEffect, useContext } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { SiteContext } from "../../context/SiteContext";
+import { RestaurantContext } from "../../context/RestaurantContext";
 import "../../styles/form.css";
 
-const SiteEditForm = ({ siteID }) => {
+const RestaurantEditForm = ({ restaurantID }) => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
-  const { sites, dispatch } = useContext(SiteContext);
+  const { dispatch } = useContext(RestaurantContext);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -19,30 +19,27 @@ const SiteEditForm = ({ siteID }) => {
     state: "",
     country: "",
     pincode: "",
-    duration: 0,
-    type: "",
+    contactNumber: "",
+    email: "",
+    website: "",
+    availableMeals: [],
+    amenities: [],
+    cuisine: "",
   };
 
-  const typeOptions = [
-    "Tourist",
-    "Historical",
-    "Business",
-    "Recreational",
-    "Religious",
-  ];
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
   useEffect(() => {
-    const fetchSite = async () => {
+    const fetchRestaurant = async () => {
       if (!user) {
         setError("You must be logged in");
         return;
       }
 
       try {
-        const response = await axios.get(`${API_URL}/api/site/${siteID}`, {
+        const response = await axios.get(`${API_URL}/api/restaurant/${restaurantID}`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
@@ -54,51 +51,62 @@ const SiteEditForm = ({ siteID }) => {
       }
     };
 
-    fetchSite();
-  }, [siteID, user]);
+    fetchRestaurant();
+  }, [restaurantID, user, API_URL]); // Added API_URL to the dependency array
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const newValue = type === "checkbox" ? checked : value;
-
-    if (name.includes("visitingHours.")) {
-      const timeType = name.split(".")[1];
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        visitingHours: {
-          ...prevFormData.visitingHours,
-          [timeType]: newValue,
-        },
-      }));
-    } else {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: newValue,
-      }));
-    }
-  };
-
-  const handleFacilityChange = (index, value) => {
-    const newFacilities = [...formData?.facilities];
-    newFacilities[index] = value;
+    const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      facilities: newFacilities,
+      [name]: value,
     }));
   };
 
-  const handleAddFacility = () => {
+  const handleAvailableMealsChange = (index, value) => {
+    const newMeals = [...formData.availableMeals];
+    newMeals[index] = value;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      facilities: [...prevFormData.facilities, ""],
+      availableMeals: newMeals,
     }));
   };
 
-  const handleRemoveFacility = (index) => {
-    const newFacilities = formData?.facilities.filter((_, i) => i !== index);
+  const handleAddMeal = () => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      facilities: newFacilities,
+      availableMeals: [...prevFormData.availableMeals, ""],
+    }));
+  };
+
+  const handleRemoveMeal = (index) => {
+    const newMeals = formData.availableMeals.filter((_, i) => i !== index);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      availableMeals: newMeals,
+    }));
+  };
+
+  const handleAmenitiesChange = (index, value) => {
+    const newAmenities = [...formData.amenities];
+    newAmenities[index] = value;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      amenities: newAmenities,
+    }));
+  };
+
+  const handleAddAmenity = () => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      amenities: [...prevFormData.amenities, ""],
+    }));
+  };
+
+  const handleRemoveAmenity = (index) => {
+    const newAmenities = formData.amenities.filter((_, i) => i !== index);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      amenities: newAmenities,
     }));
   };
 
@@ -116,27 +124,21 @@ const SiteEditForm = ({ siteID }) => {
       "city",
       "state",
       "country",
-      "pincode",
-      "type",
-      "visitingHours.start",
-      "visitingHours.end",
+      "contactNumber",
+      "cuisine",
     ];
 
-    const missingFields = requiredFields.filter((field) => {
-      const [mainField, subField] = field.split(".");
-      return subField ? !formData[mainField][subField] : !formData[mainField];
-    });
+    const missingFields = requiredFields.filter((field) => !formData[field]);
 
     if (missingFields.length > 0) {
       setEmptyFields(missingFields);
       setError("Please fill in all the required fields");
-      console.log(missingFields);
       return;
     }
 
     try {
       const response = await axios.patch(
-        `${API_URL}/api/site/${siteID}`,
+        `${API_URL}/api/restaurant/${restaurantID}`,
         formData,
         {
           headers: {
@@ -148,11 +150,11 @@ const SiteEditForm = ({ siteID }) => {
 
       setError(null);
       setEmptyFields([]);
-      console.log("Site updated", response.data);
+      console.log("Restaurant updated", response.data);
 
-      dispatch({ type: "UPDATE_SITE", payload: response.data });
+      dispatch({ type: "UPDATE_RESTAURANT", payload: response.data });
 
-      navigate(`/operations/site/view/${siteID}`);
+      navigate(`/operations/restaurant/view/${restaurantID}`);
     } catch (error) {
       setError(error.response?.data?.error || "An error occurred");
       setEmptyFields(error.response?.data?.emptyFields || []);
@@ -161,7 +163,7 @@ const SiteEditForm = ({ siteID }) => {
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      <h3>Edit Site</h3>
+      <h3>Edit Restaurant</h3>
 
       <div className="row">
         <div>
@@ -170,7 +172,7 @@ const SiteEditForm = ({ siteID }) => {
             type="text"
             name="name"
             onChange={handleChange}
-            value={formData?.name}
+            value={formData.name}
             className={emptyFields.includes("name") ? "error" : ""}
           />
         </div>
@@ -182,7 +184,7 @@ const SiteEditForm = ({ siteID }) => {
             type="text"
             name="address"
             onChange={handleChange}
-            value={formData?.address}
+            value={formData.address}
             className={emptyFields.includes("address") ? "error" : ""}
           />
         </div>
@@ -193,7 +195,7 @@ const SiteEditForm = ({ siteID }) => {
             type="text"
             name="city"
             onChange={handleChange}
-            value={formData?.city}
+            value={formData.city}
             className={emptyFields.includes("city") ? "error" : ""}
           />
         </div>
@@ -205,7 +207,7 @@ const SiteEditForm = ({ siteID }) => {
             type="text"
             name="state"
             onChange={handleChange}
-            value={formData?.state}
+            value={formData.state}
             className={emptyFields.includes("state") ? "error" : ""}
           />
         </div>
@@ -215,7 +217,7 @@ const SiteEditForm = ({ siteID }) => {
             type="text"
             name="country"
             onChange={handleChange}
-            value={formData?.country}
+            value={formData.country}
             className={emptyFields.includes("country") ? "error" : ""}
           />
         </div>
@@ -226,86 +228,59 @@ const SiteEditForm = ({ siteID }) => {
           type="text"
           name="pincode"
           onChange={handleChange}
-          value={formData?.pincode}
-          className={emptyFields.includes("pincode") ? "error" : ""}
-        />
-      </div>
-      <div className="row">
-        <div>
-          <label>Type:</label>
-          <select
-            name="type"
-            onChange={handleChange}
-            value={formData?.type}
-            className={emptyFields.includes("type") ? "error" : ""}
-          >
-            <option key={""} value={""}>
-              {""}
-            </option>
-            {typeOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-      <div>
-        <label>Description:</label>
-        <textarea
-          name="description"
-          onChange={handleChange}
-          value={formData?.description}
-          className={emptyFields.includes("description") ? "error" : ""}
+          value={formData.pincode}
         />
       </div>
       <div>
-        <label>Image:</label>
+        <label>Contact Number:</label>
         <input
           type="text"
-          name="image"
+          name="contactNumber"
           onChange={handleChange}
-          value={formData?.image}
+          value={formData.contactNumber}
         />
       </div>
-      <div className="row">
-        <div>
-          <label>Visiting Hours Start:</label>
-          <input
-            type="time"
-            name="visitingHours.start"
-            onChange={handleChange}
-            value={formData?.visitingHours?.start}
-            className={
-              emptyFields.includes("visitingHours.start") ? "error" : ""
-            }
-          />
-        </div>
-        <div>
-          <label>Visiting Hours End:</label>
-          <input
-            type="time"
-            name="visitingHours.end"
-            onChange={handleChange}
-            value={formData?.visitingHours?.end}
-            className={emptyFields.includes("visitingHours.end") ? "error" : ""}
-          />
-        </div>
+      <div>
+        <label>Email:</label>
+        <input
+          type="email"
+          name="email"
+          onChange={handleChange}
+          value={formData.email}
+        />
       </div>
       <div>
-        <label>Facilities:</label>
-        {formData?.facilities?.map((item, index) => (
+        <label>Website:</label>
+        <input
+          type="text"
+          name="website"
+          onChange={handleChange}
+          value={formData.website}
+        />
+      </div>
+      <div>
+        <label>Cuisine:</label>
+        <input
+          type="text"
+          name="cuisine"
+          onChange={handleChange}
+          value={formData.cuisine}
+          className={emptyFields.includes("cuisine") ? "error" : ""}
+        />
+      </div>
+      <div>
+        <label>Available Meals:</label>
+        {formData.availableMeals.map((meal, index) => (
           <div key={index} className="destination-field">
             <input
               type="text"
-              value={item}
-              onChange={(e) => handleFacilityChange(index, e.target.value)}
-              className={emptyFields.includes("facilities") ? "error" : ""}
+              value={meal}
+              onChange={(e) => handleAvailableMealsChange(index, e.target.value)}
             />
             <button
               className="removeBtn"
               type="button"
-              onClick={() => handleRemoveFacility(index)}
+              onClick={() => handleRemoveMeal(index)}
             >
               Remove
             </button>
@@ -315,17 +290,44 @@ const SiteEditForm = ({ siteID }) => {
           className="addFacilityBtn"
           type="button"
           style={{ marginBottom: "20px" }}
-          onClick={handleAddFacility}
+          onClick={handleAddMeal}
         >
-          Add Facility
+          Add Meal
+        </button>
+      </div>
+      <div>
+        <label>Amenities:</label>
+        {formData.amenities.map((amenity, index) => (
+          <div key={index} className="destination-field">
+            <input
+              type="text"
+              value={amenity}
+              onChange={(e) => handleAmenitiesChange(index, e.target.value)}
+            />
+            <button
+              className="removeBtn"
+              type="button"
+              onClick={() => handleRemoveAmenity(index)}
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+        <button
+          className="addFacilityBtn"
+          type="button"
+          style={{ marginBottom: "20px" }}
+          onClick={handleAddAmenity}
+        >
+          Add Amenity
         </button>
       </div>
       <div className="submitBtn">
-        <button type="submit">Update Site</button>
+        <button type="submit">Update Restaurant</button>
       </div>
       {error && <div className="error">{error}</div>}
     </form>
   );
 };
 
-export default SiteEditForm;
+export default RestaurantEditForm;

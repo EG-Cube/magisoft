@@ -2,28 +2,18 @@ import React from "react";
 import "../../styles/card.css";
 import { Link } from "react-router-dom";
 
-const SiteCard = ({ site }) => {
-  const formatDestinations = (destinations) => {
-    if (!destinations || destinations.length === 0) return "";
-
-    let joinedDestinations = destinations?.join(", ");
-    if (joinedDestinations.length > 12) {
-      joinedDestinations = joinedDestinations.slice(0, 12) + "...";
-    }
-    return joinedDestinations;
-  };
-
-  const getTypeStyle = (type) => {
-    switch (type) {
-      case "Tourist":
+const RestaurantCard = ({ restaurant }) => {
+  const getCuisineStyle = (cuisine) => {
+    switch (cuisine) {
+      case "Italian":
         return { backgroundColor: "#FDD1D2", color: "black" };
-      case "Historical":
+      case "Chinese":
         return { backgroundColor: "#87cefa", color: "black" };
-      case "Business":
+      case "Indian":
         return { backgroundColor: "#98fb98", color: "black" };
-      case "Recreational":
+      case "Mexican":
         return { backgroundColor: "#d3d3d3", color: "black" };
-      case "Religious":
+      case "Japanese":
         return { backgroundColor: "#ffe86b", color: "black" };
       default:
         return { backgroundColor: "#fff", color: "black" };
@@ -31,16 +21,16 @@ const SiteCard = ({ site }) => {
   };
 
   return (
-    <Link to={`/operations/site/view/${site._id}`} className="enq">
+    <Link to={`/operations/restaurant/view/${restaurant._id}`} className="enq">
       <div className="title" style={{ marginLeft: "10px" }}>
-        {site?.name}
+        {restaurant?.name}
       </div>
-      <div className="budget">{site?.country}</div>
-      <div className="status" style={getTypeStyle(site?.type)}>
-        {site?.type}
+      <div className="budget">{restaurant?.country}</div>
+      <div className="status" style={getCuisineStyle(restaurant?.cuisine)}>
+        {restaurant?.cuisine}
       </div>
     </Link>
   );
 };
 
-export default SiteCard;
+export default RestaurantCard;

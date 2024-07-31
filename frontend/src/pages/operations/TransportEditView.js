@@ -4,7 +4,7 @@ import TransportEditForm from "../../components/operations/TransportEditForm";
 const TransportEditFormView = () => {
   const { id } = useParams();
   return (
-      <TransportEditForm siteID={id} />
+    <TransportEditForm transportID={id} />
   );
 };
 

@@ -1,23 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useSiteContext } from "../../hooks/useSiteContext";
-import axios from "axios";
-import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import { useState } from "react";
+import { useRestaurantContext } from "../../hooks/useRestaurantContext";
 import "../../styles/details.css";
 
 import editBtn from "../../assets/edit.png";
 import deleteBtn from "../../assets/delete.png";
 
-const SiteDetails = ({ site }) => {
-  const { dispatch } = useSiteContext();
+const RestaurantDetails = ({ restaurant }) => {
+  const { dispatch } = useRestaurantContext();
   const { user } = useAuthContext();
   const navigate = useNavigate();
 
   const API_URL = process.env.REACT_APP_API_URL;
 
   const handleEdit = async () => {
-    navigate(`/operations/site/edit/${site?._id}`);
+    navigate(`/operations/restaurant/edit/${restaurant?._id}`);
   };
 
   const handleDelete = async () => {
@@ -25,7 +22,7 @@ const SiteDetails = ({ site }) => {
       return;
     }
 
-    const response = await fetch(`${API_URL}/api/site/` + site?._id, {
+    const response = await fetch(`${API_URL}/api/restaurant/` + restaurant?._id, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -34,32 +31,15 @@ const SiteDetails = ({ site }) => {
     const json = await response.json();
 
     if (response.ok) {
-      dispatch({ type: "DELETE_SITE", payload: json });
+      dispatch({ type: "DELETE_RESTAURANT", payload: json });
     }
 
-    navigate(`/operations/site/list`);
-  };
-
-  const getTypeStyle = (type) => {
-    switch (type) {
-      case "Tourist":
-        return { backgroundColor: "#FDD1D2", color: "black" };
-      case "Historical":
-        return { backgroundColor: "#87cefa", color: "black" };
-      case "Business":
-        return { backgroundColor: "#98fb98", color: "black" };
-      case "Recreational":
-        return { backgroundColor: "#d3d3d3", color: "black" };
-      case "Religious":
-        return { backgroundColor: "#ffe86b", color: "black" };
-      default:
-        return { backgroundColor: "#fff", color: "black" };
-    }
+    navigate(`/operations/restaurant/list`);
   };
 
   return (
-    <div className="site-details">
-      <div className="site-header">
+    <div className="restaurant-details">
+      <div className="restaurant-header">
         <div className="status">
           <div className="actions">
             <button className="edit-btn" onClick={handleEdit}>
@@ -69,39 +49,45 @@ const SiteDetails = ({ site }) => {
               <img src={deleteBtn} alt="Delete" />
             </button>
           </div>
-          <span style={getTypeStyle(site?.type)}>{site?.type}</span>
+          <span>{restaurant?.cuisine}</span>
         </div>
       </div>
-      <div className="site-content">
+      <div className="restaurant-content">
         <div className="row">
           <div>
             <div>Name:</div>
-            <div>{site?.name}</div>
+            <div>{restaurant?.name}</div>
           </div>
           <div>
             <div>Address:</div>
             <div>
-              {site?.address}, {site?.city}, {site?.state}, {site?.country} -{" "}
-              {site?.pincode}
+              {restaurant?.address}, {restaurant?.city}, {restaurant?.state}, {restaurant?.country} -{" "}
+              {restaurant?.pincode}
             </div>
           </div>
         </div>
         <div className="row">
           <div>
-            <div>Description:</div>
-            <div>{site?.description}</div>
+            <div>Contact Number:</div>
+            <div>{restaurant?.contactNumber}</div>
+          </div>
+          <div>
+            <div>Email:</div>
+            <div>{restaurant?.email}</div>
+          </div>
+          <div>
+            <div>Website:</div>
+            <div>{restaurant?.website}</div>
           </div>
         </div>
         <div className="row">
           <div>
-            <div>Facilities:</div>
-            <div>{site?.facilities?.join(", ")}</div>
+            <div>Available Meals:</div>
+            <div>{restaurant?.availableMeals?.join(", ")}</div>
           </div>
           <div>
-            <div>Visiting Hours:</div>
-            <div>
-              {site?.visitingHours?.start} - {site?.visitingHours?.end}
-            </div>
+            <div>Amenities:</div>
+            <div>{restaurant?.amenities?.join(", ")}</div>
           </div>
         </div>
       </div>
@@ -109,4 +95,4 @@ const SiteDetails = ({ site }) => {
   );
 };
 
-export default SiteDetails;
+export default RestaurantDetails;
