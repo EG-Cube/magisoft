@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import axios from "axios";
 
 // components
-import HotelDetails from "../../components/operations/HotelDetails";
+import HotelDetails from "../../components/hotel/HotelDetails";
 import { useParams } from "react-router-dom";
 
 const HotelDetailView = () => {

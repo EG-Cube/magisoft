@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useEnquiryContext } from "../../hooks/useEnquiryContext";
 
 // components
-import EnquiryCard from "../../components/sales/EnquiryCard";
+import EnquiryCard from "../../components/enquiry/EnquiryCard";
 import Sort from "../../components/sales/Sort";
 
 const AdminEnquiryListView = ({ type }) => {
@@ -76,7 +76,7 @@ const AdminEnquiryListView = ({ type }) => {
         {filteredEnquiries
           ?.sort((a, b) => a.createdAt < b.createdAt)
           .map((enquiry) => (
-            <EnquiryCard key={enquiry._id} enquiry={enquiry} />
+            <EnquiryCard key={enquiry._id} enquiry={enquiry} isAdmin={true} redirectLink={"/admin/enquiry/view/"}/>
           ))}
       </div>
     </div>

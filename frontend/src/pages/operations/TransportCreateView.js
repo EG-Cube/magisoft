@@ -1,4 +1,4 @@
-import TransportCreateForm from "../../components/operations/TransportCreateForm";
+import TransportCreateForm from "../../components/transport/TransportCreateForm";
 
 const TransportCreateView = () => {
   return (

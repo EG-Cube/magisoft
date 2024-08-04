@@ -1,11 +1,13 @@
 import { useParams } from "react-router-dom";
-import ItineraryEditForm from "../../components/operations/ItineraryEditForm";
+import ItineraryEditForm from "../../components/itinerary/ItineraryEditForm";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const ItineraryEditFormView = () => {
-  const { id } = useParams();
-  return (
-      <ItineraryEditForm itineraryID={id} />
-  );
+  const { user } = useAuthContext();
+
+  return <ItineraryEditForm />;
 };
 
 export default ItineraryEditFormView;

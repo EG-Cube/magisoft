@@ -1,7 +1,7 @@
-import CreateEnquiryForm from "../../components/sales/CreateEnquiryForm";
+import EnquiryCreateForm from "../../components/enquiry/EnquiryCreateForm";
 
 const EnquiryGeneralView = () => {
-  return <CreateEnquiryForm />;
+  return <EnquiryCreateForm />;
 };
 
 export default EnquiryGeneralView;

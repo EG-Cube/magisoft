@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useTransportContext } from "../../hooks/useTransportContext";
 
 // components
-import TransportCard from "../../components/operations/TransportCard";
+import TransportCard from "../../components/transport/TransportCard";
 import Sort from "../../components/operations/Sort";
 
 const TransportListView = ({ type }) => {

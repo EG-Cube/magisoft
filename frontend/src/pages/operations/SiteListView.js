@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useSiteContext } from "../../hooks/useSiteContext";
 
 // components
-import SiteCard from "../../components/operations/SiteCard";
+import SiteCard from "../../components/site/SiteCard";
 import Sort from "../../components/operations/Sort";
 
 const SiteListView = ({ type }) => {

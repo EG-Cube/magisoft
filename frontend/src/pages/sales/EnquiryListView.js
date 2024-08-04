@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useEnquiryContext } from "../../hooks/useEnquiryContext";
 
 // components
-import EnquiryCard from "../../components/sales/EnquiryCard";
+import EnquiryCard from "../../components/enquiry/EnquiryCard";
 import Sort from "../../components/sales/Sort";
 
 const EnquiryListView = ({ type }) => {
@@ -17,7 +17,7 @@ const EnquiryListView = ({ type }) => {
   useEffect(() => {
     const fetchEnquiries = async () => {
       const response = await fetch(
-        `${API_URL}/api/enquiry/filter/${user?.user?._id}`,
+        `${API_URL}/api/enquiry/sales/${user?.user?._id}`,
         {
           method: "GET",
           headers: {
@@ -79,7 +79,7 @@ const EnquiryListView = ({ type }) => {
         {filteredEnquiries
           ?.sort((a, b) => a.createdAt < b.createdAt)
           .map((enquiry) => (
-            <EnquiryCard key={enquiry._id} enquiry={enquiry} />
+            <EnquiryCard key={enquiry._id} enquiry={enquiry} redirectLink={"/sales/enquiry/view/"}/>
           ))}
       </div>
     </div>

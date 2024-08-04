@@ -88,11 +88,11 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: rgb(100,220,100);
+  background-color: rgb(100, 220, 100);
 }
 
 .edit-status-btn:hover {
-  background-color: rgba(100,220,100, 0.8);
+  background-color: rgba(100, 220, 100, 0.8);
 }
 
 .actions {
@@ -125,4 +125,21 @@
 button img {
   width: 20px;
   height: 20px;
+}
+
+.allocate-btn {
+  border: none;
+  background-color: inherit;
+  margin-left: 10px;
+}
+
+.action-btn {
+  border: none;
+  color: rgb(2, 17, 35);
+  text-decoration: none;
+  background-color: rgba(71, 157, 255, 0.8);
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: solid 2px rgba(71, 157, 255, 0.8);
+  margin-left: 10px;
 }

@@ -17,19 +17,19 @@ const SideNavbar = () => {
       <nav className="nav">
         <ul>
           <li>
-            <Link to={"/enquiry/dashboard"}>Dashboard</Link>
+            <Link to={"/sales/dashboard"}>Dashboard</Link>
           </li>
           <li>
-            <Link to={"/enquiry/pending"}>Pending</Link>
+            <Link to={"/sales/enquiry/pending"}>Pending</Link>
           </li>
           <li>
-            <Link to={"/enquiry/verified"}>Verified</Link>
+            <Link to={"/sales/enquiry/verified"}>Verified</Link>
           </li>
           {/* <li>
-            <Link to={"/enquiry/packages"}>Packages</Link>
+            <Link to={"/sales/enquiry/packages"}>Packages</Link>
           </li> */}
           <li>
-            <Link to={"/enquiry/archive"}>Archive</Link>
+            <Link to={"/sales/enquiry/archive"}>Archive</Link>
           </li>
         </ul>
       </nav>

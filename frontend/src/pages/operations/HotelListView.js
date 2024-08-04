@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useHotelContext } from "../../hooks/useHotelContext";
 
 // components
-import HotelCard from "../../components/operations/HotelCard";
+import HotelCard from "../../components/hotel/HotelCard";
 import Sort from "../../components/operations/Sort";
 
 const HotelListView = ({ type }) => {

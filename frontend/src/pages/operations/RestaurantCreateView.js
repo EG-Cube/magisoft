@@ -1,4 +1,4 @@
-import RestaurantCreateForm from "../../components/operations/RestaurantCreateForm";
+import RestaurantCreateForm from "../../components/restaurant/RestaurantCreateForm";
 
 const RestaurantCreateView = () => {
   return (

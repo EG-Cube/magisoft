@@ -2,7 +2,7 @@ import React from "react";
 import "../../styles/card.css";
 import { Link } from "react-router-dom";
 
-const EnquiryCard = ({ enquiry }) => {
+const EnquiryCard = ({ enquiry, isAdmin, redirectLink }) => {
 
   const formatDestinations = (destinations) => {
     if (!destinations || destinations.length === 0) return "";
@@ -28,7 +28,7 @@ const EnquiryCard = ({ enquiry }) => {
   };
 
   return (
-    <Link to={`/enquiry/view/${enquiry._id}`} className="enq">
+    <Link to={`${redirectLink}${enquiry._id}`} className="enq">
       <div className="title" style={{ marginLeft: "10px" }}>
         {enquiry?.firstName} {enquiry?.lastName}
       </div>
@@ -42,7 +42,7 @@ const EnquiryCard = ({ enquiry }) => {
         {enquiry?.passengers?.infants}
       </div>
       <div className="package">
-        {formatDestinations(enquiry?.destinations)} ({enquiry?.numberOfDays}D)
+        {formatDestinations(enquiry?.destinations)} ({enquiry?.numberOfDays}D | {enquiry?.numberOfNights}N)
       </div>
       <div className="status" style={getStatusStyle(enquiry?.status)}>
         {enquiry?.status}

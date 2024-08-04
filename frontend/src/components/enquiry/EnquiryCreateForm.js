@@ -1,17 +1,11 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { EnquiryContext } from "../../context/EnquiryContext";
-import "../../styles/form.css";
 import { useUserContext } from "../../hooks/useUserContext";
+import "../../styles/form.css";
 
-const AdminEditEnquiryForm = ({ enquiryID }) => {
+const EnquiryForm = ({ isAdmin }) => {
   const { user } = useAuthContext();
-  const navigate = useNavigate();
-  const { users, dispatch: userDispatch } = useUserContext();
-  const { enquiries, dispatch: enquiryDispatch } = useContext(EnquiryContext);
-  
+  const { users, dispatch } = useUserContext();
   const API_URL = process.env.REACT_APP_API_URL;
 
   const initialFormData = {
@@ -30,6 +24,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
     hotelStarRating: 1,
     budget: 0,
     numberOfDays: 0,
+    numberOfNights: 0,
     numberOfRooms: 0,
     roomComments: "",
     phoneNumber: "",
@@ -38,6 +33,8 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
     mealPlan: "CP",
     purpose: "",
     remarks: "",
+    enteredBy: user?.user?._id,
+    salesAllocatedTo: user?.user?._id,
   };
 
   const mealPlanOptions = ["CP", "MAP", "AP"];
@@ -47,42 +44,24 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
   const [emptyFields, setEmptyFields] = useState([]);
 
   useEffect(() => {
-    const fetchEnquiry = async () => {
-      if (!user) {
-        setError("You must be logged in");
-        return;
-      }
-
-      try {
-        const response = await axios.get(`${API_URL}/api/enquiry/${enquiryID}`, {
+    if (isAdmin) {
+      const fetchUsers = async () => {
+        const response = await fetch(`${API_URL}/api/user/`, {
+          method: "GET",
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
         });
+        const json = await response.json();
 
-        setFormData(response.data);
-      } catch (error) {
-        setError(error.response?.data?.error || "An error occurred");
-      }
-    };
+        if (response.ok) {
+          dispatch({ type: "SET_USERS", payload: json });
+        }
+      };
 
-    const fetchUsers = async () => {
-      const response = await fetch(`${API_URL}/api/user/`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-      const json = await response.json();
-
-      if (response.ok) {
-        userDispatch({ type: "SET_USERS", payload: json });
-      }
-    };
-
-    fetchUsers();
-    fetchEnquiry();
-  }, [enquiryID, user, users]);
+      fetchUsers();
+    }
+  }, [user, isAdmin]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -135,6 +114,11 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
     if (!user) {
       setError("You must be logged in");
       return;
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        enteredBy: user?.user?._id,
+      }));
     }
 
     const requiredFields = [
@@ -149,6 +133,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
       "hotelStarRating",
       "budget",
       "numberOfDays",
+      "numberOfNights",
       "numberOfRooms",
       "phoneNumber",
       "emailAddress",
@@ -164,41 +149,33 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
     if (missingFields.length > 0) {
       setEmptyFields(missingFields);
       setError("Please fill in all the required fields");
-      console.log(missingFields);
       return;
     }
 
-    try {
-      const response = await axios.patch(
-        `${API_URL}/api/enquiry/${enquiryID}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
+    const response = await fetch(`${API_URL}/api/enquiry`, {
+      method: "POST",
+      body: JSON.stringify(formData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user?.token}`,
+      },
+    });
+    const json = await response.json();
 
+    if (!response.ok) {
+      setError(json.error);
+      setEmptyFields(json.emptyFields || []);
+    } else {
+      setFormData(initialFormData);
       setError(null);
       setEmptyFields([]);
-      console.log("Enquiry updated", response.data);
-
-      dispatch: enquiryDispatch({
-        type: "UPDATE_ENQUIRY",
-        payload: response.data,
-      });
-
-      navigate(`/admin/enquiry/view/${enquiryID}`);
-    } catch (error) {
-      setError(error.response?.data?.error || "An error occurred");
-      setEmptyFields(error.response?.data?.emptyFields || []);
+      console.log("New enquiry added", json);
     }
   };
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      <h3>Edit Enquiry</h3>
+      <h3>{isAdmin ? "Admin Create Enquiry" : "Add a New Enquiry"}</h3>
 
       <div className="row">
         <div>
@@ -231,7 +208,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
             type="date"
             name="fromDate"
             onChange={handleChange}
-            value={formData.fromDate.substring(0, 10)}
+            value={formData.fromDate}
             className={emptyFields.includes("fromDate") ? "error" : ""}
           />
         </div>
@@ -242,11 +219,12 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
             type="date"
             name="toDate"
             onChange={handleChange}
-            value={formData.toDate.substring(0, 10)}
+            value={formData.toDate}
             className={emptyFields.includes("toDate") ? "error" : ""}
           />
         </div>
-
+      </div>
+      <div className="row">
         <div>
           <label>No. of Days:</label>
           <input
@@ -257,7 +235,18 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
             className={emptyFields.includes("numberOfDays") ? "error" : ""}
           />
         </div>
+        <div>
+          <label>No. of Nights:</label>
+          <input
+            type="number"
+            name="numberOfNights"
+            onChange={handleChange}
+            value={formData.numberOfNights}
+            className={emptyFields.includes("numberOfNights") ? "error" : ""}
+          />
+        </div>
       </div>
+
       <div className="row">
         <div>
           <label>Adults:</label>
@@ -296,6 +285,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
           />
         </div>
       </div>
+
       <div>
         <label>Destinations:</label>
         {formData.destinations.map((item, index) => (
@@ -316,6 +306,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
           </div>
         ))}
         <button
+          className="addDestinationBtn"
           type="button"
           style={{ marginBottom: "20px" }}
           onClick={handleAddDestination}
@@ -347,20 +338,32 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
           />
         </div>
       </div>
+
       <div className="row">
         <div>
-          <label>Star Rating:</label>
+          <label>Hotel Star Rating:</label>
           <input
             type="number"
             name="hotelStarRating"
             onChange={handleChange}
             value={formData.hotelStarRating}
-            min={1}
-            max={5}
             className={emptyFields.includes("hotelStarRating") ? "error" : ""}
           />
         </div>
 
+        <div>
+          <label>Budget:</label>
+          <input
+            type="number"
+            name="budget"
+            onChange={handleChange}
+            value={formData.budget}
+            className={emptyFields.includes("budget") ? "error" : ""}
+          />
+        </div>
+      </div>
+
+      <div className="row">
         <div>
           <label>No. of Rooms:</label>
           <input
@@ -371,6 +374,54 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
             className={emptyFields.includes("numberOfRooms") ? "error" : ""}
           />
         </div>
+
+        <div>
+          <label>Room Comments:</label>
+          <input
+            type="text"
+            name="roomComments"
+            onChange={handleChange}
+            value={formData.roomComments}
+            className={emptyFields.includes("roomComments") ? "error" : ""}
+          />
+        </div>
+      </div>
+
+      <div className="row">
+        <div>
+          <label>Phone Number:</label>
+          <input
+            type="text"
+            name="phoneNumber"
+            onChange={handleChange}
+            value={formData.phoneNumber}
+            className={emptyFields.includes("phoneNumber") ? "error" : ""}
+          />
+        </div>
+
+        <div>
+          <label>Email Address:</label>
+          <input
+            type="text"
+            name="emailAddress"
+            onChange={handleChange}
+            value={formData.emailAddress}
+            className={emptyFields.includes("emailAddress") ? "error" : ""}
+          />
+        </div>
+      </div>
+
+      <div className="row">
+        <div>
+          <label>Flight Booking Required:</label>
+          <input
+            type="checkbox"
+            name="flightBookingRequired"
+            onChange={handleChange}
+            checked={formData.flightBookingRequired}
+          />
+        </div>
+
         <div>
           <label>Meal Plan:</label>
           <select
@@ -387,64 +438,8 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
           </select>
         </div>
       </div>
-      <div>
-        <label>Room Comments:</label>
-        <textarea
-          type="text"
-          name="roomComments"
-          onChange={handleChange}
-          value={formData.roomComments}
-        />
-      </div>
-      <div className="row">
-        <div>
-          <label>Phone Number:</label>
-          <input
-            type="text"
-            name="phoneNumber"
-            onChange={handleChange}
-            value={formData.phoneNumber}
-            className={emptyFields.includes("phoneNumber") ? "error" : ""}
-          />
-        </div>
-
-        <div>
-          <label>Email Address:</label>
-          <input
-            type="email"
-            name="emailAddress"
-            onChange={handleChange}
-            value={formData.emailAddress}
-            className={emptyFields.includes("emailAddress") ? "error" : ""}
-          />
-        </div>
-      </div>
-      <div className="row">
-        <div className="checkbox-container">
-          <label>Flight Booking Required:</label>
-          <input
-            type="checkbox"
-            name="flightBookingRequired"
-            onChange={handleChange}
-            checked={formData.flightBookingRequired}
-            className={`checkbox ${
-              emptyFields.includes("flightBookingRequired") ? "error" : ""
-            }`}
-          />
-        </div>
-      </div>
 
       <div className="row">
-        <div>
-          <label>Budget:</label>
-          <input
-            type="number"
-            name="budget"
-            onChange={handleChange}
-            value={formData.budget}
-            className={emptyFields.includes("budget") ? "error" : ""}
-          />
-        </div>
         <div>
           <label>Purpose:</label>
           <input
@@ -455,40 +450,49 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
             className={emptyFields.includes("purpose") ? "error" : ""}
           />
         </div>
+
+        <div>
+          <label>Remarks:</label>
+          <input
+            type="text"
+            name="remarks"
+            onChange={handleChange}
+            value={formData.remarks}
+            className={emptyFields.includes("remarks") ? "error" : ""}
+          />
+        </div>
       </div>
 
-      <div>
-        <label>Remarks:</label>
-        <textarea
-          type="text"
-          name="remarks"
-          onChange={handleChange}
-          value={formData.remarks}
-        />
-      </div>
+      {isAdmin && (
+        <div className="row">
+          <div>
+            <label>Allocated To:</label>
+            <select
+              name="salesAllocatedTo"
+              onChange={handleChange}
+              value={formData.salesAllocatedTo}
+              className={
+                emptyFields.includes("salesAllocatedTo") ? "error" : ""
+              }
+            >
+              <option value="">Select User</option>
+              {users &&
+                users.map((user) => (
+                  <option key={user._id} value={user._id}>
+                    {user.firstName} {user.lastName}
+                  </option>
+                ))}
+            </select>
+          </div>
+        </div>
+      )}
 
-      <div>
-        <label>Allocated To:</label>
-        <select
-          name="allocatedTo"
-          onChange={handleChange}
-          value={formData.allocatedTo ? formData.allocatedTo : ""}
-        >
-          <option value={""}>-</option>
-          {users?.map((option) => (
-            <option key={option._id} value={option._id}>
-              {option.firstName} {option.lastName}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="submitBtn">
-        <button type="submit">Update Enquiry</button>
-      </div>
+      <button className="btn" type="submit">
+        Add Enquiry
+      </button>
       {error && <div className="error">{error}</div>}
     </form>
   );
 };
 
-export default AdminEditEnquiryForm;
+export default EnquiryForm;

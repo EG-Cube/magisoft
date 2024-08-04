@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import axios from "axios";
 
 // components
-import SiteDetails from "../../components/operations/SiteDetails";
+import SiteDetails from "../../components/site/SiteDetails";
 import { useParams } from "react-router-dom";
 
 const SiteDetailView = () => {

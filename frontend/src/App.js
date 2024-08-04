@@ -49,6 +49,8 @@ import RestaurantEditView from "./pages/operations/RestaurantEditView";
 import RestaurantListView from "./pages/operations/RestaurantListView";
 import RestaurantCreateView from "./pages/operations/RestaurantCreateView";
 
+import OperationsEnquiryListView from "./pages/operations/OperationsEnquiryListView";
+
 import ItineraryCreateView from "./pages/operations/ItineraryCreateView";
 import ItineraryEditView from "./pages/operations/ItineraryEditView";
 import ItineraryDetailsView from "./pages/operations/ItineraryDetailsView";
@@ -57,9 +59,6 @@ import Unauthorized from "./pages/Unauthorized";
 import RequireAuth from "./pages/RequireAuth";
 import NotFound from "./pages/NotFound";
 import ItineraryListView from "./pages/operations/ItineraryListView";
-import { SiteContextProvider } from "./context/SiteContext";
-import { TransportContextProvider } from "./context/TransportContext";
-import { HotelContextProvider } from "./context/HotelContext";
 
 function App() {
   return (
@@ -75,23 +74,19 @@ function App() {
                   <Route path="edit/:id" element={<AdminEnquiryEditView />} />
                   <Route path="view/:id" element={<AdminEnquiryDetailView />} />
                   <Route
-                    path="dashboard"
+                    path="dashboard/"
                     element={<AdminSalesDashboardView />}
                   />
                   <Route
-                    path="ongoing"
-                    element={<AdminEnquiryListView type={"Ongoing"} />}
-                  />
-                  <Route
-                    path="pending"
+                    path="pending/"
                     element={<AdminEnquiryListView type={"Pending"} />}
                   />
                   <Route
-                    path="completed"
-                    element={<AdminEnquiryListView type={"Completed"} />}
+                    path="verified/"
+                    element={<AdminEnquiryListView type={"Verified"} />}
                   />
                   <Route
-                    path="archive"
+                    path="archive/"
                     element={<AdminEnquiryListView type={"Archived"} />}
                   />
                 </Route>
@@ -100,7 +95,7 @@ function App() {
                   <Route path="edit/:id" element={<AdminUserEditView />} />
                   <Route path="view/:id" element={<AdminUserDetailView />} />
                   <Route
-                    path="dashboard"
+                    path="dashboard/"
                     element={<AdminUserDashboardView />}
                   />
                 </Route>
@@ -108,23 +103,28 @@ function App() {
             </Route>
             {/* Sales */}
             <Route element={<RequireAuth allowedRoles={["Admin", "Sales"]} />}>
-              <Route path="enquiry/" element={<SalesDashboardLayout />}>
-                <Route path="create/" element={<EnquiryCreateView />} />
-                <Route path="edit/:id" element={<EnquiryEditView />} />
-                <Route path="view/:id" element={<EnquiryDetailView />} />
-                <Route path="dashboard" element={<SalesDashboardView />} />
-                <Route
-                  path="pending"
-                  element={<EnquiryListView type={"Pending"} />}
-                />
-                <Route
-                  path="verified"
-                  element={<EnquiryListView type={"Verified"} />}
-                />
-                <Route
-                  path="archive"
-                  element={<EnquiryListView type={"Archived"} />}
-                />
+              <Route path="sales/" element={<SalesDashboardLayout />}>
+                <Route path="dashboard/" element={<SalesDashboardView />} />
+                <Route path="enquiry/">
+                  <Route path="create/" element={<EnquiryCreateView />} />
+                  <Route path="edit/:id" element={<EnquiryEditView />} />
+                  <Route
+                    path="view/:id"
+                    element={<EnquiryDetailView type={"Sales"} />}
+                  />
+                  <Route
+                    path="pending/"
+                    element={<EnquiryListView type={"Pending"} />}
+                  />
+                  <Route
+                    path="verified/"
+                    element={<EnquiryListView type={"Verified"} />}
+                  />
+                  <Route
+                    path="archive/"
+                    element={<EnquiryListView type={"Archived"} />}
+                  />
+                </Route>
               </Route>
             </Route>
 
@@ -133,10 +133,16 @@ function App() {
               element={<RequireAuth allowedRoles={["Admin", "Operations"]} />}
             >
               <Route path="operations/" element={<OperationsDashboardLayout />}>
-              <Route path="dashboard/" element={<OperationsDashboardView />} />
+                <Route
+                  path="dashboard/"
+                  element={<OperationsDashboardView />}
+                />
                 <Route path="enquiry/">
-                  <Route path="view/:id" element={<EnquiryDetailView />} />
-                  <Route path="list/" element={<EnquiryListView />} />
+                  <Route
+                    path="view/:id"
+                    element={<EnquiryDetailView type={"Operations"} />}
+                  />
+                  <Route path="list/" element={<OperationsEnquiryListView />} />
                 </Route>
                 <Route path="site/">
                   <Route path="create/" element={<SiteCreateView />} />
@@ -163,7 +169,7 @@ function App() {
                   <Route path="list/" element={<TransportListView />} />
                 </Route>
                 <Route path="itinerary/">
-                  <Route path="create/" element={<ItineraryCreateView />} />
+                  <Route path="create/:id" element={<ItineraryCreateView />} />
                   <Route path="edit/:id" element={<ItineraryEditView />} />
                   <Route path="view/:id" element={<ItineraryDetailsView />} />
                   <Route path="list/" element={<ItineraryListView />} />

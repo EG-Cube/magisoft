@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import axios from "axios";
-import TransportDetails from "../../components/operations/TransportDetails";
+import TransportDetails from "../../components/transport/TransportDetails";
 import { useParams } from "react-router-dom";
 
 const TransportDetailView = () => {

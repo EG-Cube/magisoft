@@ -14,13 +14,13 @@ export const enquiryReducer = (state, action) => {
       };
     case "DELETE_ENQUIRY":
       return {
-        enquiries: state.enquiries.filter(
+        enquiries: state.enquiries?.filter(
           (enquiry) => enquiry._id !== action.payload._id
         ),
       };
     case "UPDATE_ENQUIRY":
       return {
-        enquiries: state.enquiries.map((enquiry) =>
+        enquiries: state.enquiries?.map((enquiry) =>
           enquiry._id === action.payload._id ? action.payload : enquiry
         ),
       };
