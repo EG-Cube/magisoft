@@ -1,15 +1,18 @@
 const Itinerary = require("../models/itineraryModel");
 const mongoose = require("mongoose");
 
-// get all itineraries
+// Get all itineraries
 const getItineraries = async (req, res) => {
   const user_id = req.user._id;
-  const itineraries = await Itinerary.find({ user_id }).sort({ createdAt: -1 });
-
-  res.status(200).json(itineraries);
+  try {
+    const itineraries = await Itinerary.find({ user_id }).sort({ createdAt: -1 });
+    res.status(200).json(itineraries);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
-// get a single itinerary
+// Get a single itinerary
 const getItinerary = async (req, res) => {
   const { id } = req.params;
 
@@ -17,25 +20,34 @@ const getItinerary = async (req, res) => {
     return res.status(404).json({ error: "No such itinerary" });
   }
 
-  const itinerary = await Itinerary.findById(id).populate("days.sites");
+  try {
+    const itinerary = await Itinerary.findById(id).populate({
+      path: 'days.events',
+      populate: {
+        path: 'siteRef transportRef hotelRef restaurantRef',
+      },
+    });
 
-  if (!itinerary) {
-    return res.status(404).json({ error: "No such itinerary" });
+    if (!itinerary) {
+      return res.status(404).json({ error: "No such itinerary" });
+    }
+
+    res.status(200).json(itinerary);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
-
-  res.status(200).json(itinerary);
 };
 
-// get a itineraries by user
+// Get itineraries by user
 const getUserItineraries = async (req, res) => {
   const { id } = req.params;
 
-  try {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(404).json({ error: "No such itineraries" });
-    }
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such itineraries" });
+  }
 
-    const itineraries = await Itinerary.find({ allocatedTo: id });
+  try {
+    const itineraries = await Itinerary.find({ operationsAllocatedTo: id });
 
     if (!itineraries) {
       return res.status(404).json({ error: "No such itineraries" });
@@ -47,13 +59,9 @@ const getUserItineraries = async (req, res) => {
   }
 };
 
-// create new itinerary
+// Create new itinerary
 const createItinerary = async (req, res) => {
-  const {
-    name,
-    description,
-    days,
-  } = req.body;
+  const { name, description, days } = req.body;
 
   let emptyFields = [];
 
@@ -67,7 +75,6 @@ const createItinerary = async (req, res) => {
       .json({ error: "Please fill in all the required fields", emptyFields });
   }
 
-  // Add doc to db
   try {
     const user_id = req.user._id;
     const itinerary = await Itinerary.create({
@@ -76,13 +83,13 @@ const createItinerary = async (req, res) => {
       days,
       user_id,
     });
-    res.status(200).json(itinerary);
+    res.status(201).json(itinerary);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-// delete an itinerary
+// Delete an itinerary
 const deleteItinerary = async (req, res) => {
   const { id } = req.params;
 
@@ -90,16 +97,20 @@ const deleteItinerary = async (req, res) => {
     return res.status(404).json({ error: "No such itinerary" });
   }
 
-  const itinerary = await Itinerary.findOneAndDelete({ _id: id });
+  try {
+    const itinerary = await Itinerary.findOneAndDelete({ _id: id });
 
-  if (!itinerary) {
-    return res.status(400).json({ error: "No such itinerary" });
+    if (!itinerary) {
+      return res.status(404).json({ error: "No such itinerary" });
+    }
+
+    res.status(200).json(itinerary);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
-
-  res.status(200).json(itinerary);
 };
 
-// update an itinerary
+// Update an itinerary
 const updateItinerary = async (req, res) => {
   const { id } = req.params;
 
@@ -107,19 +118,26 @@ const updateItinerary = async (req, res) => {
     return res.status(404).json({ error: "No such itinerary" });
   }
 
-  const itinerary = await Itinerary.findOneAndUpdate(
-    { _id: id },
-    {
-      ...req.body,
-    },
-    { new: true }
-  ).populate("days.sites");
+  try {
+    const itinerary = await Itinerary.findOneAndUpdate(
+      { _id: id },
+      { ...req.body },
+      { new: true }
+    ).populate({
+      path: 'days.events',
+      populate: {
+        path: 'site transport.transportRef hotel.hotelRef restaurant.restaurantRef',
+      },
+    });
 
-  if (!itinerary) {
-    return res.status(400).json({ error: "No such itinerary" });
+    if (!itinerary) {
+      return res.status(404).json({ error: "No such itinerary" });
+    }
+
+    res.status(200).json(itinerary);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
-
-  res.status(200).json(itinerary);
 };
 
 module.exports = {
