@@ -35,11 +35,11 @@ const transportSchema = new Schema(
       required: false,
       trim: true,
     },
-    // description: {
-    //   type: String,
-    //   required: false,
-    //   trim: true,
-    // },
+    description: {
+      type: String,
+      required: false,
+      trim: true,
+    },
     // distance: {
     //   type: Number,
     //   required: true,

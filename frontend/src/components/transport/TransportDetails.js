@@ -77,32 +77,32 @@ const TransportDetails = ({ transport }) => {
             <div>Company:</div>
             <div>{transport?.company}</div>
           </div>
-          <div>
+          {/* <div>
             <div>From Location:</div>
             <div>{transport?.fromLocation}</div>
-          </div>
+          </div> */}
         </div>
         <div className="row">
-          <div>
+          {/* <div>
             <div>To Location:</div>
             <div>{transport?.toLocation}</div>
-          </div>
+          </div> */}
           <div>
             <div>Contact Number:</div>
             <div>{transport?.contactNumber}</div>
           </div>
-        </div>
-        <div className="row">
           <div>
             <div>Email:</div>
             <div>{transport?.email}</div>
           </div>
+        </div>
+        <div className="row">
           <div>
             <div>Description:</div>
             <div>{transport?.description}</div>
           </div>
         </div>
-        <div className="row">
+        {/* <div className="row">
           <div>
             <div>Distance:</div>
             <div>{transport?.distance} km</div>
@@ -111,7 +111,7 @@ const TransportDetails = ({ transport }) => {
             <div>Duration:</div>
             <div>{transport?.duration} hours</div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

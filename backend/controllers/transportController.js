@@ -54,7 +54,7 @@ const createTransport = async (req, res) => {
       // toLocation,
       contactNumber,
       email,
-      // description,
+      description,
       // distance,
       // duration,
     });
