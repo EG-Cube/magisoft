@@ -1,8 +1,8 @@
-import AdminCreateEnquiryForm from "../../components/admin/AdminCreateEnquiryForm";
+import EnquiryCreateForm from "../../components/enquiry/EnquiryCreateForm";
 
 const AdminEnquiryCreateView = () => {
   return (
-      <AdminCreateEnquiryForm />
+      <EnquiryCreateForm isAdmin={true}/>
   );
 };
 

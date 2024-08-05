@@ -4,7 +4,7 @@ import axios from "axios";
 
 // components
 import { useParams } from "react-router-dom";
-import AdminEnquiryDetails from "../../components/admin/AdminEnquiryDetails";
+import EnquiryDetails from "../../components/enquiry/EnquiryDetails";
 
 const AdminEnquiryDetailView = () => {
   const { user } = useAuthContext();
@@ -36,7 +36,7 @@ const AdminEnquiryDetailView = () => {
   return (
       <div className="home">
         <div className="enquiries">
-          {enquiry && <AdminEnquiryDetails key={id} enquiry={enquiry} />}
+          {enquiry && <EnquiryDetails key={id} enquiry={enquiry} isAdmin={true}/>}
         </div>
       </div>
   );

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const ItinerarySchema = require("./itineraryModel"); // Import the Itinerary schema
 
 const Schema = mongoose.Schema;
 
@@ -58,7 +59,16 @@ const enquirySchema = new Schema(
       type: Number,
       required: true,
     },
+    currency: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     numberOfDays: {
+      type: Number,
+      required: true,
+    },
+    numberOfNights: {
       type: Number,
       required: true,
     },
@@ -73,6 +83,7 @@ const enquirySchema = new Schema(
     phoneNumber: {
       type: String,
       required: true,
+      match: /^\+\d{1,3}\s?\d{1,14}(\s?\d{1,13})?$/, // Regular expression to include country code
     },
     emailAddress: {
       type: String,
@@ -101,7 +112,17 @@ const enquirySchema = new Schema(
       ref: "User",
       default: null,
     },
-    allocatedTo: {
+    salesTo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+    operationsTo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+    accountingTo: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       default: null,
@@ -110,6 +131,16 @@ const enquirySchema = new Schema(
       type: String,
       enum: ["Pending", "Verified", "Archived"],
       default: "Pending",
+    },
+    itineraries: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Itinerary",
+      required: false,
+    }, // Array of Itinerary schemas
+    activeItinerary: {
+      type: Schema.Types.ObjectId,
+      ref: "Itinerary",
+      default: null,
     },
   },
   { timestamps: true }

@@ -26,7 +26,7 @@ const Login = () => {
       else if (user?.user?.roles?.find((r) => r === "Admin")) {
         navigate("/admin/user/dashboard", { replace: true });
       } else if (user?.user?.roles?.find((r) => r === "Sales")) {
-        navigate("/enquiry/dashboard", { replace: true });
+        navigate("/sales/dashboard", { replace: true });
       }
     }
   }, [user, from, location, navigate]);

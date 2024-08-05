@@ -4,7 +4,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 // components
-import ItineraryDetails from "../../components/operations/ItineraryDetails";
+import ItineraryDetails from "../../components/itinerary/ItineraryDetails";
 
 const ItineraryDetailsView = () => {
   const { user } = useAuthContext();

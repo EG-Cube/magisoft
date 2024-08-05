@@ -7,6 +7,7 @@
 }
 
 .react-calendar {
+  display: none;
   margin-top: 1rem;
   height: max-content;
   border: 1px solid #a0a096;

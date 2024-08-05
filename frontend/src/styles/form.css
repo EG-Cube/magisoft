@@ -4,6 +4,7 @@
     background: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-x: scroll;
   }
   
   .form h3 {
@@ -30,6 +31,7 @@
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
+    font-size: 12px;
   }
   
   .form input,

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import axios from "axios";
-import RestaurantDetails from "../../components/operations/RestaurantDetails";
+import RestaurantDetails from "../../components/restaurant/RestaurantDetails";
 import { useParams } from "react-router-dom";
 
 const RestaurantDetailView = () => {

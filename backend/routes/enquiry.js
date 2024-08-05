@@ -1,11 +1,16 @@
 const express = require("express");
 const {
-  createEnquiry,
   getEnquiries,
   getEnquiry,
+  getSalesEnquiries,
+  getOperationsEnquiries,
+  getAccountingEnquiries,
+  createEnquiry,
   deleteEnquiry,
   updateEnquiry,
-  getUserEnquiries,
+  allocateSalesTo,
+  allocateOperationsTo,
+  allocateAccountingTo
 } = require("../controllers/enquiryController");
 const requireAuth = require("../middleware/requireAuth");
 
@@ -20,8 +25,14 @@ router.get("/", getEnquiries);
 // GET a single enquiry
 router.get("/:id", getEnquiry);
 
-// GET a user enquiries
-router.get("/filter/:id", getUserEnquiries);
+// GET sales enquiries
+router.get("/sales/:id", getSalesEnquiries);
+
+// GET operations enquiries
+router.get("/operations/:id", getOperationsEnquiries);
+
+// GET accounting enquiries
+router.get("/accounting/:id", getAccountingEnquiries);
 
 // POST a new enquiry
 router.post("/", createEnquiry);
@@ -31,5 +42,14 @@ router.delete("/:id", deleteEnquiry);
 
 // UPDATE an enquiry
 router.patch("/:id", updateEnquiry);
+
+// UPDATE an enquiry with sales allocation
+router.patch("allocate/:id/:aid", allocateSalesTo);
+
+// UPDATE an enquiry with operations allocation
+router.patch("allocate/:id/:aid", allocateOperationsTo);
+
+// UPDATE an enquiry with accounting allocation
+router.patch("allocate/:id/:aid", allocateAccountingTo);
 
 module.exports = router;

@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useRestaurantContext } from "../../hooks/useRestaurantContext";
 
 // components
-import RestaurantCard from "../../components/operations/RestaurantCard";
+import RestaurantCard from "../../components/restaurant/RestaurantCard";
 import Sort from "../../components/operations/Sort";
 
 const RestaurantListView = ({ type }) => {

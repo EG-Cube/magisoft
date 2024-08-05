@@ -3,15 +3,14 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { EnquiryContext } from "../../context/EnquiryContext";
-import "../../styles/form.css";
 import { useUserContext } from "../../hooks/useUserContext";
+import "../../styles/form.css";
 
-const AdminEditEnquiryForm = ({ enquiryID }) => {
+const EditEnquiryForm = ({ enquiryID, isAdmin }) => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
-  const { users, dispatch: userDispatch } = useUserContext();
   const { enquiries, dispatch: enquiryDispatch } = useContext(EnquiryContext);
-  
+  const { users, dispatch: userDispatch } = useUserContext();
   const API_URL = process.env.REACT_APP_API_URL;
 
   const initialFormData = {
@@ -30,6 +29,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
     hotelStarRating: 1,
     budget: 0,
     numberOfDays: 0,
+    numberOfNights: 0,
     numberOfRooms: 0,
     roomComments: "",
     phoneNumber: "",
@@ -54,11 +54,14 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
       }
 
       try {
-        const response = await axios.get(`${API_URL}/api/enquiry/${enquiryID}`, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
+        const response = await axios.get(
+          `${API_URL}/api/enquiry/${enquiryID}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
 
         setFormData(response.data);
       } catch (error) {
@@ -66,23 +69,26 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
       }
     };
 
-    const fetchUsers = async () => {
-      const response = await fetch(`${API_URL}/api/user/`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-      const json = await response.json();
-
-      if (response.ok) {
-        userDispatch({ type: "SET_USERS", payload: json });
-      }
-    };
-
-    fetchUsers();
     fetchEnquiry();
-  }, [enquiryID, user]);
+
+    if (isAdmin) {
+      const fetchUsers = async () => {
+        const response = await fetch(`${API_URL}/api/user/`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+        const json = await response.json();
+
+        if (response.ok) {
+          userDispatch({ type: "SET_USERS", payload: json });
+        }
+      };
+
+      fetchUsers();
+    }
+  }, [enquiryID, user, isAdmin, userDispatch]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -149,6 +155,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
       "hotelStarRating",
       "budget",
       "numberOfDays",
+      "numberOfNights",
       "numberOfRooms",
       "phoneNumber",
       "emailAddress",
@@ -184,12 +191,15 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
       setEmptyFields([]);
       console.log("Enquiry updated", response.data);
 
-      dispatch: enquiryDispatch({
+      enquiryDispatch({
         type: "UPDATE_ENQUIRY",
         payload: response.data,
       });
 
-      navigate(`/admin/enquiry/view/${enquiryID}`);
+      const redirectPath = isAdmin
+        ? `/admin/enquiry/view/${enquiryID}`
+        : `/sales/enquiry/view/${enquiryID}`;
+      navigate(redirectPath);
     } catch (error) {
       setError(error.response?.data?.error || "An error occurred");
       setEmptyFields(error.response?.data?.emptyFields || []);
@@ -246,7 +256,9 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
             className={emptyFields.includes("toDate") ? "error" : ""}
           />
         </div>
+      </div>
 
+      <div className="row">
         <div>
           <label>No. of Days:</label>
           <input
@@ -255,6 +267,17 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
             onChange={handleChange}
             value={formData.numberOfDays}
             className={emptyFields.includes("numberOfDays") ? "error" : ""}
+          />
+        </div>
+
+        <div>
+          <label>No. of Nights:</label>
+          <input
+            type="number"
+            name="numberOfNights"
+            onChange={handleChange}
+            value={formData.numberOfNights}
+            className={emptyFields.includes("numberOfNights") ? "error" : ""}
           />
         </div>
       </div>
@@ -315,11 +338,7 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
             </button>
           </div>
         ))}
-        <button
-          type="button"
-          style={{ marginBottom: "20px" }}
-          onClick={handleAddDestination}
-        >
+        <button type="button" className="addBtn" onClick={handleAddDestination}>
           Add Destination
         </button>
       </div>
@@ -347,20 +366,32 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
           />
         </div>
       </div>
+
       <div className="row">
         <div>
-          <label>Star Rating:</label>
+          <label>Hotel Star Rating:</label>
           <input
             type="number"
             name="hotelStarRating"
             onChange={handleChange}
             value={formData.hotelStarRating}
-            min={1}
-            max={5}
             className={emptyFields.includes("hotelStarRating") ? "error" : ""}
           />
         </div>
 
+        <div>
+          <label>Budget:</label>
+          <input
+            type="number"
+            name="budget"
+            onChange={handleChange}
+            value={formData.budget}
+            className={emptyFields.includes("budget") ? "error" : ""}
+          />
+        </div>
+      </div>
+
+      <div className="row">
         <div>
           <label>No. of Rooms:</label>
           <input
@@ -371,31 +402,19 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
             className={emptyFields.includes("numberOfRooms") ? "error" : ""}
           />
         </div>
+
         <div>
-          <label>Meal Plan:</label>
-          <select
-            name="mealPlan"
+          <label>Room Comments:</label>
+          <input
+            type="text"
+            name="roomComments"
             onChange={handleChange}
-            value={formData.mealPlan}
-            className={emptyFields.includes("mealPlan") ? "error" : ""}
-          >
-            {mealPlanOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+            value={formData.roomComments}
+            className={emptyFields.includes("roomComments") ? "error" : ""}
+          />
         </div>
       </div>
-      <div>
-        <label>Room Comments:</label>
-        <textarea
-          type="text"
-          name="roomComments"
-          onChange={handleChange}
-          value={formData.roomComments}
-        />
-      </div>
+
       <div className="row">
         <div>
           <label>Phone Number:</label>
@@ -419,76 +438,63 @@ const AdminEditEnquiryForm = ({ enquiryID }) => {
           />
         </div>
       </div>
+
       <div className="row">
-        <div className="checkbox-container">
+        <div>
           <label>Flight Booking Required:</label>
           <input
             type="checkbox"
             name="flightBookingRequired"
             onChange={handleChange}
             checked={formData.flightBookingRequired}
-            className={`checkbox ${
-              emptyFields.includes("flightBookingRequired") ? "error" : ""
-            }`}
           />
+        </div>
+
+        <div>
+          <label>Meal Plan:</label>
+          <select
+            name="mealPlan"
+            onChange={handleChange}
+            value={formData.mealPlan}
+            className={emptyFields.includes("mealPlan") ? "error" : ""}
+          >
+            {mealPlanOptions.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
       <div className="row">
         <div>
-          <label>Budget:</label>
-          <input
-            type="number"
-            name="budget"
-            onChange={handleChange}
-            value={formData.budget}
-            className={emptyFields.includes("budget") ? "error" : ""}
-          />
-        </div>
-        <div>
           <label>Purpose:</label>
-          <input
-            type="text"
+          <textarea
             name="purpose"
             onChange={handleChange}
             value={formData.purpose}
             className={emptyFields.includes("purpose") ? "error" : ""}
           />
         </div>
+
+        <div>
+          <label>Remarks:</label>
+          <textarea
+            name="remarks"
+            onChange={handleChange}
+            value={formData.remarks}
+            className={emptyFields.includes("remarks") ? "error" : ""}
+          />
+        </div>
       </div>
 
-      <div>
-        <label>Remarks:</label>
-        <textarea
-          type="text"
-          name="remarks"
-          onChange={handleChange}
-          value={formData.remarks}
-        />
-      </div>
-
-      <div>
-        <label>Allocated To:</label>
-        <select
-          name="allocatedTo"
-          onChange={handleChange}
-          value={formData.allocatedTo ? formData.allocatedTo : ""}
-        >
-          <option value={""}>-</option>
-          {users?.map((option) => (
-            <option key={option._id} value={option._id}>
-              {option.firstName} {option.lastName}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="submitBtn">
-        <button type="submit">Update Enquiry</button>
-      </div>
+      <button className="addBtn" type="submit">
+        Save Changes
+      </button>
       {error && <div className="error">{error}</div>}
     </form>
   );
 };
 
-export default AdminEditEnquiryForm;
+export default EditEnquiryForm;

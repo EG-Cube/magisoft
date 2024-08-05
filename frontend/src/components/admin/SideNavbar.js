@@ -17,10 +17,10 @@ const SideNavbar = () => {
       <nav className="nav">
         <ul>
           <li>
-            <Link to={"/admin/user/dashboard"}>User</Link>
+            <Link to={"/admin/user/dashboard/"}>User</Link>
           </li>
           <li>
-            <Link to={"/admin/enquiry/dashboard"}>Enquiry</Link>
+            <Link to={"/admin/enquiry/dashboard/"}>Enquiry</Link>
           </li>
         </ul>
       </nav>

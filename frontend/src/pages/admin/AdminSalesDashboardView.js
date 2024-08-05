@@ -6,7 +6,7 @@ import { useEnquiryContext } from "../../hooks/useEnquiryContext";
 import Summary from "../../components/sales/Summary";
 import Sort from "../../components/sales/Sort";
 import "../../styles/DashboardView.css";
-import AdminEnquiryCard from "../../components/admin/AdminEnquiryCard";
+import EnquiryCard from "../../components/enquiry/EnquiryCard";
 import { useUserContext } from "../../hooks/useUserContext";
 
 const AdminSalesDashboardView = () => {
@@ -118,7 +118,7 @@ const AdminSalesDashboardView = () => {
           <div key={month} className="month-group">
             <h2>{month}</h2>
             {groupedEnquiries[month].map((enquiry) => (
-              <AdminEnquiryCard key={enquiry._id} enquiry={enquiry} />
+              <EnquiryCard key={enquiry._id} enquiry={enquiry} isAdmin={true} redirectLink={"/admin/enquiry/view/"}/>
             ))}
           </div>
         ))}

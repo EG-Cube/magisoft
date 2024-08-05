@@ -1,4 +1,4 @@
-import HotelCreateForm from "../../components/operations/HotelCreateForm";
+import HotelCreateForm from "../../components/hotel/HotelCreateForm";
 
 const HotelCreateView = () => {
   return (

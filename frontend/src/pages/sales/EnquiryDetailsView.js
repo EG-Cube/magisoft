@@ -3,10 +3,10 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import axios from "axios";
 
 // components
-import EnquiryDetails from "../../components/sales/EnquiryDetails";
+import EnquiryDetails from "../../components/enquiry/EnquiryDetails";
 import { useParams } from "react-router-dom";
 
-const EnquiryDetailView = () => {
+const EnquiryDetailView = ({type}) => {
   const { user } = useAuthContext();
   const { id } = useParams();
   
@@ -36,7 +36,7 @@ const EnquiryDetailView = () => {
   return (
       <div className="home">
         <div className="enquiries">
-          {enquiry && <EnquiryDetails key={id} enquiry={enquiry} />}
+          {enquiry && <EnquiryDetails key={id} enquiry={enquiry} type={type}/>}
         </div>
       </div>
   );

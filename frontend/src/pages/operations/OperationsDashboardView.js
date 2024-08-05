@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useItineraryContext } from "../../hooks/useItineraryContext";
 
 // components
-import ItineraryCard from "../../components/operations/ItineraryCard";
+import ItineraryCard from "../../components/itinerary/ItineraryCard";
 import Sort from "../../components/operations/Sort";
 import "../../styles/DashboardView.css";
 
