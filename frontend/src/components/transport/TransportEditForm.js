@@ -14,13 +14,13 @@ const TransportEditForm = ({ transportID }) => {
 
   const initialFormData = {
     company: "",
-    fromLocation: "",
-    toLocation: "",
+    // fromLocation: "",
+    // toLocation: "",
     contactNumber: "",
     email: "",
     description: "",
-    distance: 0,
-    duration: 0,
+    // distance: 0,
+    // duration: 0,
     modeOfTransport: "",
   };
 
@@ -71,8 +71,8 @@ const TransportEditForm = ({ transportID }) => {
 
     const requiredFields = [
       "company",
-      "fromLocation",
-      "toLocation",
+      // "fromLocation",
+      // "toLocation",
       "contactNumber",
       "email",
       "modeOfTransport",
@@ -128,7 +128,7 @@ const TransportEditForm = ({ transportID }) => {
           />
         </div>
       </div>
-      <div className="row">
+      {/* <div className="row">
         <div>
           <label>From Location:</label>
           <input
@@ -149,7 +149,7 @@ const TransportEditForm = ({ transportID }) => {
             className={emptyFields.includes("toLocation") ? "error" : ""}
           />
         </div>
-      </div>
+      </div> */}
       <div className="row">
         <div>
           <label>Contact Number:</label>
@@ -181,7 +181,7 @@ const TransportEditForm = ({ transportID }) => {
           className={emptyFields.includes("description") ? "error" : ""}
         />
       </div>
-      <div>
+      {/* <div>
         <label>Distance (km):</label>
         <input
           type="number"
@@ -200,7 +200,7 @@ const TransportEditForm = ({ transportID }) => {
           value={formData?.duration}
           className={emptyFields.includes("duration") ? "error" : ""}
         />
-      </div>
+      </div> */}
       <div className="row">
         <div>
           <label>Mode of Transport:</label>

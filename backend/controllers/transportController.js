@@ -37,26 +37,26 @@ const createTransport = async (req, res) => {
   const {
     company,
     modeOfTransport,
-    fromLocation,
-    toLocation,
+    // fromLocation,
+    // toLocation,
     contactNumber,
     email,
     description,
-    distance,
-    duration,
+    // distance,
+    // duration,
   } = req.body;
 
   try {
     const transport = await Transport.create({
       company,
       modeOfTransport,
-      fromLocation,
-      toLocation,
+      // fromLocation,
+      // toLocation,
       contactNumber,
       email,
       description,
-      distance,
-      duration,
+      // distance,
+      // duration,
     });
     res.status(201).json(transport);
   } catch (error) {

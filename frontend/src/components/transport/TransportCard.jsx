@@ -25,7 +25,7 @@ const TransportCard = ({ transport }) => {
       <div className="title" style={{ marginLeft: "10px" }}>
         {transport?.company}
       </div>
-      <div className="budget">{transport?.fromLocation} to {transport?.toLocation}</div>
+      <div className="budget">{transport?.contactNumber} | {transport?.email}</div>
       <div className="status" style={getModeStyle(transport?.modeOfTransport)}>
         {transport?.modeOfTransport}
       </div>

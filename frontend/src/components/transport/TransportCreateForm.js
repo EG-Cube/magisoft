@@ -10,13 +10,13 @@ const TransportCreateForm = () => {
   const initialFormData = {
     company: "",
     modeOfTransport: "",
-    fromLocation: "",
-    toLocation: "",
+    // fromLocation: "",
+    // toLocation: "",
     contactNumber: "",
     email: "",
     description: "",
-    distance: "",
-    duration: "",
+    // distance: "",
+    // duration: "",
   };
 
   const modeOptions = ["Cab", "Bus", "Train", "Flight", "Ship"];
@@ -44,10 +44,10 @@ const TransportCreateForm = () => {
     const requiredFields = [
       "company",
       "modeOfTransport",
-      "fromLocation",
-      "toLocation",
-      "distance",
-      "duration",
+      // "fromLocation",
+      // "toLocation",
+      // "distance",
+      // "duration",
     ];
 
     const missingFields = requiredFields.filter((field) => !formData[field]);
@@ -128,7 +128,7 @@ const TransportCreateForm = () => {
         </div>
       </div>
 
-      <div className="row">
+      {/* <div className="row">
         <div>
           <label>From Location:</label>
           <input
@@ -152,7 +152,7 @@ const TransportCreateForm = () => {
             className={emptyFields.includes("toLocation") ? "error" : ""}
           />
         </div>
-      </div>
+      </div> */}
 
       <div className="row">
         <div>
@@ -189,7 +189,7 @@ const TransportCreateForm = () => {
         </div>
       </div>
 
-      <div className="row">
+      {/* <div className="row">
         <div>
           <label>Distance (in km):</label>
           <input
@@ -213,7 +213,7 @@ const TransportCreateForm = () => {
             className={emptyFields.includes("duration") ? "error" : ""}
           />
         </div>
-      </div>
+      </div> */}
 
       <div className="submitBtn">
         <button type="submit">Add Transport</button>
