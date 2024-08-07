@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useUserContext } from "../../hooks/useUserContext";
+import currencyCodes from "currency-codes";
 import "../../styles/form.css";
 
 const EnquiryForm = ({ isAdmin }) => {
@@ -35,15 +36,23 @@ const EnquiryForm = ({ isAdmin }) => {
     remarks: "",
     enteredBy: user?.user?._id,
     salesAllocatedTo: user?.user?._id,
+    currency: "USD", // Default currency
   };
 
   const mealPlanOptions = ["CP", "MAP", "AP"];
-
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
+  const [currencies, setCurrencies] = useState([]);
 
   useEffect(() => {
+    // Fetch the list of currencies
+    const currencyList = currencyCodes.codes().map(code => ({
+      code,
+      name: currencyCodes.code(code).name
+    }));
+    setCurrencies(currencyList);
+
     if (isAdmin) {
       const fetchUsers = async () => {
         const response = await fetch(`${API_URL}/api/user/`, {
@@ -139,6 +148,7 @@ const EnquiryForm = ({ isAdmin }) => {
       "emailAddress",
       "mealPlan",
       "purpose",
+      "currency", // Include currency in required fields
     ];
 
     const missingFields = requiredFields.filter((field) => {
@@ -305,12 +315,7 @@ const EnquiryForm = ({ isAdmin }) => {
             </button>
           </div>
         ))}
-        <button
-          className="addDestinationBtn"
-          type="button"
-          style={{ marginBottom: "20px" }}
-          onClick={handleAddDestination}
-        >
+        <button type="button" onClick={handleAddDestination}>
           Add Destination
         </button>
       </div>
@@ -345,12 +350,42 @@ const EnquiryForm = ({ isAdmin }) => {
           <input
             type="number"
             name="hotelStarRating"
+            min="1"
+            max="5"
             onChange={handleChange}
             value={formData.hotelStarRating}
             className={emptyFields.includes("hotelStarRating") ? "error" : ""}
           />
         </div>
 
+        <div>
+          <label>Number of Rooms:</label>
+          <input
+            type="number"
+            name="numberOfRooms"
+            onChange={handleChange}
+            value={formData.numberOfRooms}
+            className={emptyFields.includes("numberOfRooms") ? "error" : ""}
+          />
+        </div>
+      </div>
+      
+      <div className="row">
+        <div>
+          <label>Currency:</label>
+          <select
+            name="currency"
+            onChange={handleChange}
+            value={formData.currency}
+            className={emptyFields.includes("currency") ? "error" : ""}
+          >
+            {currencies.map((currency) => (
+              <option key={currency.code} value={currency.code}>
+                {currency.name} ({currency.code})
+              </option>
+            ))}
+          </select>
+        </div>
         <div>
           <label>Budget:</label>
           <input
@@ -363,35 +398,21 @@ const EnquiryForm = ({ isAdmin }) => {
         </div>
       </div>
 
-      <div className="row">
-        <div>
-          <label>No. of Rooms:</label>
-          <input
-            type="number"
-            name="numberOfRooms"
-            onChange={handleChange}
-            value={formData.numberOfRooms}
-            className={emptyFields.includes("numberOfRooms") ? "error" : ""}
-          />
-        </div>
-
-        <div>
-          <label>Room Comments:</label>
-          <input
-            type="text"
-            name="roomComments"
-            onChange={handleChange}
-            value={formData.roomComments}
-            className={emptyFields.includes("roomComments") ? "error" : ""}
-          />
-        </div>
+      <div>
+        <label>Room Comments:</label>
+        <textarea
+          name="roomComments"
+          onChange={handleChange}
+          value={formData.roomComments}
+          className={emptyFields.includes("roomComments") ? "error" : ""}
+        />
       </div>
 
       <div className="row">
         <div>
           <label>Phone Number:</label>
           <input
-            type="text"
+            type="tel"
             name="phoneNumber"
             onChange={handleChange}
             value={formData.phoneNumber}
@@ -402,7 +423,7 @@ const EnquiryForm = ({ isAdmin }) => {
         <div>
           <label>Email Address:</label>
           <input
-            type="text"
+            type="email"
             name="emailAddress"
             onChange={handleChange}
             value={formData.emailAddress}
@@ -430,7 +451,7 @@ const EnquiryForm = ({ isAdmin }) => {
             value={formData.mealPlan}
             className={emptyFields.includes("mealPlan") ? "error" : ""}
           >
-            {mealPlanOptions.map((option) => (
+            {mealPlanOptions.map(option => (
               <option key={option} value={option}>
                 {option}
               </option>
@@ -439,53 +460,27 @@ const EnquiryForm = ({ isAdmin }) => {
         </div>
       </div>
 
-      <div className="row">
-        <div>
-          <label>Purpose:</label>
-          <input
-            type="text"
-            name="purpose"
-            onChange={handleChange}
-            value={formData.purpose}
-            className={emptyFields.includes("purpose") ? "error" : ""}
-          />
-        </div>
-
-        <div>
-          <label>Remarks:</label>
-          <input
-            type="text"
-            name="remarks"
-            onChange={handleChange}
-            value={formData.remarks}
-            className={emptyFields.includes("remarks") ? "error" : ""}
-          />
-        </div>
+      <div>
+        <label>Purpose:</label>
+        <textarea
+          name="purpose"
+          onChange={handleChange}
+          value={formData.purpose}
+          className={emptyFields.includes("purpose") ? "error" : ""}
+        />
       </div>
 
-      {isAdmin && (
-        <div className="row">
-          <div>
-            <label>Allocated To:</label>
-            <select
-              name="salesAllocatedTo"
-              onChange={handleChange}
-              value={formData.salesAllocatedTo}
-              className={
-                emptyFields.includes("salesAllocatedTo") ? "error" : ""
-              }
-            >
-              <option value="">Select User</option>
-              {users &&
-                users.map((user) => (
-                  <option key={user._id} value={user._id}>
-                    {user.firstName} {user.lastName}
-                  </option>
-                ))}
-            </select>
-          </div>
-        </div>
-      )}
+      <div>
+        <label>Remarks:</label>
+        <textarea
+          name="remarks"
+          onChange={handleChange}
+          value={formData.remarks}
+          className={emptyFields.includes("remarks") ? "error" : ""}
+        />
+      </div>
+
+      
 
       <button className="btn" type="submit">
         Add Enquiry
