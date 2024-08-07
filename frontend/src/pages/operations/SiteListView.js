@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useSiteContext } from "../../hooks/useSiteContext";
+import { Link } from "react-router-dom";
+
 
 // components
 import SiteCard from "../../components/site/SiteCard";
@@ -54,7 +56,12 @@ const SiteListView = ({ type }) => {
 
   return (
     <div className="home">
-      <h1>{type} Sites</h1>
+      <div className="row">
+        <h1>{type} Sites</h1>
+        <Link to="/operations/site/create" className="nav-button">
+          New Site
+        </Link>
+      </div>
       <div className="sites">
         <input
           id="search"

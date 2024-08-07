@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useHotelContext } from "../../hooks/useHotelContext";
+import { Link } from "react-router-dom";
 
 // components
 import HotelCard from "../../components/hotel/HotelCard";
@@ -54,7 +55,12 @@ const HotelListView = ({ type }) => {
 
   return (
     <div className="home">
-      <h1>{type} Hotels</h1>
+      <div className="row">
+        <h1>{type} Hotels</h1>
+        <Link to="/operations/hotel/create" className="nav-button">
+          New Hotel
+        </Link>
+      </div>
       <div className="hotels"> {/* Changed className to reflect hotels */}
         <input
           id="search"

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useTransportContext } from "../../hooks/useTransportContext";
+import { Link } from "react-router-dom";
 
 // components
 import TransportCard from "../../components/transport/TransportCard";
@@ -55,7 +56,13 @@ const TransportListView = ({ type }) => {
 
   return (
     <div className="home">
-      <h1>{type} Transports</h1>
+      <div className="row">
+        <h1>{type} Transports</h1>
+        <Link to="/operations/transport/create" className="nav-button">
+          New Transport
+        </Link>
+      </div>
+      
       <div className="transports">
         <input
           id="search"

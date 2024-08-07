@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useRestaurantContext } from "../../hooks/useRestaurantContext";
+import { Link } from "react-router-dom";
 
 // components
 import RestaurantCard from "../../components/restaurant/RestaurantCard";
@@ -53,7 +54,12 @@ const RestaurantListView = ({ type }) => {
 
   return (
     <div className="home">
-      <h1>{type} Restaurants</h1>
+      <div className="row">
+        <h1>{type} Restaurants</h1>
+        <Link to="/operations/restaurant/create" className="nav-button">
+          New Restaurant
+        </Link>
+      </div>
       <div className="restaurants">
         <input
           id="search"
