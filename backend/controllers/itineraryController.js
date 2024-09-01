@@ -3,9 +3,8 @@ const mongoose = require("mongoose");
 
 // Get all itineraries
 const getItineraries = async (req, res) => {
-  const user_id = req.user._id;
   try {
-    const itineraries = await Itinerary.find({ user_id }).sort({
+    const itineraries = await Itinerary.find().sort({
       createdAt: -1,
     });
     res.status(200).json(itineraries);

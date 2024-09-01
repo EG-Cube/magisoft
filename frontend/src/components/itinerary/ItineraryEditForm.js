@@ -188,6 +188,108 @@ const ItineraryEditForm = ({ enquiry }) => {
     }));
   };
 
+  
+  const handleInclusionChange = (index, value) => {
+    const newInclusions = [...formData?.inclusions];
+    newInclusions[index] = value;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      inclusions: newInclusions,
+    }));
+  };
+
+  const handleAddInclusion = () => {
+    setFormData((prevFormData) => {
+      console.log(prevFormData);
+      return {
+        ...prevFormData,
+        inclusions: [...prevFormData.inclusions, ""],
+      };
+    });
+  };
+
+  const handleRemoveInclusion = (index) => {
+    const newInclusions = formData?.inclusions.filter((_, i) => i !== index);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      inclusions: newInclusions,
+    }));
+  };
+
+  const handleExclusionChange = (index, value) => {
+    const newExclusions = [...formData?.exclusions];
+    newExclusions[index] = value;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      exclusions: newExclusions,
+    }));
+  };
+
+  const handleAddExclusion = () => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      exclusions: [...prevFormData.exclusions, ""],
+    }));
+  };
+
+  const handleRemoveExclusion = (index) => {
+    const newExclusions = formData?.exclusions.filter((_, i) => i !== index);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      exclusions: newExclusions,
+    }));
+  };
+
+  const handleTandCChange = (index, value) => {
+    const newTandCs = [...formData?.tandcs];
+    newTandCs[index] = value;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      tandcs: newTandCs,
+    }));
+  };
+
+  const handleAddTandC = () => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      tandcs: [...prevFormData.tandcs, ""],
+    }));
+  };
+
+  const handleRemoveTandC = (index) => {
+    const newTandCs = formData?.tandcs.filter((_, i) => i !== index);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      tandcs: newTandCs,
+    }));
+  };
+
+  const handleDisclaimerChange = (index, value) => {
+    const newDisclaimers = [...formData?.disclaimers];
+    newDisclaimers[index] = value;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      disclaimers: newDisclaimers,
+    }));
+  };
+
+  //h
+
+  const handleAddDisclaimer = () => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      disclaimers: [...prevFormData.disclaimers, ""],
+    }));
+  };
+
+  const handleRemoveDisclaimer = (index) => {
+    const newDisclaimers = formData?.disclaimers.filter((_, i) => i !== index);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      disclaimers: newDisclaimers,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -614,6 +716,103 @@ const ItineraryEditForm = ({ enquiry }) => {
       <div className="row">
         <button type="button" onClick={handleAddDay}>
           Add Day
+        </button>
+      </div>
+
+      
+      <div>
+        <label>Inclusions:</label>
+        {formData?.inclusions?.map((item, index) => (
+          <div key={index} className="inclusion-field">
+            <input
+              type="text"
+              value={item}
+              onChange={(e) => handleInclusionChange(index, e.target.value)}
+              className={emptyFields.includes("inclusions") ? "error" : ""}
+            />
+            <button
+              className="removeBtn"
+              type="button"
+              onClick={() => handleRemoveInclusion(index)}
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+        <button type="button" onClick={handleAddInclusion}>
+          Add Inclusion
+        </button>
+      </div>
+
+      <div>
+        <label>Exclusions:</label>
+        {formData?.exclusions?.map((item, index) => (
+          <div key={index} className="exclusion-field">
+            <input
+              type="text"
+              value={item}
+              onChange={(e) => handleExclusionChange(index, e.target.value)}
+              className={emptyFields.includes("exclusions") ? "error" : ""}
+            />
+            <button
+              className="removeBtn"
+              type="button"
+              onClick={() => handleRemoveExclusion(index)}
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+        <button type="button" onClick={handleAddExclusion}>
+          Add Exclusion
+        </button>
+      </div>
+
+      <div>
+        <label>Terms and Conditions:</label>
+        {formData?.tandcs?.map((item, index) => (
+          <div key={index} className="tandcs-field">
+            <input
+              type="text"
+              value={item}
+              onChange={(e) => handleTandCChange(index, e.target.value)}
+              className={emptyFields.includes("tandcs") ? "error" : ""}
+            />
+            <button
+              className="removeBtn"
+              type="button"
+              onClick={() => handleRemoveTandC(index)}
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+        <button type="button" onClick={handleAddTandC}>
+          Add Terms and Conditions
+        </button>
+      </div>
+
+      <div>
+        <label>Disclaimers:</label>
+        {formData?.disclaimers?.map((item, index) => (
+          <div key={index} className="disclaimers-field">
+            <input
+              type="text"
+              value={item}
+              onChange={(e) => handleDisclaimerChange(index, e.target.value)}
+              className={emptyFields.includes("disclaimers") ? "error" : ""}
+            />
+            <button
+              className="removeBtn"
+              type="button"
+              onClick={() => handleRemoveDisclaimer(index)}
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+        <button type="button" onClick={handleAddDisclaimer}>
+          Add Disclaimer
         </button>
       </div>
 

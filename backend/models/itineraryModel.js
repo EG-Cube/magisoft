@@ -113,11 +113,11 @@ const itinerarySchema = new Schema(
       type: [String],
       required: true,
     },
-    tandc: {
+    tandcs: {
       type: [String],
       required: true,
     },
-    disclaimer: {
+    disclaimers: {
       type: [String],
       required: true,
     },

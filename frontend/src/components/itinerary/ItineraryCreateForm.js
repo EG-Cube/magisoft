@@ -6,10 +6,12 @@ import deleteBtn from "../../assets/delete.png";
 import Select from "react-select";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
+import { useNavigate } from "react-router-dom";
 
 const ItineraryCreateForm = ({ enquiry }) => {
   const { user } = useAuthContext();
   const API_URL = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate();
 
   const initialDaysCount =
     Math.max(enquiry?.numberOfDays, enquiry?.numberOfNights) || 1;
@@ -22,10 +24,10 @@ const ItineraryCreateForm = ({ enquiry }) => {
     name: "",
     description: "",
     days: initialDays,
-    inclusions: [""],
-    exclusions: [""],
-    tandcs: [""],
-    disclaimers: [""],
+    inclusions: [" "],
+    exclusions: [" "],
+    tandcs: [" "],
+    disclaimers: [" "],
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -98,6 +100,10 @@ const ItineraryCreateForm = ({ enquiry }) => {
       name: "",
       description: "",
       days: initialDays,
+      inclusions: [" "],
+      exclusions: [" "],
+      tandcs: [" "],
+      disclaimers: [" "],
     });
   }, [enquiry]);
 
@@ -182,10 +188,13 @@ const ItineraryCreateForm = ({ enquiry }) => {
   };
 
   const handleAddInclusion = () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      inclusions: [...prevFormData.inclusions, ""],
-    }));
+    setFormData((prevFormData) => {
+      console.log(prevFormData);
+      return {
+        ...prevFormData,
+        inclusions: [...prevFormData.inclusions, ""],
+      };
+    });
   };
 
   const handleRemoveInclusion = (index) => {
@@ -195,7 +204,6 @@ const ItineraryCreateForm = ({ enquiry }) => {
       inclusions: newInclusions,
     }));
   };
-  
 
   const handleExclusionChange = (index, value) => {
     const newExclusions = [...formData.exclusions];
@@ -244,7 +252,6 @@ const ItineraryCreateForm = ({ enquiry }) => {
       tandcs: newTandCs,
     }));
   };
-  
 
   const handleDisclaimerChange = (index, value) => {
     const newDisclaimers = [...formData.disclaimers];
@@ -307,6 +314,7 @@ const ItineraryCreateForm = ({ enquiry }) => {
     });
 
     const json = await response.json();
+    console.log(response)
 
     if (!response.ok) {
       setError(json.error);
@@ -339,7 +347,12 @@ const ItineraryCreateForm = ({ enquiry }) => {
     setFormData(initialFormData);
     setError(null);
     setEmptyFields([]);
+
     console.log("New itinerary added and set as active", updatedEnquiry);
+
+    navigate(
+      `/operations/itinerary/list`
+    );
   };
 
   return (
@@ -771,11 +784,10 @@ const ItineraryCreateForm = ({ enquiry }) => {
         </button>
       </div>
 
-      
       <div>
         <label>Terms and Conditions:</label>
         {formData.tandcs?.map((item, index) => (
-          <div key={index} className="tandc-field">
+          <div key={index} className="tandcs-field">
             <input
               type="text"
               value={item}
@@ -792,14 +804,14 @@ const ItineraryCreateForm = ({ enquiry }) => {
           </div>
         ))}
         <button type="button" onClick={handleAddTandC}>
-          Add TandC
+          Add Terms and Conditions
         </button>
       </div>
-      
+
       <div>
         <label>Disclaimers:</label>
         {formData.disclaimers?.map((item, index) => (
-          <div key={index} className="disclaimer-field">
+          <div key={index} className="disclaimers-field">
             <input
               type="text"
               value={item}
