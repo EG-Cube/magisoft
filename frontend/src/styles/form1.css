@@ -1,0 +1,142 @@
+.form {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+h3 {
+  margin-bottom: 20px;
+}
+
+.field-group {
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input[type="text"],
+textarea,
+select,
+input[type="number"],
+input[type="time"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.error {
+  border-color: red;
+}
+
+.removeBtn {
+  background-color: #f44;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.removeBtn:hover {
+  background-color: #d33;
+}
+
+.item-field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.item-field input {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.day-panel,
+.event-panel {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  margin-bottom: 20px;
+}
+
+.event-panel {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  margin-bottom: 20px;
+}
+
+.event-row {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.event-row label {
+  font-weight: bold;
+}
+
+.event-input {
+  display: flex;
+  align-items: center;
+}
+
+.event-input span {
+  flex: 1;
+}
+
+.event-input button {
+  margin-left: 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.row label {
+  flex: 0 0 150px;
+  font-weight: bold;
+}
+
+.form-actions {
+  text-align: right;
+}
+
+button[type="submit"],
+button[type="button"] {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover,
+button[type="button"]:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}

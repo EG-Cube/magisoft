@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import "../../styles/form.css";
+import "../../styles/form1.css";
 import EnquiryDetails from "../enquiry/EnquiryDetails";
 import deleteBtn from "../../assets/delete.png";
 import Select from "react-select";
@@ -358,12 +358,13 @@ const ItineraryCreateForm = ({ enquiry }) => {
   return (
     <form className="form" onSubmit={handleSubmit}>
       <h3>Add a New Itinerary</h3>
-
+  
       {enquiry && <EnquiryDetails enquiry={enquiry} />}
-
-      <div>
-        <label>Name:</label>
+  
+      <div className="field-group">
+        <label htmlFor="name">Name:</label>
         <input
+          id="name"
           type="text"
           name="name"
           onChange={handleChange}
@@ -371,17 +372,18 @@ const ItineraryCreateForm = ({ enquiry }) => {
           className={emptyFields.includes("name") ? "error" : ""}
         />
       </div>
-
-      <div>
-        <label>Description:</label>
+  
+      <div className="field-group">
+        <label htmlFor="description">Description:</label>
         <textarea
+          id="description"
           name="description"
           onChange={handleChange}
           value={formData.description}
         />
       </div>
-
-      <div>
+  
+      <div className="field-group">
         <label>Days:</label>
         <Tabs>
           <TabList>
@@ -389,9 +391,10 @@ const ItineraryCreateForm = ({ enquiry }) => {
               <Tab key={index}>Day {index + 1}</Tab>
             ))}
           </TabList>
-
+  
           {formData.days.map((day, dayIndex) => (
             <TabPanel key={dayIndex}>
+            <div className="day-panel">
               <div className="row">
                 <label>Day {dayIndex + 1}:</label>
                 <button type="button" onClick={() => handleRemoveDay(dayIndex)}>
@@ -399,79 +402,77 @@ const ItineraryCreateForm = ({ enquiry }) => {
                 </button>
               </div>
               {day.events.map((event, eventIndex) => (
-                <div key={eventIndex} style={{ marginBottom: "1rem" }}>
-                  <div className="row">
+                <div key={eventIndex} className="event-panel">
+                  <div className="event-row">
                     <label>Event Type:</label>
-                    <span>{event.type}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveEvent(dayIndex, eventIndex)}
-                    >
-                      Remove Event
-                    </button>
+                    <div className="event-input">
+                      <span>{event.type}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveEvent(dayIndex, eventIndex)}
+                      >
+                        Remove Event
+                      </button>
+                    </div>
                   </div>
                   {event.type === "site" && (
-                    <div className="row">
-                      <div>
-                        <label>Site:</label>
-                        <Select
-                          options={sites.map((site) => ({
-                            value: site._id,
-                            label: site.name,
-                          }))}
-                          onChange={(selectedOption) =>
-                            handleEventChange(
-                              dayIndex,
-                              eventIndex,
-                              "siteRef",
-                              selectedOption.value
-                            )
-                          }
-                          value={
-                            sites
-                              .map((site) => ({
-                                value: site._id,
-                                label: site.name,
-                              }))
-                              .find(
-                                (option) => option.value === event.siteRef
-                              ) || null
-                          }
-                        />
-                      </div>
+                    <div className="event-row">
+                      <label>Site:</label>
+                      <Select
+                        options={sites.map((site) => ({
+                          value: site._id,
+                          label: site.name,
+                        }))}
+                        onChange={(selectedOption) =>
+                          handleEventChange(
+                            dayIndex,
+                            eventIndex,
+                            "siteRef",
+                            selectedOption.value
+                          )
+                        }
+                        value={
+                          sites
+                            .map((site) => ({
+                              value: site._id,
+                              label: site.name,
+                            }))
+                            .find(
+                              (option) => option.value === event.siteRef
+                            ) || null
+                        }
+                      />
                     </div>
                   )}
                   {event.type === "restaurant" && (
-                    <div className="row">
-                      <div>
-                        <label>Restaurant:</label>
-                        <Select
-                          options={restaurants.map((restaurant) => ({
-                            value: restaurant._id,
-                            label: restaurant.name,
-                          }))}
-                          onChange={(selectedOption) =>
-                            handleEventChange(
-                              dayIndex,
-                              eventIndex,
-                              "restaurantRef",
-                              selectedOption.value
-                            )
-                          }
-                          value={
-                            restaurants
-                              .map((restaurant) => ({
-                                value: restaurant._id,
-                                label: restaurant.name,
-                              }))
-                              .find(
-                                (option) => option.value === event.restaurantRef
-                              ) || null
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label>Meal Type: </label>
+                    <div className="event-row">
+                      <label>Restaurant:</label>
+                      <Select
+                        options={restaurants.map((restaurant) => ({
+                          value: restaurant._id,
+                          label: restaurant.name,
+                        }))}
+                        onChange={(selectedOption) =>
+                          handleEventChange(
+                            dayIndex,
+                            eventIndex,
+                            "restaurantRef",
+                            selectedOption.value
+                          )
+                        }
+                        value={
+                          restaurants
+                            .map((restaurant) => ({
+                              value: restaurant._id,
+                              label: restaurant.name,
+                            }))
+                            .find(
+                              (option) => option.value === event.restaurantRef
+                            ) || null
+                        }
+                      />
+                      <div className="event-row">
+                        <label>Meal Type:</label>
                         <select
                           value={event.mealType || ""}
                           onChange={(e) =>
@@ -498,35 +499,34 @@ const ItineraryCreateForm = ({ enquiry }) => {
                     </div>
                   )}
                   {event.type === "hotel" && (
-                    <div className="row">
-                      <div>
-                        <label>Hotel:</label>
-                        <Select
-                          options={hotels.map((hotel) => ({
-                            value: hotel._id,
-                            label: hotel.name,
-                          }))}
-                          onChange={(selectedOption) =>
-                            handleEventChange(
-                              dayIndex,
-                              eventIndex,
-                              "hotelRef",
-                              selectedOption.value
-                            )
-                          }
-                          value={
-                            hotels
-                              .map((hotel) => ({
-                                value: hotel._id,
-                                label: hotel.name,
-                              }))
-                              .find(
-                                (option) => option.value === event.hotelRef
-                              ) || null
-                          }
-                        />
-
-                        <label>Room Type: </label>
+                    <div className="event-row">
+                      <label>Hotel:</label>
+                      <Select
+                        options={hotels.map((hotel) => ({
+                          value: hotel._id,
+                          label: hotel.name,
+                        }))}
+                        onChange={(selectedOption) =>
+                          handleEventChange(
+                            dayIndex,
+                            eventIndex,
+                            "hotelRef",
+                            selectedOption.value
+                          )
+                        }
+                        value={
+                          hotels
+                            .map((hotel) => ({
+                              value: hotel._id,
+                              label: hotel.name,
+                            }))
+                            .find(
+                              (option) => option.value === event.hotelRef
+                            ) || null
+                        }
+                      />
+                      <div className="event-row">
+                        <label>Room Type:</label>
                         <select
                           value={event.roomType || ""}
                           onChange={(e) =>
@@ -538,7 +538,7 @@ const ItineraryCreateForm = ({ enquiry }) => {
                             )
                           }
                         >
-                          <option value={""}>Select Room Type</option>
+                          <option value="">Select Room Type</option>
                           {hotels
                             ?.find((option) => option._id === event.hotelRef)
                             ?.availableRoomTypes.map((roomType) => (
@@ -547,8 +547,9 @@ const ItineraryCreateForm = ({ enquiry }) => {
                               </option>
                             ))}
                         </select>
-
-                        <label>Meal Plan: </label>
+                      </div>
+                      <div className="event-row">
+                        <label>Meal Plan:</label>
                         <select
                           value={event.mealPlan || ""}
                           onChange={(e) =>
@@ -560,7 +561,7 @@ const ItineraryCreateForm = ({ enquiry }) => {
                             )
                           }
                         >
-                          <option value={""}>Select Meal Plan</option>
+                          <option value="">Select Meal Plan</option>
                           {hotels
                             ?.find((option) => option._id === event.hotelRef)
                             ?.availableMealPlans.map((mealPlan) => (
@@ -573,41 +574,40 @@ const ItineraryCreateForm = ({ enquiry }) => {
                     </div>
                   )}
                   {event.type === "transport" && (
-                    <div className="row">
-                      <div>
-                        <label>Transport:</label>
-                        <Select
-                          options={transports.map((transport) => ({
-                            value: transport._id,
-                            label:
-                              transport.modeOfTransport +
-                              " | " +
-                              transport.company,
-                          }))}
-                          onChange={(selectedOption) =>
-                            handleEventChange(
-                              dayIndex,
-                              eventIndex,
-                              "transportRef",
-                              selectedOption.value
-                            )
-                          }
-                          value={
-                            transports
-                              .map((transport) => ({
-                                value: transport._id,
-                                label:
-                                  transport.modeOfTransport +
-                                  " | " +
-                                  transport.company,
-                              }))
-                              .find(
-                                (option) => option.value === event.transportRef
-                              ) || null
-                          }
-                        />
-
-                        <label>From: </label>
+                    <div className="event-row">
+                      <label>Transport:</label>
+                      <Select
+                        options={transports.map((transport) => ({
+                          value: transport._id,
+                          label:
+                            transport.modeOfTransport +
+                            " | " +
+                            transport.company,
+                        }))}
+                        onChange={(selectedOption) =>
+                          handleEventChange(
+                            dayIndex,
+                            eventIndex,
+                            "transportRef",
+                            selectedOption.value
+                          )
+                        }
+                        value={
+                          transports
+                            .map((transport) => ({
+                              value: transport._id,
+                              label:
+                                transport.modeOfTransport +
+                                " | " +
+                                transport.company,
+                            }))
+                            .find(
+                              (option) => option.value === event.transportRef
+                            ) || null
+                        }
+                      />
+                      <div className="event-row">
+                        <label>From:</label>
                         <input
                           type="text"
                           value={event.from || ""}
@@ -620,8 +620,9 @@ const ItineraryCreateForm = ({ enquiry }) => {
                             )
                           }
                         />
-
-                        <label>To: </label>
+                      </div>
+                      <div className="event-row">
+                        <label>To:</label>
                         <input
                           type="text"
                           value={event.to || ""}
@@ -634,8 +635,9 @@ const ItineraryCreateForm = ({ enquiry }) => {
                             )
                           }
                         />
-
-                        <label>Distance: </label>
+                      </div>
+                      <div className="event-row">
+                        <label>Distance:</label>
                         <input
                           min={0}
                           type="number"
@@ -652,7 +654,7 @@ const ItineraryCreateForm = ({ enquiry }) => {
                       </div>
                     </div>
                   )}
-                  <div className="row">
+                  <div className="event-row">
                     <label>Start Time:</label>
                     <input
                       type="time"
@@ -667,7 +669,7 @@ const ItineraryCreateForm = ({ enquiry }) => {
                       value={event.startTime}
                     />
                   </div>
-                  <div className="row">
+                  <div className="event-row">
                     <label>End Time:</label>
                     <input
                       type="time"
@@ -682,7 +684,7 @@ const ItineraryCreateForm = ({ enquiry }) => {
                       value={event.endTime}
                     />
                   </div>
-                  <div className="row">
+                  <div className="event-row">
                     <label>Duration:</label>
                     <input
                       type="number"
@@ -725,21 +727,22 @@ const ItineraryCreateForm = ({ enquiry }) => {
                   Add Transportation Event
                 </button>
               </div>
-            </TabPanel>
+            </div>
+          </TabPanel>          
           ))}
         </Tabs>
       </div>
-
-      <div className="row">
+  
+      <div className="field-group">
         <button type="button" onClick={handleAddDay}>
           Add Day
         </button>
       </div>
-
-      <div>
+  
+      <div className="field-group">
         <label>Inclusions:</label>
         {formData.inclusions?.map((item, index) => (
-          <div key={index} className="inclusion-field">
+          <div key={index} className="item-field">
             <input
               type="text"
               value={item}
@@ -759,11 +762,11 @@ const ItineraryCreateForm = ({ enquiry }) => {
           Add Inclusion
         </button>
       </div>
-
-      <div>
+  
+      <div className="field-group">
         <label>Exclusions:</label>
         {formData.exclusions?.map((item, index) => (
-          <div key={index} className="exclusion-field">
+          <div key={index} className="item-field">
             <input
               type="text"
               value={item}
@@ -783,11 +786,11 @@ const ItineraryCreateForm = ({ enquiry }) => {
           Add Exclusion
         </button>
       </div>
-
-      <div>
+  
+      <div className="field-group">
         <label>Terms and Conditions:</label>
         {formData.tandcs?.map((item, index) => (
-          <div key={index} className="tandcs-field">
+          <div key={index} className="item-field">
             <input
               type="text"
               value={item}
@@ -807,11 +810,11 @@ const ItineraryCreateForm = ({ enquiry }) => {
           Add Terms and Conditions
         </button>
       </div>
-
-      <div>
+  
+      <div className="field-group">
         <label>Disclaimers:</label>
         {formData.disclaimers?.map((item, index) => (
-          <div key={index} className="disclaimers-field">
+          <div key={index} className="item-field">
             <input
               type="text"
               value={item}
@@ -831,8 +834,8 @@ const ItineraryCreateForm = ({ enquiry }) => {
           Add Disclaimer
         </button>
       </div>
-
-      <div>
+  
+      <div className="form-actions">
         <button type="submit">Save Itinerary</button>
         {error && <div className="error">{error}</div>}
       </div>
