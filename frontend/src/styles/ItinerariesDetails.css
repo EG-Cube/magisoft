@@ -1,92 +1,138 @@
 .itinerary-details {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .main-container {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .package-container, .enquiry-container {
-    flex: 1;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: azure;
-  }
-  
-  .package-container div {
-    background-color: #F6EEF5;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 1rem;
-  }
-  
-  .enquiry-container {
-    /* Optional: Add additional styles if needed */
-  }
-  
-  .days-container {
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-  }
-  
-  .itinerary-day {
-    margin-bottom: 20px;
-  }
-  
-  .itinerary-day h3 {
-    margin-bottom: 10px;
-  }
-  
-  .events {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .event {
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #F9F9F9;
-  }
-  
-  .event-details {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .event-detail {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-  }
-  
-  .event-detail div {
-    margin-left: 10px;
-  }
-  
-  .event-label {
-    font-weight: bold;
-    width: 100px; /* Adjust width as needed */
-  }
-  
-  .event-value {
-    margin-left: 10px;
-  }
-  
-  .edit-btn, .delete-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .edit-btn img, .delete-btn img {
-    width: 24px;
-    height: 24px;
-  }
-  
+  font-family: Arial, sans-serif;
+}
+
+.main-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.package-container,
+.enquiry-container {
+  flex: 1;
+  margin-right: 2rem;
+  padding: 1rem;
+  background-color: azure;
+  border-radius: 1rem;
+}
+
+.package-name {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 1rem;
+  margin-bottom: 10px;
+  background-color: #F6EEF5;
+  border-radius: 1rem;
+}
+
+.package-description {
+  font-size: 16px;
+  color: #555;
+  padding: 1rem;
+  background-color: #F6EEF5;
+  border-radius: 1rem;
+}
+
+.enquiry-container div {
+  margin-bottom: 10px;
+}
+
+.days-container {
+  margin-top: 20px;
+}
+
+.day-container {
+  background: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.day-header {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.event {
+  display: flex;
+  flex-direction: column;
+}
+
+.event-details {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.detail {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px 0;
+}
+
+.label {
+  display: block;
+  font-weight: 500;
+  color: #6c757d;
+}
+
+.data {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.inclusions-exclusions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.inclusions-exclusions div {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.inclusions-exclusions ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.tandcs-disclaimers {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.tandcs-disclaimers div {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.tandcs-disclaimers ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.actions button {
+  margin-left: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.actions img {
+  width: 20px;
+  height: 20px;
+}

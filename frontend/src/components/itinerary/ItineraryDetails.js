@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import axios from "axios";
-import "../../styles/details.css";
+import "../../styles/ItinerariesDetails.css";
 
 import editBtn from "../../assets/edit.png";
 import deleteBtn from "../../assets/delete.png";
@@ -94,51 +94,64 @@ const ItineraryDetails = ({ itinerary }) => {
 
   const formatEvents = (events) => {
     if (!events || events.length === 0) return "No events";
-
+  
     return events.map((event, index) => {
+      const renderDetails = (label, value) => (
+        <div className="detail" key={`${label}-${index}`}>
+          <span className="label">{label}</span>
+          <span className="data">{value || "Unknown"}</span>
+        </div>
+      );
+  
       switch (event?.type) {
         case "site":
           return (
             <div key={index} className="event">
-              <div>Site: {event?.siteRef?.name || "Unknown"}</div>
-              <div>Start Time: {event?.startTime}</div>
-              <div>End Time: {event?.endTime}</div>
-              <div>Duration: {event?.duration} hours</div>
+              <div className="event-details">
+                {renderDetails("Site", event?.siteRef?.name)}
+                {renderDetails("Duration", `${event?.duration} hours`)}
+                {renderDetails("Start Time", event?.startTime)}
+                {renderDetails("End Time", event?.endTime)}
+              </div>
             </div>
           );
         case "transport":
           return (
             <div key={index} className="event">
-              <div>
-                Transport: {event?.transportRef?.modeOfTransport || "Unknown"}
+              <div className="event-details">
+                {renderDetails("Transport", event?.transportRef?.modeOfTransport)}
+                {renderDetails("From", event?.from)}
+                {renderDetails("To", event?.to)}
+                {renderDetails("Distance", `${event?.distance} km`)}
+                {renderDetails("Duration", `${event?.duration} hours`)}
+                {renderDetails("Start Time", event?.startTime)}
+                {renderDetails("End Time", event?.endTime)}
               </div>
-              <div>From: {event?.from || "Unknown"}</div>
-              <div>To: {event?.to || "Unknown"}</div>
-              <div>Distance: {event?.distance || "Unknown"} km</div>
-              <div>Start Time: {event?.startTime}</div>
-              <div>End Time: {event?.endTime}</div>
-              <div>Duration: {event?.duration} hours</div>
             </div>
           );
         case "hotel":
           return (
             <div key={index} className="event">
-              <div>Hotel: {event?.hotelRef?.name || "Unknown"}</div>
-              <div>Room Type: {event?.roomType || "Unknown"}</div>
-              <div>Meal Plan: {event?.mealPlan || "Unknown"}</div>
-              <div>Start Time: {event?.startTime}</div>
-              <div>End Time: {event?.endTime}</div>
-              <div>Duration: {event?.duration} hours</div>
+              <div className="event-details">
+                {renderDetails("Hotel", event?.hotelRef?.name)}
+                {renderDetails("Room Type", event?.roomType)}
+                {renderDetails("Meal Plan", event?.mealPlan)}
+                {renderDetails("Duration", `${event?.duration} hours`)}
+                {renderDetails("Start Time", event?.startTime)}
+                {renderDetails("End Time", event?.endTime)}
+              </div>
             </div>
           );
         case "restaurant":
           return (
             <div key={index} className="event">
-              <div>Restaurant: {event?.restaurantRef?.name || "Unknown"}</div>
-              <div>Meal Type: {event?.mealType || "Unknown"}</div>
-              <div>Start Time: {event?.startTime}</div>
-              <div>End Time: {event?.endTime}</div>
-              <div>Duration: {event?.duration} hours</div>
+              <div className="event-details">
+                {renderDetails("Restaurant", event?.restaurantRef?.name)}
+                {renderDetails("Meal Type", event?.mealType)}
+                {renderDetails("Duration", `${event?.duration} hours`)}
+                {renderDetails("Start Time", event?.startTime)}
+                {renderDetails("End Time", event?.endTime)}
+              </div>
             </div>
           );
         default:
@@ -150,77 +163,73 @@ const ItineraryDetails = ({ itinerary }) => {
       }
     });
   };
+  
 
   return (
     <div className="itinerary-details">
-      <div className="itinerary-header">
-        <div className="status">
-          <div className="actions">
-            <button className="edit-btn" onClick={handleEdit}>
-              <img src={editBtn} alt="Edit" />
-            </button>
-            <button className="delete-btn" onClick={handleDelete}>
-              <img src={deleteBtn} alt="Delete" />
-            </button>
-          </div>
-          <span>{itinerary?.name}</span>
+      <div className="main-container">
+        <div className="package-container">
+          <div className="package-name">{itinerary?.name}</div>
+          <div className="package-description">{itinerary?.description}</div>
+        </div>
+        <div className="enquiry-container">
+          <h1>Enquiry Details</h1>
         </div>
       </div>
-      <div className="itinerary-content">
-        <div className="row">
-          <div>
-            <div>Name:</div>
-            <div>{itinerary?.name}</div>
-          </div>
-          <div>
-            <div>Description:</div>
-            <div>{itinerary?.description}</div>
-          </div>
-        </div>
-        <div className="row">
-          {itinerary?.days?.map((day, index) => (
-            <div key={index} className="itinerary-day">
-              <h3>Day {day.day}</h3>
-              <div className="events">{formatEvents(day.events)}</div>
+      <div className="days-container">
+        {itinerary?.days?.map((day, index) => (
+          <div key={index} className="day-wrapper">
+            <div className="day-header">Day {day.day}</div>
+            <div className="events-container">
+              {formatEvents(day.events)}
             </div>
-          ))}
+          </div>
+        ))}
+      </div>
+
+      <div className="inclusions-exclusions">
+        <div>
+          <div>Inclusions:</div>
+          <ul>
+            {itinerary?.inclusions?.map((item, index) => (
+              <li key={`inc-${index}`}>{item}</li>
+            ))}
+          </ul>
         </div>
-        <div className="row">
-          <div>
-            <div>Inclusions : </div>
-            <ol>
-              {itinerary?.inclusions?.map((item, index) => (
-                <li key={`inc-${index}`}>{item}</li>
-              ))}
-            </ol>
-          </div>
-          <div>
-            <div>Exclusions : </div>
-            <ol>
-              {itinerary?.exclusions?.map((item, index) => (
-                <li key={`exc-${index}`}>{item}</li>
-              ))}
-            </ol>
-          </div>
+        <div>
+          <div>Exclusions:</div>
+          <ul>
+            {itinerary?.exclusions?.map((item, index) => (
+              <li key={`exc-${index}`}>{item}</li>
+            ))}
+          </ul>
         </div>
-        <div className="row">
-          <div>
-            <div>Terms & Conditions : </div>
-            <ol>
-              {itinerary?.tandcs?.map((item, index) => (
-                <li key={`tac-${index}`}>{item}</li>
-              ))}
-            </ol>
-          </div>
-          <div>
-            <div>Disclaimer : </div>
-            <ol>
-              {itinerary?.disclaimers?.map((item, index) => (
-                <li key={`dis-${index}`}>{item}</li>
-              ))}
-            </ol>
-          </div>
+      </div>
+      <div className="tandcs-disclaimers">
+        <div>
+          <div>Terms & Conditions:</div>
+          <ul>
+            {itinerary?.tandcs?.map((item, index) => (
+              <li key={`tac-${index}`}>{item}</li>
+            ))}
+          </ul>
         </div>
+        <div>
+          <div>Disclaimer:</div>
+          <ul>
+            {itinerary?.disclaimers?.map((item, index) => (
+              <li key={`dis-${index}`}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="actions">
+        <button className="edit-btn" onClick={handleEdit}>
+          <img src={editBtn} alt="Edit" />
+        </button>
+        <button className="delete-btn" onClick={handleDelete}>
+          <img src={deleteBtn} alt="Delete" />
+        </button>
       </div>
     </div>
   );
