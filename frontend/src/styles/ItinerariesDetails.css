@@ -57,9 +57,19 @@
   margin-bottom: 15px;
 }
 
+.event-container {
+  margin-bottom: 10px;
+}
+
 .event {
   display: flex;
   flex-direction: column;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
 }
 
 .event-details {
@@ -135,4 +145,44 @@
 .actions img {
   width: 20px;
   height: 20px;
+}
+
+ul, ol {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tabs-container {
+  margin-top: 20px;
+}
+
+.tabs-header {
+  display: flex;
+  border-bottom: 2px solid #ccc;
+}
+
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  background-color: #f9f9f9;
+  margin-right: 5px;
+}
+
+.tab:hover {
+  background-color: #e0e0e0;
+}
+
+.tab--selected {
+  background-color: #fff;
+  border-bottom: 2px solid #fff;
+}
+
+.tab-content {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-top: none;
+  background-color: #fff;
 }

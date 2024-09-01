@@ -2,10 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import axios from "axios";
 import "../../styles/ItinerariesDetails.css";
-
 import editBtn from "../../assets/edit.png";
 import deleteBtn from "../../assets/delete.png";
 import { useEffect, useState } from "react";
+import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 const ItineraryDetails = ({ itinerary }) => {
   const { user } = useAuthContext();
@@ -63,9 +64,9 @@ const ItineraryDetails = ({ itinerary }) => {
       }
     };
     fetchData();
-  }, []);
+  }, [user, API_URL]);
 
-  const handleEdit = async () => {
+  const handleEdit = () => {
     navigate(`/operations/itinerary/edit/${itinerary?._id}`);
   };
 
@@ -93,8 +94,8 @@ const ItineraryDetails = ({ itinerary }) => {
   };
 
   const formatEvents = (events) => {
-    if (!events || events.length === 0) return "No events";
-  
+    if (!events || events.length === 0) return <div className="no-events">No events</div>;
+
     return events.map((event, index) => {
       const renderDetails = (label, value) => (
         <div className="detail" key={`${label}-${index}`}>
@@ -102,7 +103,7 @@ const ItineraryDetails = ({ itinerary }) => {
           <span className="data">{value || "Unknown"}</span>
         </div>
       );
-  
+
       switch (event?.type) {
         case "site":
           return (
@@ -163,7 +164,6 @@ const ItineraryDetails = ({ itinerary }) => {
       }
     });
   };
-  
 
   return (
     <div className="itinerary-details">
@@ -176,17 +176,22 @@ const ItineraryDetails = ({ itinerary }) => {
           <h1>Enquiry Details</h1>
         </div>
       </div>
-      <div className="days-container">
+      <Tabs className="tabs-container">
+        <TabList className="tabs-header">
+          {itinerary?.days?.map((day, index) => (
+            <Tab key={index} className="tab">
+              Day {day.day}
+            </Tab>
+          ))}
+        </TabList>
         {itinerary?.days?.map((day, index) => (
-          <div key={index} className="day-wrapper">
-            <div className="day-header">Day {day.day}</div>
-            <div className="events-container">
+          <TabPanel key={index} className="tab-panel">
+            <div className="events">
               {formatEvents(day.events)}
             </div>
-          </div>
+          </TabPanel>
         ))}
-      </div>
-
+      </Tabs>
       <div className="inclusions-exclusions">
         <div>
           <div>Inclusions:</div>
