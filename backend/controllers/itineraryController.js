@@ -3,9 +3,14 @@ const mongoose = require("mongoose");
 
 // Get all itineraries
 const getItineraries = async (req, res) => {
-  const user_id = req.user._id;
   try {
+<<<<<<< HEAD
     const itineraries = await Itinerary.find();
+=======
+    const itineraries = await Itinerary.find().sort({
+      createdAt: -1,
+    });
+>>>>>>> 72d32a33acb7bafac4d52136c5b8f6db426ce839
     res.status(200).json(itineraries);
   } catch (error) {
     res.status(500).json({ error: error.message });
