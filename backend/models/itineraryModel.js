@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-// Validation functions
-const isRequiredForType = (value, contextType, expectedType) => {
-  return contextType === expectedType ? !!value : true;
-};
+// Helper function for conditional required validation
+const requiredIfType = (expectedType) => ({
+  validator: function (value) {
+    return this.type !== expectedType || !!value;
+  },
+  message: (props) => `${props.path} is required for type "${props.context.type}".`,
+});
 
 // Event Schema
 const eventSchema = new Schema(
@@ -29,96 +32,46 @@ const eventSchema = new Schema(
     siteRef: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Site",
-      validate: {
-        validator: function (value) {
-          return isRequiredForType(value, this.type, "site");
-        },
-        message: 'Site field is required for type "site".',
-      },
+      validate: requiredIfType("site"),
     },
     from: {
       type: String,
-      validate: {
-        validator: function (value) {
-          return isRequiredForType(value, this.type, "transport");
-        },
-        message: 'From field is required for type "transport".',
-      },
+      validate: requiredIfType("transport"),
     },
     to: {
       type: String,
-      validate: {
-        validator: function (value) {
-          return isRequiredForType(value, this.type, "transport");
-        },
-        message: 'To field is required for type "transport".',
-      },
+      validate: requiredIfType("transport"),
     },
     distance: {
       type: Number, // Distance in kilometers
-      validate: {
-        validator: function (value) {
-          return isRequiredForType(value, this.type, "transport");
-        },
-        message: 'Distance field is required for type "transport".',
-      },
+      validate: requiredIfType("transport"),
     },
     transportRef: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Transport",
-      validate: {
-        validator: function (value) {
-          return isRequiredForType(value, this.type, "transport");
-        },
-        message: 'Transport reference is required for type "transport".',
-      },
+      validate: requiredIfType("transport"),
     },
     roomType: {
       type: String,
-      validate: {
-        validator: function (value) {
-          return isRequiredForType(value, this.type, "hotel");
-        },
-        message: 'Room type is required for type "hotel".',
-      },
+      validate: requiredIfType("hotel"),
     },
     mealPlan: {
       type: String,
-      validate: {
-        validator: function (value) {
-          return isRequiredForType(value, this.type, "hotel");
-        },
-        message: 'Meal plan is required for type "hotel".',
-      },
+      validate: requiredIfType("hotel"),
     },
     hotelRef: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Hotel",
-      validate: {
-        validator: function (value) {
-          return isRequiredForType(value, this.type, "hotel");
-        },
-        message: 'Hotel reference is required for type "hotel".',
-      },
+      validate: requiredIfType("hotel"),
     },
     mealType: {
       type: String,
-      validate: {
-        validator: function (value) {
-          return isRequiredForType(value, this.type, "restaurant");
-        },
-        message: 'Meal type is required for type "restaurant".',
-      },
+      validate: requiredIfType("restaurant"),
     },
     restaurantRef: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Restaurant",
-      validate: {
-        validator: function (value) {
-          return isRequiredForType(value, this.type, "restaurant");
-        },
-        message: 'Restaurant reference is required for type "restaurant".',
-      },
+      validate: requiredIfType("restaurant"),
     },
   },
   { timestamps: true }
@@ -152,6 +105,23 @@ const itinerarySchema = new Schema(
       type: [itineraryDaySchema],
       required: true,
     },
+    inclusions: {
+      type: [String],
+      required: true,
+    },
+    exclusions: {
+      type: [String],
+      required: true,
+    },
+    tandc: {
+      type: [String],
+      required: true,
+    },
+    disclaimer: {
+      type: [String],
+      required: true,
+    },
+
   },
   { timestamps: true }
 );

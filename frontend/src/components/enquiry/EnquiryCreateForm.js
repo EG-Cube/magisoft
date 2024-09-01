@@ -16,7 +16,7 @@ const EnquiryForm = ({ isAdmin }) => {
     toDate: "",
     passengers: {
       adults: 0,
-      children: 0,
+    children: 0,
       infants: 0,
     },
     destinations: [""],

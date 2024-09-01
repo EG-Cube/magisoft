@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useEnquiryContext } from "../../hooks/useEnquiryContext";
 import { useUserContext } from "../../hooks/useUserContext";
+import { useItineraryContext } from "../../hooks/useItineraryContext";
 import { format } from "date-fns";
 import axios from "axios";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
@@ -16,6 +17,7 @@ const EnquiryDetails = ({ enquiry, isAdmin, type }) => {
   const { dispatch } = useEnquiryContext();
   const { user } = useAuthContext();
   const { users, dispatch: userDispatch } = useUserContext();
+  const { itineraries, dispatch: itineraryDispatch } = useItineraryContext();
   const [isUpdated, setIsUpdated] = useState(false);
   const [isAllocatingSales, setIsAllocatingSales] = useState(false);
   const [isAllocatingOperations, setIsAllocatingOperations] = useState(false);
@@ -51,6 +53,22 @@ const EnquiryDetails = ({ enquiry, isAdmin, type }) => {
       }
     };
 
+    
+    const fetchItineraries = async () => {
+      const response = await fetch(`${API_URL}/api/itinerary/`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      const json = await response.json();
+
+      if (response.ok) {
+        itineraryDispatch({ type: "SET_ITINERARIES", payload: json });
+      }
+    };
+
+    fetchItineraries();
     fetchUsers();
   }, [API_URL, user.token, userDispatch]);
 
@@ -355,6 +373,15 @@ const EnquiryDetails = ({ enquiry, isAdmin, type }) => {
               </div>
             </>
           )}
+        </div>
+
+        <div className="row">
+          <p>Itineraries</p>
+          <div>
+            {enquiry.itineraries.map((id) => {
+              return <p>{itineraries?.find((it) => it._id == id)?.name}</p>;
+            })}
+          </div>
         </div>
 
         {isAdmin && (

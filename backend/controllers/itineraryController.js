@@ -5,7 +5,9 @@ const mongoose = require("mongoose");
 const getItineraries = async (req, res) => {
   const user_id = req.user._id;
   try {
-    const itineraries = await Itinerary.find({ user_id }).sort({ createdAt: -1 });
+    const itineraries = await Itinerary.find({ user_id }).sort({
+      createdAt: -1,
+    });
     res.status(200).json(itineraries);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -22,9 +24,9 @@ const getItinerary = async (req, res) => {
 
   try {
     const itinerary = await Itinerary.findById(id).populate({
-      path: 'days.events',
+      path: "days.events",
       populate: {
-        path: 'siteRef transportRef hotelRef restaurantRef',
+        path: "siteRef transportRef hotelRef restaurantRef",
       },
     });
 
@@ -61,7 +63,15 @@ const getUserItineraries = async (req, res) => {
 
 // Create new itinerary
 const createItinerary = async (req, res) => {
-  const { name, description, days } = req.body;
+  const {
+    name,
+    description,
+    days,
+    inclusions,
+    exclusions,
+    tandcs,
+    disclaimers,
+  } = req.body;
 
   let emptyFields = [];
 
@@ -82,6 +92,10 @@ const createItinerary = async (req, res) => {
       description,
       days,
       user_id,
+      inclusions,
+      exclusions,
+      tandcs,
+      disclaimers,
     });
     res.status(201).json(itinerary);
   } catch (error) {
@@ -124,9 +138,9 @@ const updateItinerary = async (req, res) => {
       { ...req.body },
       { new: true }
     ).populate({
-      path: 'days.events',
+      path: "days.events",
       populate: {
-        path: 'site transport.transportRef hotel.hotelRef restaurant.restaurantRef',
+        path: "site transport.transportRef hotel.hotelRef restaurant.restaurantRef",
       },
     });
 
