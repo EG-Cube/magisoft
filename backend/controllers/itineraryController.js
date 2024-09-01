@@ -5,9 +5,7 @@ const mongoose = require("mongoose");
 const getItineraries = async (req, res) => {
   const user_id = req.user._id;
   try {
-    const itineraries = await Itinerary.find({ user_id }).sort({
-      createdAt: -1,
-    });
+    const itineraries = await Itinerary.find();
     res.status(200).json(itineraries);
   } catch (error) {
     res.status(500).json({ error: error.message });

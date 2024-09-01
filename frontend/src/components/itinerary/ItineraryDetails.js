@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import axios from "axios";
-import "../../styles/details.css";
+import "../../styles/ItinerariesDetails.css";
 
 import editBtn from "../../assets/edit.png";
 import deleteBtn from "../../assets/delete.png";
@@ -17,7 +17,8 @@ const ItineraryDetails = ({ itinerary }) => {
   const [hotels, setHotels] = useState([]);
   const [transports, setTransports] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
-  const [error, setError] = useState("")
+  const [enquiry, setEnquiry] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +32,7 @@ const ItineraryDetails = ({ itinerary }) => {
           hotelsResponse,
           transportsResponse,
           restaurantsResponse,
+          enquiryResponse,
         ] = await Promise.all([
           fetch(`${API_URL}/api/site`, {
             headers: { Authorization: `Bearer ${user.token}` },
@@ -44,28 +46,33 @@ const ItineraryDetails = ({ itinerary }) => {
           fetch(`${API_URL}/api/restaurant`, {
             headers: { Authorization: `Bearer ${user.token}` },
           }),
+          fetch(`${API_URL}/api/enquiry/${itinerary?.enquiryId}`, {
+            headers: { Authorization: `Bearer ${user.token}` },
+          }),
         ]);
 
-        const [sitesData, hotelsData, transportsData, restaurantsData] =
+        const [sitesData, hotelsData, transportsData, restaurantsData, enquiryData] =
           await Promise.all([
             sitesResponse.json(),
             hotelsResponse.json(),
             transportsResponse.json(),
             restaurantsResponse.json(),
+            enquiryResponse.json(),
           ]);
 
         if (sitesResponse.ok) setSites(sitesData);
         if (hotelsResponse.ok) setHotels(hotelsData);
         if (transportsResponse.ok) setTransports(transportsData);
         if (restaurantsResponse.ok) setRestaurants(restaurantsData);
+        if (enquiryResponse.ok) setEnquiry(enquiryData);
       } catch (err) {
         setError("Failed to fetch data");
       }
     };
     fetchData();
-  }, []);
+  }, [user, API_URL, itinerary?.enquiryId]);
 
-  const handleEdit = async () => {
+  const handleEdit = () => {
     navigate(`/operations/itinerary/edit/${itinerary?._id}`);
   };
 
@@ -93,47 +100,54 @@ const ItineraryDetails = ({ itinerary }) => {
     if (!events || events.length === 0) return "No events";
 
     return events.map((event, index) => {
+      const getEventDetail = (label, value) => (
+        <div key={index} className="event-detail">
+          <strong>{label}:</strong>
+          <div>{value || 'Unknown'}</div>
+        </div>
+      );
+
       switch (event?.type) {
         case 'site':
           return (
             <div key={index} className="event">
-              <div>Site: {event?.siteRef?.name || 'Unknown'}</div>
-              <div>Start Time: {event?.startTime}</div>
-              <div>End Time: {event?.endTime}</div>
-              <div>Duration: {event?.duration} hours</div>
+              {getEventDetail('Site', event?.siteRef?.name)}
+              {getEventDetail('Start Time', event?.startTime)}
+              {getEventDetail('End Time', event?.endTime)}
+              {getEventDetail('Duration', `${event?.duration} hours`)}
             </div>
           );
         case 'transport':
           return (
             <div key={index} className="event">
-              <div>Transport: {event?.transportRef?.modeOfTransport || 'Unknown'}</div>
-              <div>From: {event?.from || 'Unknown'}</div>
-              <div>To: {event?.to || 'Unknown'}</div>
-              <div>Distance: {event?.distance || 'Unknown'} km</div>
-              <div>Start Time: {event?.startTime}</div>
-              <div>End Time: {event?.endTime}</div>
-              <div>Duration: {event?.duration} hours</div>
+              {getEventDetail('Transport', event?.transportRef?.modeOfTransport)}
+              {getEventDetail('From', event?.from)}
+              {getEventDetail('To', event?.to)}
+              {getEventDetail('Distance', `${event?.distance || 'Unknown'} km`)}
+              {getEventDetail('Start Time', event?.startTime)}
+              {getEventDetail('End Time', event?.endTime)}
+              {getEventDetail('Duration', `${event?.duration} hours`)}
             </div>
           );
         case 'hotel':
           return (
             <div key={index} className="event">
-              <div>Hotel: {event?.hotelRef?.name || 'Unknown'}</div>
-              <div>Room Type: {event?.roomType || 'Unknown'}</div>
-              <div>Meal Plan: {event?.mealPlan || 'Unknown'}</div>
-              <div>Start Time: {event?.startTime}</div>
-              <div>End Time: {event?.endTime}</div>
-              <div>Duration: {event?.duration} hours</div>
+              {getEventDetail('Hotel', event?.hotelRef?.name)}
+              {getEventDetail('Room Type', event?.roomType)}
+              {getEventDetail('Meal Plan', event?.mealPlan)}
+              {getEventDetail('Start Time', event?.startTime)}
+              {getEventDetail('End Time', event?.endTime)}
+              {getEventDetail('Duration', `${event?.duration} hours`)}
             </div>
           );
         case 'restaurant':
           return (
             <div key={index} className="event">
-              <div>Restaurant: {event?.restaurantRef?.name || 'Unknown'}</div>
-              <div>Meal Type: {event?.mealType || 'Unknown'}</div>
-              <div>Start Time: {event?.startTime}</div>
-              <div>End Time: {event?.endTime}</div>
-              <div>Duration: {event?.duration} hours</div>
+              {getEventDetail('Restaurant', event?.restaurantRef?.name)}
+              {getEventDetail('Meal Type', event?.mealType)}
+              {getEventDetail('Start Time', event?.startTime)}
+              {getEventDetail('End Time', event?.endTime)}
+              {getEventDetail('Duration', `${event?.duration} hours`)}
             </div>
           );
         default:
@@ -148,31 +162,34 @@ const ItineraryDetails = ({ itinerary }) => {
 
   return (
     <div className="itinerary-details">
-      <div className="itinerary-header">
-        <div className="status">
-          <div className="actions">
-            <button className="edit-btn" onClick={handleEdit}>
-              <img src={editBtn} alt="Edit" />
-            </button>
-            <button className="delete-btn" onClick={handleDelete}>
-              <img src={deleteBtn} alt="Delete" />
-            </button>
+      <div className="main-container">
+        <div className="package-container">
+          <div>
+            <strong>Package Name:</strong> {itinerary?.name}
           </div>
-          <span>{itinerary?.name}</span>
+          {/* <div className="status">
+            <div className="actions">
+              <button className="edit-btn" onClick={handleEdit}>
+                <img src={editBtn} alt="Edit" />
+              </button>
+              <button className="delete-btn" onClick={handleDelete}>
+                <img src={deleteBtn} alt="Delete" />
+              </button>
+            </div>
+          </div> */}
+          <div>
+            <strong>Description:</strong> {itinerary?.description}
+          </div>
+        </div>
+        <div className="enquiry-container">
+          <div>
+            <div><strong>Enquiry Details:</strong></div>
+            {/* Add enquiry details component or information here */}
+          </div>
         </div>
       </div>
-      <div className="itinerary-content">
-        <div className="row">
-          <div>
-            <div>Name:</div>
-            <div>{itinerary?.name}</div>
-          </div>
-          <div>
-            <div>Description:</div>
-            <div>{itinerary?.description}</div>
-          </div>
-        </div>
-        <div className="row">
+      <div className="days-container">
+        <div className="day-details">
           {itinerary?.days?.map((day, index) => (
             <div key={index} className="itinerary-day">
               <h3>Day {day.day}</h3>

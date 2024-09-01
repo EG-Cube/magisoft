@@ -1,0 +1,92 @@
+.itinerary-details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .main-container {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .package-container, .enquiry-container {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: azure;
+  }
+  
+  .package-container div {
+    background-color: #F6EEF5;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 1rem;
+  }
+  
+  .enquiry-container {
+    /* Optional: Add additional styles if needed */
+  }
+  
+  .days-container {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .itinerary-day {
+    margin-bottom: 20px;
+  }
+  
+  .itinerary-day h3 {
+    margin-bottom: 10px;
+  }
+  
+  .events {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .event {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #F9F9F9;
+  }
+  
+  .event-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .event-detail {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .event-detail div {
+    margin-left: 10px;
+  }
+  
+  .event-label {
+    font-weight: bold;
+    width: 100px; /* Adjust width as needed */
+  }
+  
+  .event-value {
+    margin-left: 10px;
+  }
+  
+  .edit-btn, .delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .edit-btn img, .delete-btn img {
+    width: 24px;
+    height: 24px;
+  }
+  
