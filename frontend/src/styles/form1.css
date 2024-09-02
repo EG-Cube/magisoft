@@ -1,6 +1,5 @@
 .form {
   font-family: Arial, sans-serif;
-  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -75,6 +74,9 @@ textarea {
 }
 
 .event-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4rem;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -83,19 +85,20 @@ textarea {
 }
 
 .event-row {
-  display: grid;
-  grid-template-columns: 150px 1fr;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
   margin-bottom: 10px;
 }
 
 .event-row label {
   font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .event-input {
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .event-input span {
