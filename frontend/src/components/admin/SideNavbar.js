@@ -22,6 +22,21 @@ const SideNavbar = () => {
           <li>
             <Link to={"/admin/enquiry/dashboard/"}>Enquiry</Link>
           </li>
+          <li>
+            <Link to={"/admin/itinerary/list/"}>Itinerary</Link>
+          </li>
+          <li>
+            <Link to={"/admin/site/list/"}>Site</Link>
+          </li>
+          <li>
+            <Link to={"/admin/hotel/list/"}>Hotel</Link>
+          </li>
+          <li>
+            <Link to={"/admin/restaurant/list/"}>Restaurant</Link>
+          </li>
+          <li>
+            <Link to={"/admin/transport/list/"}>Transport</Link>
+          </li>
         </ul>
       </nav>
       <div className="user-info">

@@ -20,6 +20,31 @@ import AdminUserDetailView from "./pages/admin/AdminUserDetailsView";
 import AdminUserEditView from "./pages/admin/AdminUserEditView";
 import AdminUserCreateView from "./pages/admin/AdminUserCreateView";
 
+import AdminItineraryDetailView from "./pages/admin/AdminItineraryDetailsView";
+import AdminItineraryEditView from "./pages/admin/AdminItineraryEditView";
+import AdminItineraryListView from "./pages/admin/AdminItineraryListView";
+import AdminItineraryCreateView from "./pages/admin/AdminItineraryCreateView";
+
+import AdminSiteDetailView from "./pages/admin/AdminSiteDetailsView";
+import AdminSiteEditView from "./pages/admin/AdminSiteEditView";
+import AdminSiteListView from "./pages/admin/AdminSiteListView";
+import AdminSiteCreateView from "./pages/admin/AdminSiteCreateView";
+
+import AdminHotelDetailView from "./pages/admin/AdminHotelDetailsView";
+import AdminHotelEditView from "./pages/admin/AdminHotelEditView";
+import AdminHotelListView from "./pages/admin/AdminHotelListView";
+import AdminHotelCreateView from "./pages/admin/AdminHotelCreateView";
+
+import AdminRestaurantDetailView from "./pages/admin/AdminRestaurantDetailsView";
+import AdminRestaurantEditView from "./pages/admin/AdminRestaurantEditView";
+import AdminRestaurantListView from "./pages/admin/AdminRestaurantListView";
+import AdminRestaurantCreateView from "./pages/admin/AdminRestaurantCreateView";
+
+import AdminTransportDetailView from "./pages/admin/AdminTransportDetailsView";
+import AdminTransportEditView from "./pages/admin/AdminTransportEditView";
+import AdminTransportListView from "./pages/admin/AdminTransportListView";
+import AdminTransportCreateView from "./pages/admin/AdminTransportCreateView";
+
 import SalesDashboardView from "./pages/sales/SalesDashboardView";
 import CreateEnquiryForm from "./pages/sales/EnquiryGeneralView";
 import EnquiryDetailView from "./pages/sales/EnquiryDetailsView";
@@ -89,6 +114,36 @@ function App() {
                     path="archive/"
                     element={<AdminEnquiryListView type={"Archived"} />}
                   />
+                </Route>
+                <Route path="itinerary/">
+                  <Route path="create/" element={<AdminItineraryCreateView />} />
+                  <Route path="edit/:id" element={<AdminItineraryEditView />} />
+                  <Route path="view/:id" element={<AdminItineraryDetailView />} />
+                  <Route path="list/" element={<AdminItineraryListView />} />
+                </Route>
+                <Route path="site/">
+                  <Route path="create/" element={<AdminSiteCreateView />} />
+                  <Route path="edit/:id" element={<AdminSiteEditView />} />
+                  <Route path="view/:id" element={<AdminSiteDetailView />} />
+                  <Route path="list/" element={<AdminSiteListView />} />
+                </Route>
+                <Route path="hotel/">
+                  <Route path="create/" element={<AdminHotelCreateView />} />
+                  <Route path="edit/:id" element={<AdminHotelEditView />} />
+                  <Route path="view/:id" element={<AdminHotelDetailView />} />
+                  <Route path="list/" element={<AdminHotelListView />} />
+                </Route>
+                <Route path="restaurant/">
+                  <Route path="create/" element={<AdminRestaurantCreateView />} />
+                  <Route path="edit/:id" element={<AdminRestaurantEditView />} />
+                  <Route path="view/:id" element={<AdminRestaurantDetailView />} />
+                  <Route path="list/" element={<AdminRestaurantListView />} />
+                </Route>
+                <Route path="transport/">
+                  <Route path="create/" element={<AdminTransportCreateView />} />
+                  <Route path="edit/:id" element={<AdminTransportEditView />} />
+                  <Route path="view/:id" element={<AdminTransportDetailView />} />
+                  <Route path="list/" element={<AdminTransportListView />} />
                 </Route>
                 <Route path="user/">
                   <Route path="create/" element={<AdminUserCreateView />} />

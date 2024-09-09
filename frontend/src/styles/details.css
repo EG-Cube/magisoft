@@ -29,7 +29,7 @@
 .status span {
   margin-inline-start: 1rem;
   color: #fff;
-  background-color: #007bff;
+  background-color: #8d008d;
   padding: 0.5rem 1rem;
   border-radius: 2rem;
 }
@@ -116,7 +116,7 @@
 }
 
 .actions .edit-btn {
-  background-color: #007bff;
+  background-color: #8d008d;
 }
 
 .actions .archive-btn {
