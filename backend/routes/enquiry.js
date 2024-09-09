@@ -10,7 +10,8 @@ const {
   updateEnquiry,
   allocateSalesTo,
   allocateOperationsTo,
-  allocateAccountingTo
+  allocateAccountingTo,
+  getEnquiryFromItinerary,
 } = require("../controllers/enquiryController");
 const requireAuth = require("../middleware/requireAuth");
 
@@ -33,6 +34,9 @@ router.get("/operations/:id", getOperationsEnquiries);
 
 // GET accounting enquiries
 router.get("/accounting/:id", getAccountingEnquiries);
+
+// GET enquiry from itinerary
+router.get("/itinerary/:id", getEnquiryFromItinerary);
 
 // POST a new enquiry
 router.post("/", createEnquiry);

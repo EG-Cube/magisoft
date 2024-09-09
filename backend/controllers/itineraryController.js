@@ -1,4 +1,5 @@
 const Itinerary = require("../models/itineraryModel");
+const Enquiry = require("../models/enquiryModel");
 const mongoose = require("mongoose");
 
 // Get all itineraries
@@ -101,24 +102,40 @@ const createItinerary = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-
-// Delete an itinerary
+// Delete an itinerary and remove references in enquiries
 const deleteItinerary = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "No such itinerary" });
+    return res.status(404).json({ error: "Invalid itinerary ID" });
   }
 
   try {
+    // Find and delete the itinerary
     const itinerary = await Itinerary.findOneAndDelete({ _id: id });
 
     if (!itinerary) {
       return res.status(404).json({ error: "No such itinerary" });
     }
 
-    res.status(200).json(itinerary);
+    // Remove the itinerary reference from the activeItinerary field in enquiries
+    await Enquiry.updateMany(
+      { activeItinerary: id }, // Match enquiries with the activeItinerary set to the deleted itinerary
+      { $unset: { activeItinerary: null } } // Unset (remove) the activeItinerary field
+    );
+
+    // Remove the itinerary reference from the itineraries array in enquiries
+    await Enquiry.updateMany(
+      { itineraries: id }, // Match enquiries where the itinerary is in the itineraries array
+      { $pull: { itineraries: id } } // Pull (remove) the specific itinerary from the array
+    );
+
+    // Respond with the deleted itinerary details
+    res
+      .status(200)
+      .json({ message: "Itinerary deleted and references removed", itinerary });
   } catch (error) {
+    // Handle any errors
     res.status(500).json({ error: error.message });
   }
 };

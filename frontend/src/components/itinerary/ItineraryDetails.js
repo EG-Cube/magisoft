@@ -5,10 +5,12 @@ import "../../styles/ItinerariesDetails.css";
 import editBtn from "../../assets/edit.png";
 import deleteBtn from "../../assets/delete.png";
 import { useEffect, useState } from "react";
-import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
+import { Tabs, Tab, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
+import EnquiryCard from "../enquiry/EnquiryCard";
+import EnquiryDetails from "../enquiry/EnquiryDetails";
 
-const ItineraryDetails = ({ itinerary }) => {
+const ItineraryDetails = ({ itinerary, enquiry }) => {
   const { user } = useAuthContext();
   const navigate = useNavigate();
 
@@ -94,7 +96,8 @@ const ItineraryDetails = ({ itinerary }) => {
   };
 
   const formatEvents = (events) => {
-    if (!events || events.length === 0) return <div className="no-events">No events</div>;
+    if (!events || events.length === 0)
+      return <div className="no-events">No events</div>;
 
     return events.map((event, index) => {
       const renderDetails = (label, value) => (
@@ -120,7 +123,10 @@ const ItineraryDetails = ({ itinerary }) => {
           return (
             <div key={index} className="event">
               <div className="event-details">
-                {renderDetails("Transport", event?.transportRef?.modeOfTransport)}
+                {renderDetails(
+                  "Transport",
+                  event?.transportRef?.modeOfTransport
+                )}
                 {renderDetails("From", event?.from)}
                 {renderDetails("To", event?.to)}
                 {renderDetails("Distance", `${event?.distance} km`)}
@@ -173,7 +179,8 @@ const ItineraryDetails = ({ itinerary }) => {
           <div className="package-description">{itinerary?.description}</div>
         </div>
         <div className="enquiry-container">
-          <h1>Enquiry Details</h1>
+          {/* <h1>Enquiry Details</h1> */}
+          {enquiry && <EnquiryDetails key={enquiry._id} enquiry={enquiry} minimal />}
         </div>
       </div>
       <Tabs className="tabs-container">
@@ -186,9 +193,7 @@ const ItineraryDetails = ({ itinerary }) => {
         </TabList>
         {itinerary?.days?.map((day, index) => (
           <TabPanel key={index} className="tab-panel">
-            <div className="events">
-              {formatEvents(day.events)}
-            </div>
+            <div className="events">{formatEvents(day.events)}</div>
           </TabPanel>
         ))}
       </Tabs>

@@ -12,8 +12,9 @@ import "../../styles/details.css";
 import editBtn from "../../assets/edit.png";
 import archiveBtn from "../../assets/archive.png";
 import deleteBtn from "../../assets/delete.png";
+import viewBtn from "../../assets/view.png";
 
-const EnquiryDetails = ({ enquiry, isAdmin, type }) => {
+const EnquiryDetails = ({ enquiry, isAdmin, type, minimal = false }) => {
   const { dispatch } = useEnquiryContext();
   const { user } = useAuthContext();
   const { users, dispatch: userDispatch } = useUserContext();
@@ -53,7 +54,6 @@ const EnquiryDetails = ({ enquiry, isAdmin, type }) => {
       }
     };
 
-    
     const fetchItineraries = async () => {
       const response = await fetch(`${API_URL}/api/itinerary/`, {
         method: "GET",
@@ -207,58 +207,63 @@ const EnquiryDetails = ({ enquiry, isAdmin, type }) => {
 
   return (
     <div className="enquiry-details">
-      <div className="enquiry-header">
-        <div className="created-date">
-          {enquiry.createdAt &&
-            formatDistanceToNow(new Date(enquiry.createdAt), {
-              addSuffix: true,
-            })}
-        </div>
-        <div className="status">
-          {!isUpdated &&
-            enquiry.status !== "Archived" &&
-            enquiry.status !== "Verified" && (
-              <button className="edit-status-btn" onClick={handleUpdateStatus}>
-                {enquiry.status === "Pending" ? "Verify" : ""}
-              </button>
-            )}
-          <div className="actions">
-            {(type == "Sales" || isAdmin) && (
-              <>
-                <button className="edit-btn" onClick={handleEdit}>
-                  <img src={editBtn} alt="Edit" />
-                </button>
-                <button className="archive-btn" onClick={handleArchive}>
-                  <img src={archiveBtn} alt="Archive" />
-                </button>
-                {isAdmin && (
-                  <button className="delete-btn" onClick={handleDelete}>
-                    <img src={deleteBtn} alt="Delete" />
-                  </button>
-                )}
-              </>
-            )}
-
-            {(type == "Operations" || isAdmin) && (
-              <>
-                <Link
-                  to={`/operations/itinerary/create/${enquiry._id}`}
-                  className="action-btn"
-                >
-                  Create Itinerary
-                </Link>
-                {isAdmin && (
-                  <button className="delete-btn" onClick={handleDelete}>
-                    <img src={deleteBtn} alt="Delete" />
-                  </button>
-                )}
-              </>
-            )}
+      {!minimal && (
+        <div className="enquiry-header">
+          <div className="created-date">
+            {enquiry.createdAt &&
+              formatDistanceToNow(new Date(enquiry.createdAt), {
+                addSuffix: true,
+              })}
           </div>
+          <div className="status">
+            {!isUpdated &&
+              enquiry.status !== "Archived" &&
+              enquiry.status !== "Verified" && (
+                <button
+                  className="edit-status-btn"
+                  onClick={handleUpdateStatus}
+                >
+                  {enquiry.status === "Pending" ? "Verify" : ""}
+                </button>
+              )}
+            <div className="actions">
+              {(type == "Sales" || isAdmin) && (
+                <>
+                  <button className="edit-btn" onClick={handleEdit}>
+                    <img src={editBtn} alt="Edit" />
+                  </button>
+                  <button className="archive-btn" onClick={handleArchive}>
+                    <img src={archiveBtn} alt="Archive" />
+                  </button>
+                  {isAdmin && (
+                    <button className="delete-btn" onClick={handleDelete}>
+                      <img src={deleteBtn} alt="Delete" />
+                    </button>
+                  )}
+                </>
+              )}
 
-          <span style={getStatusStyle(enquiry.status)}>{enquiry.status}</span>
+              {(type == "Operations" || isAdmin) && (
+                <>
+                  <Link
+                    to={`/operations/itinerary/create/${enquiry._id}`}
+                    className="action-btn"
+                  >
+                    Create Itinerary
+                  </Link>
+                  {isAdmin && (
+                    <button className="delete-btn" onClick={handleDelete}>
+                      <img src={deleteBtn} alt="Delete" />
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+
+            <span style={getStatusStyle(enquiry.status)}>{enquiry.status}</span>
+          </div>
         </div>
-      </div>
+      )}
       <div className="enquiry-content">
         <div className="row">
           <div>
@@ -276,20 +281,23 @@ const EnquiryDetails = ({ enquiry, isAdmin, type }) => {
             <div>{enquiry.destinations.join(", ")}</div>
           </div>
         </div>
-        <div className="row">
-          <div>
-            <div>Purpose:</div>
-            <div>{enquiry.purpose}</div>
+        {!minimal && (
+          <div className="row">
+            <div>
+              <div>Purpose:</div>
+              <div>{enquiry.purpose}</div>
+            </div>
+
+            <div>
+              <div>Email:</div>
+              <div>{enquiry.emailAddress}</div>
+            </div>
+            <div>
+              <div>Phone Number:</div>
+              <div>{enquiry.phoneNumber}</div>
+            </div>
           </div>
-          <div>
-            <div>Email:</div>
-            <div>{enquiry.emailAddress}</div>
-          </div>
-          <div>
-            <div>Phone Number:</div>
-            <div>{enquiry.phoneNumber}</div>
-          </div>
-        </div>
+        )}
         <div className="row">
           <div>
             <div>From:</div>
@@ -301,15 +309,15 @@ const EnquiryDetails = ({ enquiry, isAdmin, type }) => {
           </div>
           <div className="passengers">
             <div>
-              <div>Adults:</div>
+              <div>{!minimal ? "Adults:" : "A"}</div>
               <div>{enquiry.passengers.adults}</div>
             </div>
             <div>
-              <div>Children:</div>
+              <div>{!minimal ? "Children:" : "C"}</div>
               <div>{enquiry.passengers.children}</div>
             </div>
             <div>
-              <div>Infants:</div>
+              <div>{!minimal ? "Infants:" : "I"}</div>
               <div>{enquiry.passengers.infants}</div>
             </div>
           </div>
@@ -375,14 +383,48 @@ const EnquiryDetails = ({ enquiry, isAdmin, type }) => {
           )}
         </div>
 
-        <div className="row">
-          <p>Itineraries</p>
-          <div>
-            {enquiry.itineraries.map((id) => {
-              return <p>{itineraries?.find((it) => it._id == id)?.name}</p>;
-            })}
+        {!minimal && (
+          <div className="row">
+            <div>
+              <div>Active Itinerary</div>
+              {itineraries?.find((it) => it._id == enquiry.activeItinerary) && (
+                <div className="itinerary-row">
+                  {itineraries?.find((it) => it._id == enquiry.activeItinerary)
+                    ?.name != ""}
+                  <Link
+                    to={`/operations/itinerary/view/${enquiry.activeItinerary}`}
+                    className="view-btn"
+                  >
+                    <img src={viewBtn} alt="View" />
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
+
+        {!minimal && (
+          <div className="row">
+            <div>
+              <div>Itineraries</div>
+              {enquiry.itineraries.map((id, index) => {
+                if (itineraries?.find((it) => it._id == id)?.name) {
+                  return (
+                    <div className="itinerary-row">
+                      {itineraries?.find((it) => it._id == id)?.name}
+                      <Link
+                        to={`/operations/itinerary/view/${id}`}
+                        className="view-btn"
+                      >
+                        <img src={viewBtn} alt="View" />
+                      </Link>
+                    </div>
+                  );
+                }
+              })}
+            </div>
+          </div>
+        )}
 
         {isAdmin && (
           <div className="row">

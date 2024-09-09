@@ -126,6 +126,7 @@ const EnquiryForm = ({ isAdmin }) => {
     } else {
       setFormData((prevFormData) => ({
         ...prevFormData,
+        salesTo: user?.user?._id,
         enteredBy: user?.user?._id,
       }));
     }
