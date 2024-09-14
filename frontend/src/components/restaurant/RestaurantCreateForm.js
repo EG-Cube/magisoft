@@ -73,7 +73,6 @@ const RestaurantCreateForm = () => {
       "city",
       "state",
       "country",
-      "contactNumber",
     ];
 
     const missingFields = requiredFields.filter((field) => !formData[field]);

@@ -124,7 +124,7 @@ const RestaurantEditForm = ({ restaurantID }) => {
       "city",
       "state",
       "country",
-      "contactNumber",
+      // "contactNumber",
       "cuisine",
     ];
 
