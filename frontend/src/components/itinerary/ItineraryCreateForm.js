@@ -8,7 +8,12 @@ import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { useNavigate } from "react-router-dom";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import BeachAccessIcon from "@mui/icons-material/BeachAccess";
+import HotelIcon from "@mui/icons-material/Hotel";
+import CommuteIcon from "@mui/icons-material/Commute";
+import LocalDiningIcon from "@mui/icons-material/LocalDining";
 
 const ItineraryCreateForm = ({ enquiry }) => {
   const { user } = useAuthContext();
@@ -174,12 +179,16 @@ const ItineraryCreateForm = ({ enquiry }) => {
         newDays[dayIndex].events[eventIndex].endTime = endTime;
       }
 
-      
-      if(eventIndex != 0) {
-        console.log(eventIndex, dayIndex, newDays[dayIndex].events[eventIndex].startTime, newDays[dayIndex].events[eventIndex - 1].endTime)
-        newDays[dayIndex].events[eventIndex].startTime = newDays[dayIndex].events[eventIndex - 1].endTime;          
+      if (eventIndex != 0) {
+        console.log(
+          eventIndex,
+          dayIndex,
+          newDays[dayIndex].events[eventIndex].startTime,
+          newDays[dayIndex].events[eventIndex - 1].endTime
+        );
+        newDays[dayIndex].events[eventIndex].startTime =
+          newDays[dayIndex].events[eventIndex - 1].endTime;
       }
-
     }
 
     setFormData((prevFormData) => ({
@@ -222,7 +231,7 @@ const ItineraryCreateForm = ({ enquiry }) => {
       ],
     }));
   };
-  
+
   const handleAddEvent = (dayIndex, eventType) => {
     const newDays = [...formData.days];
 
@@ -528,9 +537,22 @@ const ItineraryCreateForm = ({ enquiry }) => {
                 {day.events.map((event, eventIndex) => (
                   <div key={eventIndex} className="event-panel">
                     <div className="event-row">
-                      <label>Event Type:</label>
+                      {/* <label>Event Type:</label> */}
                       <div className="event-input">
-                        <span>{event.type}</span>
+                        <span>
+                          {event.type === "site" && (
+                            <BeachAccessIcon className="event-icon" />
+                          )}
+                          {event.type === "hotel" && (
+                            <HotelIcon className="event-icon" />
+                          )}
+                          {event.type === "restaurant" && (
+                            <LocalDiningIcon className="event-icon" />
+                          )}
+                          {event.type === "transport" && (
+                            <CommuteIcon className="event-icon" />
+                          )}
+                        </span>
                       </div>
                     </div>
                     {event.type === "site" && (
@@ -787,8 +809,6 @@ const ItineraryCreateForm = ({ enquiry }) => {
                         value={event.startTime}
                         disabled={eventIndex != 0 ? true : false}
                       />
-                    </div>
-                    <div className="event-row">
                       <label>End Time:</label>
                       <input
                         type="time"
@@ -819,12 +839,19 @@ const ItineraryCreateForm = ({ enquiry }) => {
                         value={event.duration}
                       />
                     </div>
-                    <div>
+                    <div className="btn-column">
                       <button
                         type="button"
                         onClick={() => handleMoveUpEvent(dayIndex, eventIndex)}
                       >
                         <ArrowUpwardIcon />
+                      </button>
+                      <button
+                        // className="removeBtn"
+                        type="button"
+                        onClick={() => handleRemoveEvent(dayIndex, eventIndex)}
+                      >
+                        <DeleteIcon />
                       </button>
                       <button
                         type="button"
@@ -835,13 +862,6 @@ const ItineraryCreateForm = ({ enquiry }) => {
                         <ArrowDownwardIcon />
                       </button>
                     </div>
-                    <button
-                      className="removeBtn"
-                      type="button"
-                      onClick={() => handleRemoveEvent(dayIndex, eventIndex)}
-                    >
-                      Remove Event
-                    </button>
                   </div>
                 ))}
                 <div className="row">
