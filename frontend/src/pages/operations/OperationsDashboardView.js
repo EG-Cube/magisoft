@@ -111,7 +111,7 @@ const OperationsDashboardView = () => {
             <EnquiryCard
               key={enquiry._id}
               enquiry={enquiry}
-              redirectLink={"/sales/enquiry/view/"}
+              redirectLink={"/operations/enquiry/view/"}
             />
           ))}
       </div>

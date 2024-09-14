@@ -7,6 +7,8 @@ import Select from "react-select";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { useNavigate } from "react-router-dom";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 const ItineraryCreateForm = ({ enquiry }) => {
   const { user } = useAuthContext();
@@ -115,15 +117,97 @@ const ItineraryCreateForm = ({ enquiry }) => {
     }));
   };
 
+  const getStartTime = (dayIndex, eventIndex) => {
+    console.log(
+      "getStartTime : ",
+      dayIndex,
+      eventIndex,
+      formData?.days[dayIndex]?.events[eventIndex].endTime
+    );
+    return getEndTime(
+      formData?.days[dayIndex]?.events[eventIndex].startTime,
+      formData?.days[dayIndex]?.events[eventIndex].duration
+    );
+  };
+
+  const getEndTime = (startTime, duration) => {
+    if (!startTime || !duration) return "";
+
+    const [hours, minutes] = startTime.split(":").map(Number);
+    const durationHours = parseFloat(duration);
+
+    const startDate = new Date();
+    startDate.setHours(hours, minutes, 0, 0);
+
+    console.log("Start Date : ", startDate.getHours(), startDate.getMinutes());
+
+    const endDate = new Date(
+      startDate.getTime() + durationHours * 60 * 60 * 1000
+    );
+
+    console.log("End Date : ", endDate.getHours(), endDate.getMinutes());
+
+    const endHours = endDate.getHours().toString().padStart(2, "0");
+    const endMinutes = endDate.getMinutes().toString().padStart(2, "0");
+
+    // const newDays = [...formData.days];
+    // newDays[dayIndex].events[eventIndex].endTime = `${endHours}:${endMinutes}`;
+    // setFormData((prevFormData) => ({
+    //   ...prevFormData,
+    //   days: newDays,
+    // }));
+
+    return `${endHours}:${endMinutes}`;
+  };
+
   const handleEventChange = (dayIndex, eventIndex, field, value) => {
     const newDays = [...formData.days];
     newDays[dayIndex].events[eventIndex][field] = value;
+
+    // Automatically calculate endTime if startTime or duration is changed
+    if (field === "startTime" || field === "duration") {
+      const { startTime, duration } = newDays[dayIndex].events[eventIndex];
+
+      // Ensure both startTime and duration are valid before calculating endTime
+      if (startTime && duration) {
+        const endTime = calculateEndTime(startTime, duration);
+        newDays[dayIndex].events[eventIndex].endTime = endTime;
+      }
+
+      
+      if(eventIndex != 0) {
+        console.log(eventIndex, dayIndex, newDays[dayIndex].events[eventIndex].startTime, newDays[dayIndex].events[eventIndex - 1].endTime)
+        newDays[dayIndex].events[eventIndex].startTime = newDays[dayIndex].events[eventIndex - 1].endTime;          
+      }
+
+    }
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       days: newDays,
     }));
 
     console.log(formData);
+  };
+
+  // Utility function to calculate end time based on start time and duration
+  const calculateEndTime = (startTime, duration) => {
+    if (!startTime || !duration) return "";
+
+    const [hours, minutes] = startTime.split(":").map(Number);
+    const durationHours = parseFloat(duration);
+
+    const startDate = new Date();
+    startDate.setHours(hours, minutes, 0, 0);
+
+    const endDate = new Date(
+      startDate.getTime() + durationHours * 60 * 60 * 1000
+    );
+
+    const endHours = endDate.getHours().toString().padStart(2, "0");
+    const endMinutes = endDate.getMinutes().toString().padStart(2, "0");
+
+    return `${endHours}:${endMinutes}`;
   };
 
   const handleAddDay = () => {
@@ -138,6 +222,7 @@ const ItineraryCreateForm = ({ enquiry }) => {
       ],
     }));
   };
+  
   const handleAddEvent = (dayIndex, eventType) => {
     const newDays = [...formData.days];
 
@@ -176,6 +261,43 @@ const ItineraryCreateForm = ({ enquiry }) => {
       ...prevFormData,
       days: newDays,
     }));
+  };
+  const handleMoveUpEvent = (dayIndex, eventIndex) => {
+    const newDays = [...formData.days];
+    const events = newDays[dayIndex].events;
+
+    // Ensure the event is not already the first one
+    if (eventIndex > 0) {
+      // Swap the event with the one above it
+      [events[eventIndex - 1], events[eventIndex]] = [
+        events[eventIndex],
+        events[eventIndex - 1],
+      ];
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        days: newDays,
+      }));
+    }
+  };
+
+  const handleMoveDownEvent = (dayIndex, eventIndex) => {
+    const newDays = [...formData.days];
+    const events = newDays[dayIndex].events;
+
+    // Ensure the event is not already the last one
+    if (eventIndex < events.length - 1) {
+      // Swap the event with the one below it
+      [events[eventIndex + 1], events[eventIndex]] = [
+        events[eventIndex],
+        events[eventIndex + 1],
+      ];
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        days: newDays,
+      }));
+    }
   };
 
   const handleInclusionChange = (index, value) => {
@@ -663,6 +785,7 @@ const ItineraryCreateForm = ({ enquiry }) => {
                           )
                         }
                         value={event.startTime}
+                        disabled={eventIndex != 0 ? true : false}
                       />
                     </div>
                     <div className="event-row">
@@ -678,6 +801,7 @@ const ItineraryCreateForm = ({ enquiry }) => {
                           )
                         }
                         value={event.endTime}
+                        disabled
                       />
                     </div>
                     <div className="event-row">
@@ -694,6 +818,22 @@ const ItineraryCreateForm = ({ enquiry }) => {
                         }
                         value={event.duration}
                       />
+                    </div>
+                    <div>
+                      <button
+                        type="button"
+                        onClick={() => handleMoveUpEvent(dayIndex, eventIndex)}
+                      >
+                        <ArrowUpwardIcon />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleMoveDownEvent(dayIndex, eventIndex)
+                        }
+                      >
+                        <ArrowDownwardIcon />
+                      </button>
                     </div>
                     <button
                       className="removeBtn"

@@ -116,9 +116,15 @@ function App() {
                   />
                 </Route>
                 <Route path="itinerary/">
-                  <Route path="create/" element={<AdminItineraryCreateView />} />
+                  <Route
+                    path="create/"
+                    element={<AdminItineraryCreateView />}
+                  />
                   <Route path="edit/:id" element={<AdminItineraryEditView />} />
-                  <Route path="view/:id" element={<AdminItineraryDetailView />} />
+                  <Route
+                    path="view/:id"
+                    element={<AdminItineraryDetailView />}
+                  />
                   <Route path="list/" element={<AdminItineraryListView />} />
                 </Route>
                 <Route path="site/">
@@ -134,15 +140,30 @@ function App() {
                   <Route path="list/" element={<AdminHotelListView />} />
                 </Route>
                 <Route path="restaurant/">
-                  <Route path="create/" element={<AdminRestaurantCreateView />} />
-                  <Route path="edit/:id" element={<AdminRestaurantEditView />} />
-                  <Route path="view/:id" element={<AdminRestaurantDetailView />} />
+                  <Route
+                    path="create/"
+                    element={<AdminRestaurantCreateView />}
+                  />
+                  <Route
+                    path="edit/:id"
+                    element={<AdminRestaurantEditView />}
+                  />
+                  <Route
+                    path="view/:id"
+                    element={<AdminRestaurantDetailView />}
+                  />
                   <Route path="list/" element={<AdminRestaurantListView />} />
                 </Route>
                 <Route path="transport/">
-                  <Route path="create/" element={<AdminTransportCreateView />} />
+                  <Route
+                    path="create/"
+                    element={<AdminTransportCreateView />}
+                  />
                   <Route path="edit/:id" element={<AdminTransportEditView />} />
-                  <Route path="view/:id" element={<AdminTransportDetailView />} />
+                  <Route
+                    path="view/:id"
+                    element={<AdminTransportDetailView />}
+                  />
                   <Route path="list/" element={<AdminTransportListView />} />
                 </Route>
                 <Route path="user/">
