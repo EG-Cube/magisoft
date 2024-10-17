@@ -8,6 +8,7 @@ import Signup from "./pages/Signup";
 import AdminDashboardLayout from "./components/admin/AdminDashboardLayout";
 import SalesDashboardLayout from "./components/sales/SalesDashboardLayout";
 import OperationsDashboardLayout from "./components/operations/OperationsDashboardLayout";
+import AccountingDashboardLayout from "./components/accounting/AccountingDashboardLayout";
 
 import AdminSalesDashboardView from "./pages/admin/AdminSalesDashboardView";
 import AdminEnquiryDetailView from "./pages/admin/AdminEnquiryDetailsView";
@@ -79,6 +80,8 @@ import OperationsEnquiryListView from "./pages/operations/OperationsEnquiryListV
 import ItineraryCreateView from "./pages/operations/ItineraryCreateView";
 import ItineraryEditView from "./pages/operations/ItineraryEditView";
 import ItineraryDetailsView from "./pages/operations/ItineraryDetailsView";
+
+import AccountingDashboardView from "./pages/accounting/AccountingDashboardView";
 
 import Unauthorized from "./pages/Unauthorized";
 import RequireAuth from "./pages/RequireAuth";
@@ -252,6 +255,26 @@ function App() {
                 </Route>
               </Route>
             </Route>
+
+            
+            {/* Accounting */}
+            <Route
+              element={<RequireAuth allowedRoles={["Admin", "Accounting"]} />}
+            >
+              <Route path="accounting/" element={<AccountingDashboardLayout />}>
+                <Route
+                  path="dashboard/"
+                  element={<AccountingDashboardView />}
+                />
+                <Route path="itinerary/">
+                  <Route path="create/:id" element={<ItineraryCreateView />} />
+                  <Route path="edit/:id" element={<ItineraryEditView />} />
+                  <Route path="view/:id" element={<ItineraryDetailsView />} />
+                  <Route path="list/" element={<ItineraryListView />} />
+                </Route>
+              </Route>
+            </Route>
+
             {/* No Authentication Required */}
             <Route path="/" element={<Login />} />
             {/* <Route path="/signup" element={<Signup />} /> */}

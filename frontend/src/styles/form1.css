@@ -77,7 +77,7 @@ textarea {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   gap: 4rem;
   padding: 10px;
   border: 1px solid #ddd;

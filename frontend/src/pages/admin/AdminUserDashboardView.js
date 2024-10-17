@@ -41,9 +41,9 @@ const AdminUserDashboardView = () => {
       users?.filter((user) => {
         const filterLower = filter.toLowerCase();
         return (
-          user?.firstName.toLowerCase().includes(filterLower) ||
-          user?.lastName.toLowerCase().includes(filterLower) ||
-          user?.email.toLowerCase().includes(filterLower) ||
+          user?.firstName?.toLowerCase().includes(filterLower) ||
+          user?.lastName?.toLowerCase().includes(filterLower) ||
+          user?.email?.toLowerCase().includes(filterLower) ||
           user?.roles.some((role) => role.toLowerCase().includes(filterLower))
         );
       })

@@ -41,13 +41,13 @@ const SiteListView = ({ type }) => {
       sites?.filter((site) => {
         const filterLower = filter?.toLowerCase();
         return (
-          site?.name.toLowerCase().includes(filterLower) ||
-          site?.address.toLowerCase().includes(filterLower) ||
-          site?.city.toLowerCase().includes(filterLower) ||
-          site?.state.toLowerCase().includes(filterLower) ||
-          site?.country.toLowerCase().includes(filterLower) ||
-          site?.pincode.toLowerCase().includes(filterLower) ||
-          site?.duration.toLowerCase().includes(filterLower) ||
+          site?.name?.toLowerCase().includes(filterLower) ||
+          site?.address?.toLowerCase().includes(filterLower) ||
+          site?.city?.toLowerCase().includes(filterLower) ||
+          site?.state?.toLowerCase().includes(filterLower) ||
+          site?.country?.toLowerCase().includes(filterLower) ||
+          site?.pincode?.toLowerCase().includes(filterLower) ||
+          site?.description?.toLowerCase().includes(filterLower) ||
           site?.type.toString().includes(filterLower)
         );
       })

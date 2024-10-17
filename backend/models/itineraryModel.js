@@ -73,6 +73,22 @@ const eventSchema = new Schema(
       ref: "Restaurant",
       validate: requiredIfType("restaurant"),
     },
+    cost: {
+      type: Number, // Cost of the event
+      required: false, // Not required by default, can be customized later
+    },
+    currency: {
+      type: String, // Currency in which the cost is defined
+      required: function () {
+        return !!this.cost; // Only required if the cost is provided
+      },
+      validate: {
+        validator: function (value) {
+          return !!this.cost || !value; // If currency is provided, cost must be present
+        },
+        message: "Currency is required when cost is provided.",
+      },
+    },
   },
   { timestamps: true }
 );
@@ -121,7 +137,6 @@ const itinerarySchema = new Schema(
       type: [String],
       required: true,
     },
-
   },
   { timestamps: true }
 );

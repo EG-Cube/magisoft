@@ -9,6 +9,7 @@ import { Tabs, Tab, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import EnquiryCard from "../enquiry/EnquiryCard";
 import EnquiryDetails from "../enquiry/EnquiryDetails";
+import * as XLSX from "xlsx"; // Import xlsx library
 
 const ItineraryDetails = ({ itinerary, enquiry }) => {
   const { user } = useAuthContext();
@@ -93,6 +94,34 @@ const ItineraryDetails = ({ itinerary, enquiry }) => {
     } catch (err) {
       console.error("Failed to delete the itinerary", err);
     }
+  };
+
+  const exportToExcel = () => {
+    const data = [];
+
+    itinerary?.days?.forEach((day) => {
+      day.events.forEach((event) => {
+        data.push({
+          "Day Number": day.day,
+          "Start Time": event.startTime || "Unknown",
+          "End Time": event.endTime || "Unknown",
+          "Event Type": event.type,
+          "Site/Hotel/Restaurant/Transport Name":
+            event?.siteRef?.name ||
+            event?.hotelRef?.name ||
+            event?.restaurantRef?.name ||
+            event?.transportRef?.modeOfTransport ||
+            "Unknown",
+          "Event Details": event.details || "N/A",
+        });
+      });
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Itinerary");
+
+    XLSX.writeFile(workbook, "ItineraryDetails.xlsx");
   };
 
   const formatEvents = (events) => {
@@ -180,7 +209,9 @@ const ItineraryDetails = ({ itinerary, enquiry }) => {
         </div>
         <div className="enquiry-container">
           {/* <h1>Enquiry Details</h1> */}
-          {enquiry && <EnquiryDetails key={enquiry._id} enquiry={enquiry} minimal />}
+          {enquiry && (
+            <EnquiryDetails key={enquiry._id} enquiry={enquiry} minimal />
+          )}
         </div>
       </div>
       <Tabs className="tabs-container">
