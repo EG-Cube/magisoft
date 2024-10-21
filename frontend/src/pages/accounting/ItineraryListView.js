@@ -11,7 +11,7 @@ const ItineraryListView = ({ type }) => {
   const { user } = useAuthContext();
   const [filteredItineraries, setFilteredItineraries] = useState([]);
   const [filter, setFilter] = useState("");
-  
+  const [loading, setLoading] = useState(true);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -30,6 +30,7 @@ const ItineraryListView = ({ type }) => {
       if (response.ok) {
         dispatch({ type: "SET_ITINERARIES", payload: json });
       }
+      // setLoading(false);
     };
 
     if (user) {
@@ -52,20 +53,24 @@ const ItineraryListView = ({ type }) => {
   return (
     <div className="home">
       <h1>{type} Itineraries</h1>
-      <div className="itineraries">
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        {filteredItineraries
-          ?.sort((a, b) => a.createdAt < b.createdAt)
-          .map((itinerary) => (
-            <ItineraryCard key={itinerary?._id} itinerary={itinerary} />
-          ))}
-      </div>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="itineraries">
+          <input
+            id="search"
+            type="text"
+            placeholder="Search"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          {filteredItineraries
+            ?.sort((a, b) => a.createdAt < b.createdAt)
+            .map((itinerary) => (
+              <ItineraryCard key={itinerary?._id} itinerary={itinerary} />
+            ))}
+        </div>
+      )}
     </div>
   );
 };

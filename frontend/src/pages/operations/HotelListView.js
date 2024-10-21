@@ -6,18 +6,21 @@ import { Link } from "react-router-dom";
 // components
 import HotelCard from "../../components/hotel/HotelCard";
 import Sort from "../../components/operations/Sort";
+import Spinner from "../../components/Spinner";
 
 const HotelListView = ({ type }) => {
   const { hotels, dispatch } = useHotelContext(); // Use 'hotels' instead of 'sites'
   const { user } = useAuthContext();
   const [filteredHotels, setFilteredHotels] = useState([]);
   const [filter, setFilter] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchHotels = async () => {
-      const response = await fetch(`${API_URL}/api/hotel/`, { // Updated endpoint
+      const response = await fetch(`${API_URL}/api/hotel/`, {
+        // Updated endpoint
         method: "GET",
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -28,6 +31,7 @@ const HotelListView = ({ type }) => {
       if (response.ok) {
         dispatch({ type: "SET_HOTELS", payload: json }); // Updated action type
       }
+      setLoading(false);
     };
 
     if (user) {
@@ -37,7 +41,8 @@ const HotelListView = ({ type }) => {
 
   useEffect(() => {
     setFilteredHotels(
-      hotels?.filter((hotel) => { // Use 'hotel' instead of 'site'
+      hotels?.filter((hotel) => {
+        // Use 'hotel' instead of 'site'
         const filterLower = filter?.toLowerCase();
         return (
           hotel?.name.toLowerCase().includes(filterLower) ||
@@ -46,37 +51,51 @@ const HotelListView = ({ type }) => {
           hotel?.state.toLowerCase().includes(filterLower) ||
           hotel?.country.toLowerCase().includes(filterLower) ||
           hotel?.pincode.toLowerCase().includes(filterLower) ||
-          hotel?.availableRoomTypes.join(", ").toLowerCase().includes(filterLower) ||
-          hotel?.availableMealPlans.join(", ").toLowerCase().includes(filterLower)
+          hotel?.availableRoomTypes
+            .join(", ")
+            .toLowerCase()
+            .includes(filterLower) ||
+          hotel?.availableMealPlans
+            .join(", ")
+            .toLowerCase()
+            .includes(filterLower)
         );
       })
     );
   }, [filter, hotels, type]);
 
   return (
-    <div className="home">
-      <div className="row">
-        <h1>{type} Hotels</h1>
-        <Link to="/operations/hotel/create" className="nav-button">
-          New Hotel
-        </Link>
-      </div>
-      <div className="hotels"> {/* Changed className to reflect hotels */}
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        {/* <Sort /> */}
-        {filteredHotels
-          ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by date
-          .map((hotel) => (
-            <HotelCard key={hotel?._id} hotel={hotel} />
-          ))}
-      </div>
-    </div>
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="home">
+          <div className="row">
+            <h1>{type} Hotels</h1>
+            <Link to="/operations/hotel/create" className="nav-button">
+              New Hotel
+            </Link>
+          </div>
+          <div className="hotels">
+            {" "}
+            {/* Changed className to reflect hotels */}
+            <input
+              id="search"
+              type="text"
+              placeholder="Search"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+            {/* <Sort /> */}
+            {filteredHotels
+              ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by date
+              .map((hotel) => (
+                <HotelCard key={hotel?._id} hotel={hotel} />
+              ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

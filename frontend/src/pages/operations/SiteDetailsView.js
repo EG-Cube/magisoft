@@ -5,6 +5,7 @@ import axios from "axios";
 // components
 import SiteDetails from "../../components/site/SiteDetails";
 import { useParams } from "react-router-dom";
+import Spinner from "../../components/Spinner";
 
 const SiteDetailView = () => {
   const { user } = useAuthContext();
@@ -13,6 +14,7 @@ const SiteDetailView = () => {
   const API_URL = process.env.REACT_APP_API_URL;
 
   const [site, setSite] = useState();
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const fetchSite = async () => {
@@ -26,6 +28,7 @@ const SiteDetailView = () => {
         }
       );
       setSite(response.data);
+      setLoading(false)
     };
 
     if (user) {
@@ -36,7 +39,7 @@ const SiteDetailView = () => {
   return (
       <div className="home">
         <div className="sites">
-          {site && <SiteDetails key={id} site={site} />}
+          {loading ? <Spinner/> : <SiteDetails key={id} site={site} />}
         </div>
       </div>
   );

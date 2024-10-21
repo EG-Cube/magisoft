@@ -5,10 +5,12 @@ import "../../styles/details.css";
 
 import editBtn from "../../assets/edit.png";
 import deleteBtn from "../../assets/delete.png";
+import { useState } from "react";
 
 const RestaurantDetails = ({ restaurant }) => {
   const { dispatch } = useRestaurantContext();
-  const { user } = useAuthContext();
+  const { user } = useAuthContext(); 
+
   const navigate = useNavigate();
 
   const API_URL = process.env.REACT_APP_API_URL;

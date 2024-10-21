@@ -3,13 +3,13 @@ import { useAuthContext } from "./useAuthContext";
 
 export const useSignup = () => {
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(null);
+  const [loading, setLoading] = useState(null);
   const { dispatch } = useAuthContext();
   
   const API_URL = process.env.REACT_APP_API_URL;
 
   const signup = async (firstName, lastName, country, email, password) => {
-    setIsLoading(true);
+    setLoading(true);
     setError(null);
 
     const response = await fetch(`${API_URL}/api/user/signup`, {
@@ -21,7 +21,7 @@ export const useSignup = () => {
     const json = await response.json();
 
     if (!response.ok) {
-      setIsLoading(false);
+      setLoading(false);
       setError(json.error);
     }
 
@@ -32,9 +32,9 @@ export const useSignup = () => {
       // update AuthContext
       dispatch({ type: "LOGIN", payload: json });
 
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  return { signup, isLoading, error };
+  return { signup, loading, error };
 };

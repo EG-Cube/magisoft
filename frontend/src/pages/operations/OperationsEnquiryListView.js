@@ -5,12 +5,14 @@ import { useEnquiryContext } from "../../hooks/useEnquiryContext";
 // components
 import EnquiryCard from "../../components/enquiry/EnquiryCard";
 import Sort from "../../components/sales/Sort";
+import Spinner from "../../components/Spinner";
 
 const OperationsEnquiryListView = () => {
   const { enquiries, dispatch } = useEnquiryContext();
   const { user } = useAuthContext();
   const [filteredEnquiries, setFilteredEnquiries] = useState([]);
   const [filter, setFilter] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -30,6 +32,7 @@ const OperationsEnquiryListView = () => {
       if (response.ok) {
         dispatch({ type: "SET_ENQUIRIES", payload: json });
       }
+      setLoading(false);
     };
 
     if (user) {
@@ -64,24 +67,34 @@ const OperationsEnquiryListView = () => {
   }, [filter, enquiries]);
 
   return (
-    <div className="home">
-      <h1>Enquiries</h1>
-      <div className="enquiries">
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        {/* <Sort /> */}
-        {filteredEnquiries
-          ?.sort((a, b) => a.createdAt < b.createdAt)
-          .map((enquiry) => (
-            <EnquiryCard key={enquiry._id} enquiry={enquiry} redirectLink={"/operations/enquiry/view/"}/>
-          ))}
-      </div>
-    </div>
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="home">
+          <h1>Enquiries</h1>
+          <div className="enquiries">
+            <input
+              id="search"
+              type="text"
+              placeholder="Search"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+            {/* <Sort /> */}
+            {filteredEnquiries
+              ?.sort((a, b) => a.createdAt < b.createdAt)
+              .map((enquiry) => (
+                <EnquiryCard
+                  key={enquiry._id}
+                  enquiry={enquiry}
+                  redirectLink={"/operations/enquiry/view/"}
+                />
+              ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

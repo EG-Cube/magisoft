@@ -5,13 +5,15 @@ import { useSiteContext } from "../../hooks/useSiteContext";
 // components
 import SiteCard from "../../components/site/SiteCard";
 import Sort from "../../components/sales/Sort";
+import Spinner from "../../components/Spinner";
 
 const AdminSiteListView = ({ type }) => {
   const { sites, dispatch } = useSiteContext();
   const { user } = useAuthContext();
   const [filteredSites, setFilteredSites] = useState([]);
   const [filter, setFilter] = useState("");
-  
+  const [loading, setLoading] = useState(true);
+
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
@@ -27,6 +29,7 @@ const AdminSiteListView = ({ type }) => {
       if (response.ok) {
         dispatch({ type: "SET_SITES", payload: json });
       }
+      setLoading(false);
     };
 
     if (user) {
@@ -55,21 +58,30 @@ const AdminSiteListView = ({ type }) => {
   return (
     <div className="home">
       <h1>{type} Sites</h1>
-      <div className="sites">
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        {/* <Sort /> */}
-        {filteredSites
-          ?.sort((a, b) => a.createdAt < b.createdAt)
-          .map((site) => (
-            <SiteCard key={site._id} site={site} isAdmin={true} redirectLink={"/admin/site/view/"}/>
-          ))}
-      </div>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="sites">
+          <input
+            id="search"
+            type="text"
+            placeholder="Search"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          {/* <Sort /> */}
+          {filteredSites
+            ?.sort((a, b) => a.createdAt < b.createdAt)
+            .map((site) => (
+              <SiteCard
+                key={site._id}
+                site={site}
+                isAdmin={true}
+                redirectLink={"/admin/site/view/"}
+              />
+            ))}
+        </div>
+      )}
     </div>
   );
 };

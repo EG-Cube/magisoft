@@ -8,15 +8,17 @@ import Sort from "../../components/sales/Sort";
 import "../../styles/DashboardView.css";
 import EnquiryCard from "../../components/enquiry/EnquiryCard";
 import { useUserContext } from "../../hooks/useUserContext";
+import Spinner from "../../components/Spinner";
 
 const AdminSalesDashboardView = () => {
   const { enquiries, dispatch: enquiryDispatch } = useEnquiryContext();
-  const { dispatch: userDispatch } = useUserContext()
+  const { dispatch: userDispatch } = useUserContext();
   const { user } = useAuthContext();
   const [filteredEnquiries, setFilteredEnquiries] = useState([]);
   const [filter, setFilter] = useState("");
   const [sortCriteria, setSortCriteria] = useState("Date");
-  
+  const [loading, setLoading] = useState(true);
+
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
@@ -46,6 +48,7 @@ const AdminSalesDashboardView = () => {
       if (response.ok) {
         userDispatch({ type: "SET_USERS", payload: json });
       }
+      setLoading(false);
     };
 
     if (user) {
@@ -83,11 +86,11 @@ const AdminSalesDashboardView = () => {
   const groupEnquiriesByMonth = (enquiries) => {
     const grouped = enquiries?.reduce((acc, enquiry) => {
       const date = new Date(enquiry.createdAt); // Assuming 'date' field exists in enquiry object
-      const month = date.toLocaleString('default', { month: 'long' });
+      const month = date.toLocaleString("default", { month: "long" });
       const year = date.getFullYear();
       const key = `${month} ${year}`;
 
-      console.log(enquiry.date, month, year, key)
+      console.log(enquiry.date, month, year, key);
       if (!acc[key]) {
         acc[key] = [];
       }
@@ -96,7 +99,7 @@ const AdminSalesDashboardView = () => {
       return acc;
     }, {});
 
-    console.log(grouped)
+    console.log(grouped);
     return grouped;
   };
 
@@ -104,25 +107,35 @@ const AdminSalesDashboardView = () => {
 
   return (
     <div className="home">
-      <div className="enquiries">
-        <Summary enquiries={enquiries} />
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        {/* <Sort sortCriteria={sortCriteria} set /> */}
-        {groupedEnquiries && Object.keys(groupedEnquiries)?.map((month) => (
-          <div key={month} className="month-group">
-            <h2>{month}</h2>
-            {groupedEnquiries[month].map((enquiry) => (
-              <EnquiryCard key={enquiry._id} enquiry={enquiry} isAdmin={true} redirectLink={"/admin/enquiry/view/"}/>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="enquiries">
+          <Summary enquiries={enquiries} />
+          <input
+            id="search"
+            type="text"
+            placeholder="Search"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          {/* <Sort sortCriteria={sortCriteria} set /> */}
+          {groupedEnquiries &&
+            Object.keys(groupedEnquiries)?.map((month) => (
+              <div key={month} className="month-group">
+                <h2>{month}</h2>
+                {groupedEnquiries[month].map((enquiry) => (
+                  <EnquiryCard
+                    key={enquiry._id}
+                    enquiry={enquiry}
+                    isAdmin={true}
+                    redirectLink={"/admin/enquiry/view/"}
+                  />
+                ))}
+              </div>
             ))}
-          </div>
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 
 // components
 import ItineraryDetails from "../../components/itinerary/ItineraryDetails";
+import Spinner from "../../components/Spinner";
 
 const ItineraryDetailsView = () => {
   const { user } = useAuthContext();
@@ -14,6 +15,7 @@ const ItineraryDetailsView = () => {
 
   const [itinerary, setItinerary] = useState();
   const [enquiry, setEnquiry] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchItinerary = async () => {
@@ -36,7 +38,8 @@ const ItineraryDetailsView = () => {
       );
       setEnquiry(enquiryResponse.data);
 
-      console.log(enquiryResponse)
+      console.log(enquiryResponse);
+      setLoading(false);
     };
 
     if (user) {
@@ -47,7 +50,9 @@ const ItineraryDetailsView = () => {
   return (
     <div className="home">
       <div className="itinerary">
-        {itinerary && enquiry && (
+        {loading ? (
+          <Spinner />
+        ) : (
           <ItineraryDetails key={id} itinerary={itinerary} enquiry={enquiry} />
         )}
       </div>

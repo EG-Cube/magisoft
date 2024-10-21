@@ -5,14 +5,16 @@ import axios from "axios";
 import UserDetails from "../../components/user/UserDetails";
 import { useParams } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import Spinner from "../../components/Spinner";
 
 const AdminUserDetailView = () => {
   const { user } = useAuthContext();
   const { id } = useParams();
-  
+
   const API_URL = process.env.REACT_APP_API_URL;
 
   const [userData, setUserData] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -23,6 +25,7 @@ const AdminUserDetailView = () => {
         },
       });
       setUserData(response.data);
+      setLoading(false);
     };
 
     fetchUser();
@@ -32,7 +35,7 @@ const AdminUserDetailView = () => {
   return (
     <div className="home">
       <div className="enquiries">
-        <UserDetails key={id} user={userData} />
+        {loading ? <Spinner /> : <UserDetails key={id} user={userData} />}
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import axios from "axios";
 // components
 import { useParams } from "react-router-dom";
 import TransportDetails from "../../components/transport/TransportDetails";
+import Spinner from "../../components/Spinner";
 
 const AdminTransportDetailView = () => {
   const { user } = useAuthContext();
@@ -13,6 +14,7 @@ const AdminTransportDetailView = () => {
   const API_URL = process.env.REACT_APP_API_URL;
 
   const [transport, setTransport] = useState();
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const fetchTransport = async () => {
@@ -25,7 +27,8 @@ const AdminTransportDetailView = () => {
           },
         }
       );
-      setTransport(response.data);
+      setTransport(response.data);setLoading(false)
+
     };
 
     if (user) {
@@ -34,10 +37,10 @@ const AdminTransportDetailView = () => {
   }, [user, id]);
 
   return (
-      <div className="home">
+      <div className="home">{loading ? <Spinner/> : 
         <div className="enquiries">
           {transport && <TransportDetails key={id} transport={transport} isAdmin={true}/>}
-        </div>
+        </div>}
       </div>
   );
 };

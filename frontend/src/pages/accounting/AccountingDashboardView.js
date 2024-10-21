@@ -9,6 +9,7 @@ import Sort from "../../components/accounting/Sort";
 import "../../styles/DashboardView.css";
 import Summary from "../../components/accounting/Summary";
 import EnquiryCard from "../../components/enquiry/EnquiryCard";
+import Spinner from "../../components/Spinner";
 
 const AccountingDashboardView = () => {
   const { itineraries, dispatch } = useItineraryContext();
@@ -17,6 +18,7 @@ const AccountingDashboardView = () => {
   const [filteredEnquiries, setFilteredEnquiries] = useState([]);
   const [filter, setFilter] = useState("");
   const [sortCriteria, setSortCriteria] = useState("Date");
+  const [loading, setLoading] = useState(true);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -57,6 +59,7 @@ const AccountingDashboardView = () => {
       if (response.ok) {
         enquiryDispatch({ type: "SET_ENQUIRIES", payload: json });
       }
+      setLoading(false);
     };
 
     if (user) {
@@ -93,28 +96,32 @@ const AccountingDashboardView = () => {
 
   return (
     <div className="home">
-      <div className="itineraries">
-        {itineraries && enquiries && (
-          <Summary itineraries={itineraries} enquiries={enquiries} />
-        )}
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="itineraries">
+          {itineraries && enquiries && (
+            <Summary itineraries={itineraries} enquiries={enquiries} />
+          )}
 
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        {filteredEnquiries
-          ?.sort((a, b) => a.createdAt < b.createdAt)
-          .map((enquiry) => (
-            <EnquiryCard
-              key={enquiry._id}
-              enquiry={enquiry}
-              redirectLink={"/accounting/enquiry/view/"}
-            />
-          ))}
-      </div>
+          <input
+            id="search"
+            type="text"
+            placeholder="Search"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          {filteredEnquiries
+            ?.sort((a, b) => a.createdAt < b.createdAt)
+            .map((enquiry) => (
+              <EnquiryCard
+                key={enquiry._id}
+                enquiry={enquiry}
+                redirectLink={"/accounting/enquiry/view/"}
+              />
+            ))}
+        </div>
+      )}
     </div>
   );
 };

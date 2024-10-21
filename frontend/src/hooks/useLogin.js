@@ -3,13 +3,13 @@ import { useAuthContext } from "./useAuthContext";
 
 export const useLogin = () => {
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(null);
+  const [loading, setLoading] = useState(null);
   const { dispatch } = useAuthContext();
   
   const API_URL = process.env.REACT_APP_API_URL;
 
   const login = async (email, password) => {
-    setIsLoading(true);
+    setLoading(true);
     setError(null);
 
     console.log("Login initiated")
@@ -22,7 +22,7 @@ export const useLogin = () => {
     const json = await response.json();
     console.log("Login : ",json)
     if (!response.ok) {
-      setIsLoading(false);
+      setLoading(false);
       setError(json.error);
     }
 
@@ -33,9 +33,9 @@ export const useLogin = () => {
       // update AuthContext
       dispatch({ type: "LOGIN", payload: json });
 
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  return { login, isLoading, error };
+  return { login, loading, error };
 };

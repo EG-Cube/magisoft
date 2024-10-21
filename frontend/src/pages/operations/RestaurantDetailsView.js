@@ -3,6 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import axios from "axios";
 import RestaurantDetails from "../../components/restaurant/RestaurantDetails";
 import { useParams } from "react-router-dom";
+import Spinner from "../../components/Spinner";
 
 const RestaurantDetailView = () => {
   const { user } = useAuthContext();
@@ -11,6 +12,7 @@ const RestaurantDetailView = () => {
   const API_URL = process.env.REACT_APP_API_URL;
 
   const [restaurant, setRestaurant] = useState();
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const fetchRestaurant = async () => {
@@ -23,6 +25,7 @@ const RestaurantDetailView = () => {
         }
       );
       setRestaurant(response.data);
+      setLoading(false);
     };
 
     if (user) {
@@ -33,7 +36,7 @@ const RestaurantDetailView = () => {
   return (
     <div className="home">
       <div className="restaurants">
-        {restaurant && <RestaurantDetails key={id} restaurant={restaurant} />}
+        {loading ? <Spinner/> : <RestaurantDetails key={id} restaurant={restaurant} />}
       </div>
     </div>
   );

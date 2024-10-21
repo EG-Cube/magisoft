@@ -5,13 +5,15 @@ import { useRestaurantContext } from "../../hooks/useRestaurantContext";
 // components
 import RestaurantCard from "../../components/restaurant/RestaurantCard";
 import Sort from "../../components/sales/Sort";
+import Spinner from "../../components/Spinner";
 
 const AdminRestaurantListView = ({ type }) => {
   const { restaurants, dispatch } = useRestaurantContext();
   const { user } = useAuthContext();
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [filter, setFilter] = useState("");
-  
+  const [loading, setLoading] = useState(true);
+
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
@@ -27,6 +29,7 @@ const AdminRestaurantListView = ({ type }) => {
       if (response.ok) {
         dispatch({ type: "SET_RESTAURANTS", payload: json });
       }
+      setLoading(false);
     };
 
     if (user) {
@@ -52,24 +55,35 @@ const AdminRestaurantListView = ({ type }) => {
   }, [filter, restaurants, type]);
 
   return (
-    <div className="home">
-      <h1>{type} Restaurants</h1>
-      <div className="restaurants">
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        {/* <Sort /> */}
-        {filteredRestaurants
-          ?.sort((a, b) => a.createdAt < b.createdAt)
-          .map((restaurant) => (
-            <RestaurantCard key={restaurant._id} restaurant={restaurant} isAdmin={true} redirectLink={"/admin/restaurant/view/"}/>
-          ))}
-      </div>
-    </div>
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="home">
+          <h1>{type} Restaurants</h1>
+          <div className="restaurants">
+            <input
+              id="search"
+              type="text"
+              placeholder="Search"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+            {/* <Sort /> */}
+            {filteredRestaurants
+              ?.sort((a, b) => a.createdAt < b.createdAt)
+              .map((restaurant) => (
+                <RestaurantCard
+                  key={restaurant._id}
+                  restaurant={restaurant}
+                  isAdmin={true}
+                  redirectLink={"/admin/restaurant/view/"}
+                />
+              ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -6,6 +6,7 @@ import { useUserContext } from "../../hooks/useUserContext";
 import UserCard from "../../components/user/UserCard";
 import Summary from "../../components/admin/Summary";
 import "../../styles/DashboardView.css";
+import Spinner from "../../components/Spinner";
 
 const AdminUserDashboardView = () => {
   const { users, dispatch } = useUserContext();
@@ -13,7 +14,8 @@ const AdminUserDashboardView = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [filter, setFilter] = useState("");
   const [sortCriteria, setSortCriteria] = useState("Date");
-  
+  const [loading, setLoading] = useState(true);
+
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
@@ -29,6 +31,7 @@ const AdminUserDashboardView = () => {
       if (response.ok) {
         dispatch({ type: "SET_USERS", payload: json });
       }
+      setLoading(false);
     };
 
     if (user) {
@@ -52,20 +55,24 @@ const AdminUserDashboardView = () => {
 
   return (
     <div className="home">
-      <div className="users">
-        <Summary users={users} />
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        {/* <Sort sortCriteria={sortCriteria} set /> */}
-        {filteredUsers?.map((user) => (
-          <UserCard key={user?._id} user={user} />
-        ))}
-      </div>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="users">
+          <Summary users={users} />
+          <input
+            id="search"
+            type="text"
+            placeholder="Search"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          {/* <Sort sortCriteria={sortCriteria} set /> */}
+          {filteredUsers?.map((user) => (
+            <UserCard key={user?._id} user={user} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

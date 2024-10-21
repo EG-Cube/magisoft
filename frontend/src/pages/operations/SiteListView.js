@@ -3,16 +3,17 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useSiteContext } from "../../hooks/useSiteContext";
 import { Link } from "react-router-dom";
 
-
 // components
 import SiteCard from "../../components/site/SiteCard";
 import Sort from "../../components/operations/Sort";
+import Spinner from "../../components/Spinner";
 
 const SiteListView = ({ type }) => {
   const { sites, dispatch } = useSiteContext();
   const { user } = useAuthContext();
   const [filteredSites, setFilteredSites] = useState([]);
   const [filter, setFilter] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -29,6 +30,7 @@ const SiteListView = ({ type }) => {
       if (response.ok) {
         dispatch({ type: "SET_SITES", payload: json });
       }
+      setLoading(false);
     };
 
     if (user) {
@@ -55,29 +57,35 @@ const SiteListView = ({ type }) => {
   }, [filter, sites, type]);
 
   return (
-    <div className="home">
-      <div className="row">
-        <h1>{type} Sites</h1>
-        <Link to="/operations/site/create" className="nav-button">
-          New Site
-        </Link>
-      </div>
-      <div className="sites">
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        {/* <Sort /> */}
-        {filteredSites
-          ?.sort((a, b) => a.createdAt < b.createdAt)
-          .map((site) => (
-            <SiteCard key={site?._id} site={site} />
-          ))}
-      </div>
-    </div>
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="home">
+          <div className="row">
+            <h1>{type} Sites</h1>
+            <Link to="/operations/site/create" className="nav-button">
+              New Site
+            </Link>
+          </div>
+          <div className="sites">
+            <input
+              id="search"
+              type="text"
+              placeholder="Search"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+            {/* <Sort /> */}
+            {filteredSites
+              ?.sort((a, b) => a.createdAt < b.createdAt)
+              .map((site) => (
+                <SiteCard key={site?._id} site={site} />
+              ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

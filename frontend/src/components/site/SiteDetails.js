@@ -12,6 +12,7 @@ import deleteBtn from "../../assets/delete.png";
 const SiteDetails = ({ site }) => {
   const { dispatch } = useSiteContext();
   const { user } = useAuthContext();
+
   const navigate = useNavigate();
 
   const API_URL = process.env.REACT_APP_API_URL;

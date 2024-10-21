@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { HotelContext } from "../../context/HotelContext";
 import "../../styles/form.css";
+import Spinner from "../Spinner";
 
 const HotelEditForm = ({ hotelID }) => {
   const { user } = useAuthContext();
@@ -31,6 +32,7 @@ const HotelEditForm = ({ hotelID }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchHotel = async () => {
@@ -40,11 +42,14 @@ const HotelEditForm = ({ hotelID }) => {
       }
 
       try {
+        setLoading(true);
+
         const response = await axios.get(`${API_URL}/api/hotel/${hotelID}`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
         });
+        setLoading(false);
 
         setFormData(response.data);
       } catch (error) {
@@ -59,8 +64,12 @@ const HotelEditForm = ({ hotelID }) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
-    if (name.includes("availableRoomTypes") || name.includes("availableMealPlans") || name.includes("amenities")) {
-      const [key, index] = name.split('.');
+    if (
+      name.includes("availableRoomTypes") ||
+      name.includes("availableMealPlans") ||
+      name.includes("amenities")
+    ) {
+      const [key, index] = name.split(".");
       const updatedArray = [...formData[key]];
       updatedArray[index] = newValue;
       setFormData((prevFormData) => ({
@@ -121,7 +130,11 @@ const HotelEditForm = ({ hotelID }) => {
       "availableMealPlans",
     ];
 
-    const missingFields = requiredFields.filter((field) => !formData[field] || (Array.isArray(formData[field]) && formData[field].length === 0));
+    const missingFields = requiredFields.filter(
+      (field) =>
+        !formData[field] ||
+        (Array.isArray(formData[field]) && formData[field].length === 0)
+    );
 
     if (missingFields.length > 0) {
       setEmptyFields(missingFields);
@@ -155,206 +168,230 @@ const HotelEditForm = ({ hotelID }) => {
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <h3>Edit Hotel</h3>
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <form className="form" onSubmit={handleSubmit}>
+          <h3>Edit Hotel</h3>
 
-      <div className="row">
-        <div>
-          <label>Name:</label>
-          <input
-            type="text"
-            name="name"
-            onChange={handleChange}
-            value={formData?.name}
-            className={emptyFields.includes("name") ? "error" : ""}
-          />
-        </div>
-      </div>
-      <div className="row">
-        <div>
-          <label>Address:</label>
-          <input
-            type="text"
-            name="address"
-            onChange={handleChange}
-            value={formData?.address}
-            className={emptyFields.includes("address") ? "error" : ""}
-          />
-        </div>
+          <div className="row">
+            <div>
+              <label>Name:</label>
+              <input
+                type="text"
+                name="name"
+                onChange={handleChange}
+                value={formData?.name}
+                className={emptyFields.includes("name") ? "error" : ""}
+              />
+            </div>
+          </div>
+          <div className="row">
+            <div>
+              <label>Address:</label>
+              <input
+                type="text"
+                name="address"
+                onChange={handleChange}
+                value={formData?.address}
+                className={emptyFields.includes("address") ? "error" : ""}
+              />
+            </div>
 
-        <div>
-          <label>City:</label>
-          <input
-            type="text"
-            name="city"
-            onChange={handleChange}
-            value={formData?.city}
-            className={emptyFields.includes("city") ? "error" : ""}
-          />
-        </div>
-      </div>
-      <div className="row">
-        <div>
-          <label>State:</label>
-          <input
-            type="text"
-            name="state"
-            onChange={handleChange}
-            value={formData?.state}
-            className={emptyFields.includes("state") ? "error" : ""}
-          />
-        </div>
-        <div>
-          <label>Country:</label>
-          <input
-            type="text"
-            name="country"
-            onChange={handleChange}
-            value={formData?.country}
-            className={emptyFields.includes("country") ? "error" : ""}
-          />
-        </div>
-      </div>
-      <div>
-        <label>Pincode:</label>
-        <input
-          type="text"
-          name="pincode"
-          onChange={handleChange}
-          value={formData?.pincode}
-          className={emptyFields.includes("pincode") ? "error" : ""}
-        />
-      </div>
-      <div>
-        <label>Star Rating:</label>
-        <input
-          type="number"
-          name="starRating"
-          onChange={handleChange}
-          value={formData?.starRating}
-          min="1"
-          max="5"
-          className={emptyFields.includes("starRating") ? "error" : ""}
-        />
-      </div>
-      <div>
-        <label>Contact Number:</label>
-        <input
-          type="text"
-          name="contactNumber"
-          onChange={handleChange}
-          value={formData?.contactNumber}
-          className={emptyFields.includes("contactNumber") ? "error" : ""}
-        />
-      </div>
-      <div>
-        <label>Email:</label>
-        <input
-          type="email"
-          name="email"
-          onChange={handleChange}
-          value={formData?.email}
-          className={emptyFields.includes("email") ? "error" : ""}
-        />
-      </div>
-      <div>
-        <label>Website:</label>
-        <input
-          type="text"
-          name="website"
-          onChange={handleChange}
-          value={formData?.website}
-        />
-      </div>
-      <div>
-        <label>Available Room Types:</label>
-        {formData?.availableRoomTypes?.map((item, index) => (
-          <div key={index} className="destination-field">
+            <div>
+              <label>City:</label>
+              <input
+                type="text"
+                name="city"
+                onChange={handleChange}
+                value={formData?.city}
+                className={emptyFields.includes("city") ? "error" : ""}
+              />
+            </div>
+          </div>
+          <div className="row">
+            <div>
+              <label>State:</label>
+              <input
+                type="text"
+                name="state"
+                onChange={handleChange}
+                value={formData?.state}
+                className={emptyFields.includes("state") ? "error" : ""}
+              />
+            </div>
+            <div>
+              <label>Country:</label>
+              <input
+                type="text"
+                name="country"
+                onChange={handleChange}
+                value={formData?.country}
+                className={emptyFields.includes("country") ? "error" : ""}
+              />
+            </div>
+          </div>
+          <div>
+            <label>Pincode:</label>
             <input
               type="text"
-              value={item}
-              onChange={(e) => handleArrayChange('availableRoomTypes', index, e.target.value)}
-              className={emptyFields.includes("availableRoomTypes") ? "error" : ""}
+              name="pincode"
+              onChange={handleChange}
+              value={formData?.pincode}
+              className={emptyFields.includes("pincode") ? "error" : ""}
             />
-            <button
-              className="removeBtn"
-              type="button"
-              onClick={() => handleRemoveItem('availableRoomTypes', index)}
-            >
-              Remove
-            </button>
           </div>
-        ))}
-        <button
-          className="addFacilityBtn"
-          type="button"
-          style={{ marginBottom: "20px" }}
-          onClick={() => handleAddItem('availableRoomTypes')}
-        >
-          Add Room Type
-        </button>
-      </div>
-      <div>
-        <label>Available Meal Plans:</label>
-        {formData?.availableMealPlans?.map((item, index) => (
-          <div key={index} className="destination-field">
+          <div>
+            <label>Star Rating:</label>
+            <input
+              type="number"
+              name="starRating"
+              onChange={handleChange}
+              value={formData?.starRating}
+              min="1"
+              max="5"
+              className={emptyFields.includes("starRating") ? "error" : ""}
+            />
+          </div>
+          <div>
+            <label>Contact Number:</label>
             <input
               type="text"
-              value={item}
-              onChange={(e) => handleArrayChange('availableMealPlans', index, e.target.value)}
-              className={emptyFields.includes("availableMealPlans") ? "error" : ""}
+              name="contactNumber"
+              onChange={handleChange}
+              value={formData?.contactNumber}
+              className={emptyFields.includes("contactNumber") ? "error" : ""}
             />
-            <button
-              className="removeBtn"
-              type="button"
-              onClick={() => handleRemoveItem('availableMealPlans', index)}
-            >
-              Remove
-            </button>
           </div>
-        ))}
-        <button
-          className="addFacilityBtn"
-          type="button"
-          style={{ marginBottom: "20px" }}
-          onClick={() => handleAddItem('availableMealPlans')}
-        >
-          Add Meal Plan
-        </button>
-      </div>
-      <div>
-        <label>Amenities:</label>
-        {formData?.amenities?.map((item, index) => (
-          <div key={index} className="destination-field">
+          <div>
+            <label>Email:</label>
+            <input
+              type="email"
+              name="email"
+              onChange={handleChange}
+              value={formData?.email}
+              className={emptyFields.includes("email") ? "error" : ""}
+            />
+          </div>
+          <div>
+            <label>Website:</label>
             <input
               type="text"
-              value={item}
-              onChange={(e) => handleArrayChange('amenities', index, e.target.value)}
-              className={emptyFields.includes("amenities") ? "error" : ""}
+              name="website"
+              onChange={handleChange}
+              value={formData?.website}
             />
+          </div>
+          <div>
+            <label>Available Room Types:</label>
+            {formData?.availableRoomTypes?.map((item, index) => (
+              <div key={index} className="destination-field">
+                <input
+                  type="text"
+                  value={item}
+                  onChange={(e) =>
+                    handleArrayChange(
+                      "availableRoomTypes",
+                      index,
+                      e.target.value
+                    )
+                  }
+                  className={
+                    emptyFields.includes("availableRoomTypes") ? "error" : ""
+                  }
+                />
+                <button
+                  className="removeBtn"
+                  type="button"
+                  onClick={() => handleRemoveItem("availableRoomTypes", index)}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
             <button
-              className="removeBtn"
+              className="addFacilityBtn"
               type="button"
-              onClick={() => handleRemoveItem('amenities', index)}
+              style={{ marginBottom: "20px" }}
+              onClick={() => handleAddItem("availableRoomTypes")}
             >
-              Remove
+              Add Room Type
             </button>
           </div>
-        ))}
-        <button
-          className="addFacilityBtn"
-          type="button"
-          style={{ marginBottom: "20px" }}
-          onClick={() => handleAddItem('amenities')}
-        >
-          Add Amenity
-        </button>
-      </div>
-      <div className="submitBtn">
-        <button type="submit">Update Hotel</button>
-      </div>
-      {error && <div className="error">{error}</div>}
-    </form>
+          <div>
+            <label>Available Meal Plans:</label>
+            {formData?.availableMealPlans?.map((item, index) => (
+              <div key={index} className="destination-field">
+                <input
+                  type="text"
+                  value={item}
+                  onChange={(e) =>
+                    handleArrayChange(
+                      "availableMealPlans",
+                      index,
+                      e.target.value
+                    )
+                  }
+                  className={
+                    emptyFields.includes("availableMealPlans") ? "error" : ""
+                  }
+                />
+                <button
+                  className="removeBtn"
+                  type="button"
+                  onClick={() => handleRemoveItem("availableMealPlans", index)}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              className="addFacilityBtn"
+              type="button"
+              style={{ marginBottom: "20px" }}
+              onClick={() => handleAddItem("availableMealPlans")}
+            >
+              Add Meal Plan
+            </button>
+          </div>
+          <div>
+            <label>Amenities:</label>
+            {formData?.amenities?.map((item, index) => (
+              <div key={index} className="destination-field">
+                <input
+                  type="text"
+                  value={item}
+                  onChange={(e) =>
+                    handleArrayChange("amenities", index, e.target.value)
+                  }
+                  className={emptyFields.includes("amenities") ? "error" : ""}
+                />
+                <button
+                  className="removeBtn"
+                  type="button"
+                  onClick={() => handleRemoveItem("amenities", index)}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              className="addFacilityBtn"
+              type="button"
+              style={{ marginBottom: "20px" }}
+              onClick={() => handleAddItem("amenities")}
+            >
+              Add Amenity
+            </button>
+          </div>
+          <div className="submitBtn">
+            <button type="submit">Update Hotel</button>
+          </div>
+          {error && <div className="error">{error}</div>}
+        </form>
+      )}
+    </>
   );
 };
 

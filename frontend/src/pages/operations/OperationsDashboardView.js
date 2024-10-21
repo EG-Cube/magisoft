@@ -9,6 +9,7 @@ import Sort from "../../components/operations/Sort";
 import "../../styles/DashboardView.css";
 import Summary from "../../components/operations/Summary";
 import EnquiryCard from "../../components/enquiry/EnquiryCard";
+import Spinner from "../../components/Spinner";
 
 const OperationsDashboardView = () => {
   const { itineraries, dispatch } = useItineraryContext();
@@ -17,6 +18,7 @@ const OperationsDashboardView = () => {
   const [filteredEnquiries, setFilteredEnquiries] = useState([]);
   const [filter, setFilter] = useState("");
   const [sortCriteria, setSortCriteria] = useState("Date");
+  const [loading, setLoading] = useState(true);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -38,6 +40,7 @@ const OperationsDashboardView = () => {
       if (response.ok) {
         dispatch({ type: "SET_ITINERARIES", payload: json });
       }
+      setLoading(false);
     };
 
     const fetchEnquiries = async () => {
@@ -92,30 +95,36 @@ const OperationsDashboardView = () => {
   }, [filter, enquiries]);
 
   return (
-    <div className="home">
-      <div className="itineraries">
-        {itineraries && enquiries && (
-          <Summary itineraries={itineraries} enquiries={enquiries} />
-        )}
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="home">
+          <div className="itineraries">
+            {itineraries && enquiries && (
+              <Summary itineraries={itineraries} enquiries={enquiries} />
+            )}
 
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        {filteredEnquiries
-          ?.sort((a, b) => a.createdAt < b.createdAt)
-          .map((enquiry) => (
-            <EnquiryCard
-              key={enquiry._id}
-              enquiry={enquiry}
-              redirectLink={"/operations/enquiry/view/"}
+            <input
+              id="search"
+              type="text"
+              placeholder="Search"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
             />
-          ))}
-      </div>
-    </div>
+            {filteredEnquiries
+              ?.sort((a, b) => a.createdAt < b.createdAt)
+              .map((enquiry) => (
+                <EnquiryCard
+                  key={enquiry._id}
+                  enquiry={enquiry}
+                  redirectLink={"/operations/enquiry/view/"}
+                />
+              ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

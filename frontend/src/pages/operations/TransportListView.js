@@ -6,12 +6,14 @@ import { Link } from "react-router-dom";
 // components
 import TransportCard from "../../components/transport/TransportCard";
 import Sort from "../../components/operations/Sort";
+import Spinner from "../../components/Spinner";
 
 const TransportListView = ({ type }) => {
   const { transports, dispatch } = useTransportContext();
   const { user } = useAuthContext();
   const [filteredTransports, setFilteredTransports] = useState([]);
   const [filter, setFilter] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -28,6 +30,7 @@ const TransportListView = ({ type }) => {
       if (response.ok) {
         dispatch({ type: "SET_TRANSPORTS", payload: json });
       }
+      setLoading(false);
     };
 
     if (user) {
@@ -56,28 +59,34 @@ const TransportListView = ({ type }) => {
 
   return (
     <div className="home">
-      <div className="row">
-        <h1>{type} Transports</h1>
-        <Link to="/operations/transport/create" className="nav-button">
-          New Transport
-        </Link>
-      </div>
-      
-      <div className="transports">
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        {/* <Sort /> */}
-        {filteredTransports
-          ?.sort((a, b) => a.createdAt < b.createdAt)
-          .map((transport) => (
-            <TransportCard key={transport?._id} transport={transport} />
-          ))}
-      </div>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          <div className="row">
+            <h1>{type} Transports</h1>
+            <Link to="/operations/transport/create" className="nav-button">
+              New Transport
+            </Link>
+          </div>
+
+          <div className="transports">
+            <input
+              id="search"
+              type="text"
+              placeholder="Search"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+            {/* <Sort /> */}
+            {filteredTransports
+              ?.sort((a, b) => a.createdAt < b.createdAt)
+              .map((transport) => (
+                <TransportCard key={transport?._id} transport={transport} />
+              ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

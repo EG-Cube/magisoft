@@ -11,7 +11,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const { signup, error, isLoading } = useSignup();
+  const { signup, error, loading } = useSignup();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,7 +80,7 @@ const Signup = () => {
           />
         </div>
       </div>
-      <button type="submit" disabled={isLoading}>
+      <button type="submit" disabled={loading}>
         Signup
       </button>
       {error && <div className="error">{error}</div>}

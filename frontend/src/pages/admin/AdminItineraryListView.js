@@ -5,13 +5,15 @@ import { useItineraryContext } from "../../hooks/useItineraryContext";
 // components
 import ItineraryCard from "../../components/itinerary/ItineraryCard";
 import Sort from "../../components/sales/Sort";
+import Spinner from "../../components/Spinner";
 
 const AdminItineraryListView = ({ type }) => {
   const { itineraries, dispatch } = useItineraryContext();
   const { user } = useAuthContext();
   const [filteredItineraries, setFilteredItineraries] = useState([]);
   const [filter, setFilter] = useState("");
-  
+  const [loading, setLoading] = useState(true);
+
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
@@ -27,6 +29,7 @@ const AdminItineraryListView = ({ type }) => {
       if (response.ok) {
         dispatch({ type: "SET_ENQUIRIES", payload: json });
       }
+      setLoading(false);
     };
 
     if (user) {
@@ -64,21 +67,30 @@ const AdminItineraryListView = ({ type }) => {
   return (
     <div className="home">
       <h1>{type} Itineraries</h1>
-      <div className="itineraries">
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        {/* <Sort /> */}
-        {filteredItineraries
-          ?.sort((a, b) => a.createdAt < b.createdAt)
-          .map((itinerary) => (
-            <ItineraryCard key={itinerary._id} itinerary={itinerary} isAdmin={true} redirectLink={"/admin/itinerary/view/"}/>
-          ))}
-      </div>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="itineraries">
+          <input
+            id="search"
+            type="text"
+            placeholder="Search"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          {/* <Sort /> */}
+          {filteredItineraries
+            ?.sort((a, b) => a.createdAt < b.createdAt)
+            .map((itinerary) => (
+              <ItineraryCard
+                key={itinerary._id}
+                itinerary={itinerary}
+                isAdmin={true}
+                redirectLink={"/admin/itinerary/view/"}
+              />
+            ))}
+        </div>
+      )}
     </div>
   );
 };

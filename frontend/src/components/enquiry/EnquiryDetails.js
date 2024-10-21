@@ -13,6 +13,7 @@ import editBtn from "../../assets/edit.png";
 import archiveBtn from "../../assets/archive.png";
 import deleteBtn from "../../assets/delete.png";
 import viewBtn from "../../assets/view.png";
+import Spinner from "../Spinner";
 
 const EnquiryDetails = ({ enquiry, isAdmin, type, minimal = false }) => {
   const { dispatch } = useEnquiryContext();
@@ -24,7 +25,7 @@ const EnquiryDetails = ({ enquiry, isAdmin, type, minimal = false }) => {
   const [isAllocatingOperations, setIsAllocatingOperations] = useState(false);
   const [isAllocatingAccounting, setIsAllocatingAccounting] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -48,6 +49,7 @@ const EnquiryDetails = ({ enquiry, isAdmin, type, minimal = false }) => {
         },
       });
       const json = await response.json();
+      setLoading(false);
 
       if (response.ok) {
         userDispatch({ type: "SET_USERS", payload: json });
@@ -67,7 +69,7 @@ const EnquiryDetails = ({ enquiry, isAdmin, type, minimal = false }) => {
         itineraryDispatch({ type: "SET_ITINERARIES", payload: json });
       }
     };
-
+    setLoading(true);
     fetchItineraries();
     fetchUsers();
   }, [API_URL, user.token, userDispatch]);
@@ -164,7 +166,7 @@ const EnquiryDetails = ({ enquiry, isAdmin, type, minimal = false }) => {
     const selectedUserId = e.target.value;
     const roleField = `${role}To`;
 
-    setIsLoading(true);
+    setLoading(true);
 
     try {
       const response = await axios.patch(
@@ -193,6 +195,7 @@ const EnquiryDetails = ({ enquiry, isAdmin, type, minimal = false }) => {
           break;
       }
       dispatch({ type: "UPDATE_ENQUIRY", payload: updatedEnquiry });
+      setLoading(false)
       navigate("/admin/enquiry/dashboard/");
     } catch (error) {
       console.error(`Failed to allocate ${role}`, error);
@@ -207,7 +210,9 @@ const EnquiryDetails = ({ enquiry, isAdmin, type, minimal = false }) => {
 
   return (
     <>
-      {enquiry && (
+      {loading ? (
+        <Spinner />
+      ) : (
         <div className="enquiry-details">
           {!minimal && (
             <div className="enquiry-header">

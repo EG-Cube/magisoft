@@ -5,13 +5,15 @@ import { useTransportContext } from "../../hooks/useTransportContext";
 // components
 import TransportCard from "../../components/transport/TransportCard";
 import Sort from "../../components/sales/Sort";
+import Spinner from "../../components/Spinner";
 
 const AdminTransportListView = ({ type }) => {
   const { transports, dispatch } = useTransportContext();
   const { user } = useAuthContext();
   const [filteredTransports, setFilteredTransports] = useState([]);
   const [filter, setFilter] = useState("");
-  
+  const [loading, setLoading] = useState(true);
+
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
@@ -27,6 +29,7 @@ const AdminTransportListView = ({ type }) => {
       if (response.ok) {
         dispatch({ type: "SET_ENQUIRIES", payload: json });
       }
+      setLoading(false);
     };
 
     if (user) {
@@ -54,24 +57,35 @@ const AdminTransportListView = ({ type }) => {
   }, [filter, transports, type]);
 
   return (
-    <div className="home">
-      <h1>{type} Transports</h1>
-      <div className="transports">
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        {/* <Sort /> */}
-        {filteredTransports
-          ?.sort((a, b) => a.createdAt < b.createdAt)
-          .map((transport) => (
-            <TransportCard key={transport._id} transport={transport} isAdmin={true} redirectLink={"/admin/transport/view/"}/>
-          ))}
-      </div>
-    </div>
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="home">
+          <h1>{type} Transports</h1>
+          <div className="transports">
+            <input
+              id="search"
+              type="text"
+              placeholder="Search"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+            {/* <Sort /> */}
+            {filteredTransports
+              ?.sort((a, b) => a.createdAt < b.createdAt)
+              .map((transport) => (
+                <TransportCard
+                  key={transport._id}
+                  transport={transport}
+                  isAdmin={true}
+                  redirectLink={"/admin/transport/view/"}
+                />
+              ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -20,7 +20,7 @@ const ItineraryEditForm = ({ enquiry }) => {
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -99,15 +99,14 @@ const ItineraryEditForm = ({ enquiry }) => {
         if (hotelsResponse.ok) setHotels(hotelsData);
         if (transportsResponse.ok) setTransports(transportsData);
         if (restaurantsResponse.ok) setRestaurants(restaurantsData);
+        setLoading(false)
       } catch (err) {
         console.log(err)
         setError("Failed to fetch data ");
       }
     };
 
-    setIsLoading(true)
     fetchData();
-    setIsLoading(false)
   }, [user]);
 
   const handleChange = (e) => {
@@ -332,7 +331,7 @@ const ItineraryEditForm = ({ enquiry }) => {
     }
   };
 
-  // if (!isLoading) {
+  // if (!loading) {
   //   return <div>Loading...</div>;
   // }
 

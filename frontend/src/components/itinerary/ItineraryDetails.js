@@ -10,6 +10,7 @@ import "react-tabs/style/react-tabs.css";
 import EnquiryCard from "../enquiry/EnquiryCard";
 import EnquiryDetails from "../enquiry/EnquiryDetails";
 import * as XLSX from "xlsx"; // Import xlsx library
+import Spinner from "../Spinner";
 
 const ItineraryDetails = ({ itinerary, enquiry }) => {
   const { user } = useAuthContext();
@@ -22,6 +23,7 @@ const ItineraryDetails = ({ itinerary, enquiry }) => {
   const [transports, setTransports] = useState([]);
   const [restaurants, setRestaurants] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,6 +32,7 @@ const ItineraryDetails = ({ itinerary, enquiry }) => {
         return;
       }
       try {
+
         const [
           sitesResponse,
           hotelsResponse,
@@ -62,10 +65,12 @@ const ItineraryDetails = ({ itinerary, enquiry }) => {
         if (hotelsResponse.ok) setHotels(hotelsData);
         if (transportsResponse.ok) setTransports(transportsData);
         if (restaurantsResponse.ok) setRestaurants(restaurantsData);
+        setLoading(false);
       } catch (err) {
         setError("Failed to fetch data");
       }
     };
+  
     fetchData();
   }, [user, API_URL]);
 
@@ -201,78 +206,86 @@ const ItineraryDetails = ({ itinerary, enquiry }) => {
   };
 
   return (
-    <div className="itinerary-details">
-      <div className="main-container">
-        <div className="package-container">
-          <div className="package-name">{itinerary?.name}</div>
-          <div className="package-description">{itinerary?.description}</div>
-        </div>
-        <div className="enquiry-container">
-          {/* <h1>Enquiry Details</h1> */}
-          {enquiry && (
-            <EnquiryDetails key={enquiry._id} enquiry={enquiry} minimal />
-          )}
-        </div>
-      </div>
-      <Tabs className="tabs-container">
-        <TabList className="tabs-header">
-          {itinerary?.days?.map((day, index) => (
-            <Tab key={index} className="tab">
-              Day {day.day}
-            </Tab>
-          ))}
-        </TabList>
-        {itinerary?.days?.map((day, index) => (
-          <TabPanel key={index} className="tab-panel">
-            <div className="events">{formatEvents(day.events)}</div>
-          </TabPanel>
-        ))}
-      </Tabs>
-      <div className="inclusions-exclusions">
-        <div>
-          <div>Inclusions:</div>
-          <ul>
-            {itinerary?.inclusions?.map((item, index) => (
-              <li key={`inc-${index}`}>{item}</li>
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="itinerary-details">
+          <div className="main-container">
+            <div className="package-container">
+              <div className="package-name">{itinerary?.name}</div>
+              <div className="package-description">
+                {itinerary?.description}
+              </div>
+            </div>
+            <div className="enquiry-container">
+              {/* <h1>Enquiry Details</h1> */}
+              {enquiry && (
+                <EnquiryDetails key={enquiry._id} enquiry={enquiry} minimal />
+              )}
+            </div>
+          </div>
+          <Tabs className="tabs-container">
+            <TabList className="tabs-header">
+              {itinerary?.days?.map((day, index) => (
+                <Tab key={index} className="tab">
+                  Day {day.day}
+                </Tab>
+              ))}
+            </TabList>
+            {itinerary?.days?.map((day, index) => (
+              <TabPanel key={index} className="tab-panel">
+                <div className="events">{formatEvents(day.events)}</div>
+              </TabPanel>
             ))}
-          </ul>
+          </Tabs>
+          <div className="inclusions-exclusions">
+            <div>
+              <div>Inclusions:</div>
+              <ul>
+                {itinerary?.inclusions?.map((item, index) => (
+                  <li key={`inc-${index}`}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <div>Exclusions:</div>
+              <ul>
+                {itinerary?.exclusions?.map((item, index) => (
+                  <li key={`exc-${index}`}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="tandcs-disclaimers">
+            <div>
+              <div>Terms & Conditions:</div>
+              <ul>
+                {itinerary?.tandcs?.map((item, index) => (
+                  <li key={`tac-${index}`}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <div>Disclaimer:</div>
+              <ul>
+                {itinerary?.disclaimers?.map((item, index) => (
+                  <li key={`dis-${index}`}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="actions">
+            <button className="edit-btn" onClick={handleEdit}>
+              <img src={editBtn} alt="Edit" />
+            </button>
+            <button className="delete-btn" onClick={handleDelete}>
+              <img src={deleteBtn} alt="Delete" />
+            </button>
+          </div>
         </div>
-        <div>
-          <div>Exclusions:</div>
-          <ul>
-            {itinerary?.exclusions?.map((item, index) => (
-              <li key={`exc-${index}`}>{item}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div className="tandcs-disclaimers">
-        <div>
-          <div>Terms & Conditions:</div>
-          <ul>
-            {itinerary?.tandcs?.map((item, index) => (
-              <li key={`tac-${index}`}>{item}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <div>Disclaimer:</div>
-          <ul>
-            {itinerary?.disclaimers?.map((item, index) => (
-              <li key={`dis-${index}`}>{item}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div className="actions">
-        <button className="edit-btn" onClick={handleEdit}>
-          <img src={editBtn} alt="Edit" />
-        </button>
-        <button className="delete-btn" onClick={handleDelete}>
-          <img src={deleteBtn} alt="Delete" />
-        </button>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

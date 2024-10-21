@@ -3,6 +3,7 @@ import ItineraryCreateForm from "../../components/itinerary/ItineraryCreateForm"
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Spinner from "../../components/Spinner";
 
 const ItineraryCreateView = () => {
   const { user } = useAuthContext();
@@ -11,6 +12,7 @@ const ItineraryCreateView = () => {
   const API_URL = process.env.REACT_APP_API_URL;
 
   const [enquiry, setEnquiry] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchEnquiry = async () => {
@@ -21,6 +23,7 @@ const ItineraryCreateView = () => {
         },
       });
       setEnquiry(response.data);
+      setLoading(false);
     };
 
     if (user) {
@@ -28,7 +31,9 @@ const ItineraryCreateView = () => {
     }
   }, [user, id]);
 
-  return <ItineraryCreateForm enquiry={enquiry} />;
+  return (
+    <>{loading ? <Spinner /> : <ItineraryCreateForm enquiry={enquiry} />}</>
+  );
 };
 
 export default ItineraryCreateView;

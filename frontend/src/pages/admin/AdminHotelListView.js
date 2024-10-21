@@ -5,12 +5,14 @@ import { useHotelContext } from "../../hooks/useHotelContext";
 // components
 import HotelCard from "../../components/hotel/HotelCard";
 import Sort from "../../components/sales/Sort";
+import Spinner from "../../components/Spinner";
 
 const AdminHotelListView = () => {
   const { hotels, dispatch } = useHotelContext();
   const { user } = useAuthContext();
   const [filteredHotels, setFilteredHotels] = useState([]);
   const [filter, setFilter] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -27,6 +29,7 @@ const AdminHotelListView = () => {
       if (response.ok) {
         dispatch({ type: "SET_HOTELS", payload: json });
       }
+      setLoading(false);
     };
 
     if (user) {
@@ -45,8 +48,14 @@ const AdminHotelListView = () => {
           hotel?.state.toLowerCase().includes(filterLower) ||
           hotel?.country.toLowerCase().includes(filterLower) ||
           hotel?.pincode.toLowerCase().includes(filterLower) ||
-          hotel?.availableRoomTypes.join(", ").toLowerCase().includes(filterLower) ||
-          hotel?.availableMealPlans.join(", ").toLowerCase().includes(filterLower)
+          hotel?.availableRoomTypes
+            .join(", ")
+            .toLowerCase()
+            .includes(filterLower) ||
+          hotel?.availableMealPlans
+            .join(", ")
+            .toLowerCase()
+            .includes(filterLower)
         );
       })
     );
@@ -55,26 +64,30 @@ const AdminHotelListView = () => {
   return (
     <div className="home">
       <h1>Hotels</h1>
-      <div className="hotels">
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        {/* <Sort /> */}
-        {filteredHotels
-          ?.sort((a, b) => a.createdAt < b.createdAt)
-          .map((hotel) => (
-            <HotelCard
-              key={hotel?._id}
-              hotel={hotel}
-              // isAdmin={true}
-              // redirectLink={"/admin/hotel/view/"}
-            />
-          ))}
-      </div>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="hotels">
+          <input
+            id="search"
+            type="text"
+            placeholder="Search"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          {/* <Sort /> */}
+          {filteredHotels
+            ?.sort((a, b) => a.createdAt < b.createdAt)
+            .map((hotel) => (
+              <HotelCard
+                key={hotel?._id}
+                hotel={hotel}
+                // isAdmin={true}
+                // redirectLink={"/admin/hotel/view/"}
+              />
+            ))}
+        </div>
+      )}
     </div>
   );
 };

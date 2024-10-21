@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../../context/UserContext";
 import "../../styles/form.css";
+import Spinner from "../Spinner";
 
 const EditUserForm = ({ userID }) => {
   const { user: admin } = useAuthContext();
@@ -23,7 +24,8 @@ const EditUserForm = ({ userID }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
-  
+  const [loading, setLoading] = useState(true);
+
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
@@ -45,6 +47,7 @@ const EditUserForm = ({ userID }) => {
           ...initialFormData,
           ...response.data,
         });
+        setLoading(false);
       } catch (error) {
         setError(error.response?.data?.error || "An error occurred");
       }
@@ -118,12 +121,16 @@ const EditUserForm = ({ userID }) => {
     }
 
     try {
-      const response = await axios.patch(`${API_URL}/api/user/${userID}`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${admin.token}`,
-        },
-      });
+      const response = await axios.patch(
+        `${API_URL}/api/user/${userID}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${admin.token}`,
+          },
+        }
+      );
 
       setError(null);
       setEmptyFields([]);
@@ -139,115 +146,123 @@ const EditUserForm = ({ userID }) => {
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <h3>Edit User</h3>
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <form className="form" onSubmit={handleSubmit}>
+          <h3>Edit User</h3>
 
-      <div className="row">
-        <div>
-          <label>First Name:</label>
-          <input
-            type="text"
-            name="firstName"
-            onChange={handleChange}
-            value={formData.firstName || ""}
-            className={emptyFields.includes("firstName") ? "error" : ""}
-          />
-        </div>
-
-        <div>
-          <label>Last Name:</label>
-          <input
-            type="text"
-            name="lastName"
-            onChange={handleChange}
-            value={formData.lastName || ""}
-            className={emptyFields.includes("lastName") ? "error" : ""}
-          />
-        </div>
-      </div>
-
-      <div className="row">
-        <div>
-          <label>Country:</label>
-          <input
-            type="text"
-            name="country"
-            onChange={handleChange}
-            value={formData.country || ""}
-            className={emptyFields.includes("country") ? "error" : ""}
-          />
-        </div>
-
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            onChange={handleChange}
-            value={formData.email || ""}
-            className={emptyFields.includes("email") ? "error" : ""}
-          />
-        </div>
-      </div>
-      <div>
-        <label>Roles:</label>
-        {formData.roles &&
-          formData.roles.map((item, index) => (
-            <div key={index} className="destination-field">
+          <div className="row">
+            <div>
+              <label>First Name:</label>
               <input
                 type="text"
-                value={item}
-                onChange={(e) => handleRoleChange(index, e.target.value)}
-                className={emptyFields.includes("roles") ? "error" : ""}
+                name="firstName"
+                onChange={handleChange}
+                value={formData.firstName || ""}
+                className={emptyFields.includes("firstName") ? "error" : ""}
               />
-              <button
-                className="removeBtn"
-                type="button"
-                onClick={() => handleRemoveRole(index)}
-              >
-                Remove
-              </button>
             </div>
-          ))}
-        <button
-          className="addRoleBtn"
-          type="button"
-          style={{ marginBottom: "20px" }}
-          onClick={handleAddRole}
-        >
-          Add Role
-        </button>
-      </div>
 
-      <div className="row">
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password"
-            onChange={handleChange}
-            value={formData.password || ""}
-            className={emptyFields.includes("password") ? "error" : ""}
-          />
-        </div>
+            <div>
+              <label>Last Name:</label>
+              <input
+                type="text"
+                name="lastName"
+                onChange={handleChange}
+                value={formData.lastName || ""}
+                className={emptyFields.includes("lastName") ? "error" : ""}
+              />
+            </div>
+          </div>
 
-        <div>
-          <label>Confirm Password:</label>
-          <input
-            type="password"
-            name="confirmPassword"
-            onChange={handleChange}
-            value={formData.confirmPassword || ""}
-            className={emptyFields.includes("confirmPassword") ? "error" : ""}
-          />
-        </div>
-      </div>
+          <div className="row">
+            <div>
+              <label>Country:</label>
+              <input
+                type="text"
+                name="country"
+                onChange={handleChange}
+                value={formData.country || ""}
+                className={emptyFields.includes("country") ? "error" : ""}
+              />
+            </div>
 
-      <div className="submitBtn">
-        <button type="submit">Update User</button>
-      </div>
-      {error && <div className="error">{error}</div>}
-    </form>
+            <div>
+              <label>Email:</label>
+              <input
+                type="email"
+                name="email"
+                onChange={handleChange}
+                value={formData.email || ""}
+                className={emptyFields.includes("email") ? "error" : ""}
+              />
+            </div>
+          </div>
+          <div>
+            <label>Roles:</label>
+            {formData.roles &&
+              formData.roles.map((item, index) => (
+                <div key={index} className="destination-field">
+                  <input
+                    type="text"
+                    value={item}
+                    onChange={(e) => handleRoleChange(index, e.target.value)}
+                    className={emptyFields.includes("roles") ? "error" : ""}
+                  />
+                  <button
+                    className="removeBtn"
+                    type="button"
+                    onClick={() => handleRemoveRole(index)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            <button
+              className="addRoleBtn"
+              type="button"
+              style={{ marginBottom: "20px" }}
+              onClick={handleAddRole}
+            >
+              Add Role
+            </button>
+          </div>
+
+          <div className="row">
+            <div>
+              <label>Password:</label>
+              <input
+                type="password"
+                name="password"
+                onChange={handleChange}
+                value={formData.password || ""}
+                className={emptyFields.includes("password") ? "error" : ""}
+              />
+            </div>
+
+            <div>
+              <label>Confirm Password:</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                onChange={handleChange}
+                value={formData.confirmPassword || ""}
+                className={
+                  emptyFields.includes("confirmPassword") ? "error" : ""
+                }
+              />
+            </div>
+          </div>
+
+          <div className="submitBtn">
+            <button type="submit">Update User</button>
+          </div>
+          {error && <div className="error">{error}</div>}
+        </form>
+      )}
+    </>
   );
 };
 

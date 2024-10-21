@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { TransportContext } from "../../context/TransportContext";
 import "../../styles/form.css";
+import Spinner from "../Spinner";
 
 const TransportEditForm = ({ transportID }) => {
   const { user } = useAuthContext();
@@ -28,6 +29,7 @@ const TransportEditForm = ({ transportID }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTransport = async () => {
@@ -37,13 +39,17 @@ const TransportEditForm = ({ transportID }) => {
       }
 
       try {
-        const response = await axios.get(`${API_URL}/api/transport/${transportID}`, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
+        const response = await axios.get(
+          `${API_URL}/api/transport/${transportID}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
 
         setFormData(response.data);
+        setLoading(false);
       } catch (error) {
         setError(error.response?.data?.error || "An error occurred");
       }
@@ -113,119 +119,127 @@ const TransportEditForm = ({ transportID }) => {
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <h3>Edit Transport</h3>
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <form className="form" onSubmit={handleSubmit}>
+          <h3>Edit Transport</h3>
 
-      <div className="row">
-        <div>
-          <label>Company:</label>
+          <div className="row">
+            <div>
+              <label>Company:</label>
+              <input
+                type="text"
+                name="company"
+                onChange={handleChange}
+                value={formData?.company}
+                className={emptyFields.includes("company") ? "error" : ""}
+              />
+            </div>
+          </div>
+          {/* <div className="row">
+          <div>
+            <label>From Location:</label>
+            <input
+              type="text"
+              name="fromLocation"
+              onChange={handleChange}
+              value={formData?.fromLocation}
+              className={emptyFields.includes("fromLocation") ? "error" : ""}
+            />
+          </div>
+          <div>
+            <label>To Location:</label>
+            <input
+              type="text"
+              name="toLocation"
+              onChange={handleChange}
+              value={formData?.toLocation}
+              className={emptyFields.includes("toLocation") ? "error" : ""}
+            />
+          </div>
+        </div> */}
+          <div className="row">
+            <div>
+              <label>Contact Number:</label>
+              <input
+                type="text"
+                name="contactNumber"
+                onChange={handleChange}
+                value={formData?.contactNumber}
+                className={emptyFields.includes("contactNumber") ? "error" : ""}
+              />
+            </div>
+            <div>
+              <label>Email:</label>
+              <input
+                type="email"
+                name="email"
+                onChange={handleChange}
+                value={formData?.email}
+                className={emptyFields.includes("email") ? "error" : ""}
+              />
+            </div>
+          </div>
+          <div>
+            <label>Description:</label>
+            <textarea
+              name="description"
+              onChange={handleChange}
+              value={formData?.description}
+              className={emptyFields.includes("description") ? "error" : ""}
+            />
+          </div>
+          {/* <div>
+          <label>Distance (km):</label>
           <input
-            type="text"
-            name="company"
+            type="number"
+            name="distance"
             onChange={handleChange}
-            value={formData?.company}
-            className={emptyFields.includes("company") ? "error" : ""}
+            value={formData?.distance}
+            className={emptyFields.includes("distance") ? "error" : ""}
           />
         </div>
-      </div>
-      {/* <div className="row">
         <div>
-          <label>From Location:</label>
+          <label>Duration (hours):</label>
           <input
-            type="text"
-            name="fromLocation"
+            type="number"
+            name="duration"
             onChange={handleChange}
-            value={formData?.fromLocation}
-            className={emptyFields.includes("fromLocation") ? "error" : ""}
+            value={formData?.duration}
+            className={emptyFields.includes("duration") ? "error" : ""}
           />
-        </div>
-        <div>
-          <label>To Location:</label>
-          <input
-            type="text"
-            name="toLocation"
-            onChange={handleChange}
-            value={formData?.toLocation}
-            className={emptyFields.includes("toLocation") ? "error" : ""}
-          />
-        </div>
-      </div> */}
-      <div className="row">
-        <div>
-          <label>Contact Number:</label>
-          <input
-            type="text"
-            name="contactNumber"
-            onChange={handleChange}
-            value={formData?.contactNumber}
-            className={emptyFields.includes("contactNumber") ? "error" : ""}
-          />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            onChange={handleChange}
-            value={formData?.email}
-            className={emptyFields.includes("email") ? "error" : ""}
-          />
-        </div>
-      </div>
-      <div>
-        <label>Description:</label>
-        <textarea
-          name="description"
-          onChange={handleChange}
-          value={formData?.description}
-          className={emptyFields.includes("description") ? "error" : ""}
-        />
-      </div>
-      {/* <div>
-        <label>Distance (km):</label>
-        <input
-          type="number"
-          name="distance"
-          onChange={handleChange}
-          value={formData?.distance}
-          className={emptyFields.includes("distance") ? "error" : ""}
-        />
-      </div>
-      <div>
-        <label>Duration (hours):</label>
-        <input
-          type="number"
-          name="duration"
-          onChange={handleChange}
-          value={formData?.duration}
-          className={emptyFields.includes("duration") ? "error" : ""}
-        />
-      </div> */}
-      <div className="row">
-        <div>
-          <label>Mode of Transport:</label>
-          <select
-            name="modeOfTransport"
-            onChange={handleChange}
-            value={formData?.modeOfTransport}
-            className={emptyFields.includes("modeOfTransport") ? "error" : ""}
-          >
-            <option key={""} value={""}>
-              {""}
-            </option>
-            {modeOfTransportOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-      <div className="submitBtn">
-        <button type="submit">Update Transport</button>
-      </div>
-      {error && <div className="error">{error}</div>}
-    </form>
+        </div> */}
+          <div className="row">
+            <div>
+              <label>Mode of Transport:</label>
+              <select
+                name="modeOfTransport"
+                onChange={handleChange}
+                value={formData?.modeOfTransport}
+                className={
+                  emptyFields.includes("modeOfTransport") ? "error" : ""
+                }
+              >
+                <option key={""} value={""}>
+                  {""}
+                </option>
+                {modeOfTransportOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="submitBtn">
+            <button type="submit">Update Transport</button>
+          </div>
+          {error && <div className="error">{error}</div>}
+        </form>
+      )}
+    </>
   );
 };
 

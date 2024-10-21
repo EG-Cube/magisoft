@@ -6,12 +6,14 @@ import { Link } from "react-router-dom";
 // components
 import RestaurantCard from "../../components/restaurant/RestaurantCard";
 import Sort from "../../components/operations/Sort";
+import Spinner from "../../components/Spinner";
 
 const RestaurantListView = ({ type }) => {
   const { restaurants, dispatch } = useRestaurantContext(); // Changed from `sites` to `restaurants`
   const { user } = useAuthContext();
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [filter, setFilter] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -28,6 +30,7 @@ const RestaurantListView = ({ type }) => {
       if (response.ok) {
         dispatch({ type: "SET_RESTAURANTS", payload: json }); // Changed action type
       }
+      setLoading(false);
     };
 
     if (user) {
@@ -37,7 +40,8 @@ const RestaurantListView = ({ type }) => {
 
   useEffect(() => {
     setFilteredRestaurants(
-      restaurants?.filter((restaurant) => { // Changed from `site` to `restaurant`
+      restaurants?.filter((restaurant) => {
+        // Changed from `site` to `restaurant`
         const filterLower = filter?.toLowerCase();
         return (
           restaurant?.name.toLowerCase().includes(filterLower) ||
@@ -53,29 +57,35 @@ const RestaurantListView = ({ type }) => {
   }, [filter, restaurants, type]);
 
   return (
-    <div className="home">
-      <div className="row">
-        <h1>{type} Restaurants</h1>
-        <Link to="/operations/restaurant/create" className="nav-button">
-          New Restaurant
-        </Link>
-      </div>
-      <div className="restaurants">
-        <input
-          id="search"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        {/* <Sort /> */}
-        {filteredRestaurants
-          ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Changed to sort correctly by date
-          .map((restaurant) => (
-            <RestaurantCard key={restaurant?._id} restaurant={restaurant} />
-          ))}
-      </div>
-    </div>
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="home">
+          <div className="row">
+            <h1>{type} Restaurants</h1>
+            <Link to="/operations/restaurant/create" className="nav-button">
+              New Restaurant
+            </Link>
+          </div>
+          <div className="restaurants">
+            <input
+              id="search"
+              type="text"
+              placeholder="Search"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+            {/* <Sort /> */}
+            {filteredRestaurants
+              ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Changed to sort correctly by date
+              .map((restaurant) => (
+                <RestaurantCard key={restaurant?._id} restaurant={restaurant} />
+              ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
