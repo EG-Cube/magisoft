@@ -12,6 +12,8 @@
  * Released under the MIT License
  */
 
+/*! xlsx.js (C) 2013-present SheetJS -- http://sheetjs.com */
+
 /**
  * @license React
  * react-dom.production.min.js
